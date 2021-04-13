@@ -8,13 +8,12 @@ import {
   ScrollView,
   StatusBar,
   TouchableOpacity,
-  TextInput,
-  ActivityIndicator,
-  Alert
+  Linking
 } from 'react-native';
-// import Spinner from 'react-native-loading-spinner-overlay';
-var parse = require('url-parse')
+
+import Snackbar from "react-native-snackbar"
 import Modal from 'react-native-modal';
+
 
 
 
@@ -29,6 +28,19 @@ const App = ({navigation, route}) => {
     const toggleModal = () => {
       setModalVisible(!isModalVisible);
     };
+
+    const handleLink = async (link) => {
+        try {
+          Linking.openURL(link);
+        } catch (error) {
+          Snackbar.show({
+            text:
+              'Something  Went Wrong',
+            duration: Snackbar.LENGTH_SHORT,
+            backgroundColor: 'red',
+          });
+        }
+    }
 
     return (
       <>
@@ -61,30 +73,51 @@ const App = ({navigation, route}) => {
         </View>
         <Modal isVisible={isModalVisible} >
                   <View style={{flex: 1, justifyContent : 'center', alignItems : 'center' }}>
-                    <View style={{backgroundColor : 'white', height : '50%', width : '90%', borderRadius : 10}}>
+
+                    <View style={{backgroundColor : 'white', height : '70%', width : '95%', borderRadius : 10}}>
+
                       <Text style={{alignSelf : 'center', fontFamily : 'Gotham', fontSize : 35}} >FAQ</Text>
-                      <View style={{margin : 10,}} >
+
+                      <ScrollView showsVerticalScrollIndicator={false} style={{margin : 10,}} >
+                        
+                        <View style={styles.faqOne} >
+                            <Text style={styles.faqQuestion}>How to use?</Text>
+                            <Text style={styles.faqAnswer}> 1. Copy the link of the playlist you want to download </Text>
+                            <Text style={styles.faqAnswer}> 2. Paste the link in Add New screen. Now, you can download the tracks. </Text>
+                            <Text style={styles.faqAnswer}> 3. You can save the Playlist in Library for later. </Text>
+                        </View>
+
                         <View style={styles.faqOne} >
                             <Text style={styles.faqQuestion}>How it Works?</Text>
-                            <Text>The app searches the songs in your playlist in Youtube and downloads the first result. I will try to make a detailed System Design doc soon.</Text>
+                            <Text style={styles.faqAnswer} >The app searches the songs in your playlist in Youtube and downloads the first result. 
+                              I will try to make a detailed System Design doc soon.</Text>
+                              <Text 
+                              onPress={() => handleLink("https://github.com/samadritsarkar2/spotifydown")} 
+                              style={{alignSelf : 'center', fontSize : 15, marginTop : 5, color : '#0588BC'}}>
+                                {'<GithubRepo here />'}
+                                </Text>
                         </View>
                         <View style={styles.faqOne} >
                             <Text style={styles.faqQuestion}>Upcoming Features?</Text>
-                            <Text>I plan to add in-app Music Player and <Text style={{color : '#1DB954'}}>Spotify</Text> login, so that no need of copy-pasting playlist links and few more.
+                            <Text style={styles.faqAnswer} >I plan to add in-app Music Player and <Text style={{color : '#1DB954'}}>Spotify</Text> login, so that no need of copy-pasting playlist links and few more.
                                Also, I know I suck in UI design :( Will improve on that!
                                 </Text>
                         </View>
                         <View style={styles.faqOne} >
                             <Text style={styles.faqQuestion}>Tech Stack?</Text>
-                            <Text>React Native + Node.Js (Backend server)</Text>
+                            <Text style={styles.faqAnswer} >React Native + Node.Js (Backend server)</Text>
                         </View>
                         <View style={styles.faqOne} >
                             <Text style={styles.faqQuestion}>Dev?</Text>
-                            <Text>Samadrit Sarkar</Text>
+                            <Text style={styles.faqAnswer} >Samadrit Sarkar - 
+                              <Text style={{color : '#0588BC'}} onPress={() => handleLink("https://github.com/samadritsarkar2")} >Github, </Text>
+                              <Text style={{color : '#0588BC'}} onPress={() => handleLink("https://instagram.com/samadritsarkar2")} >Insta, </Text>
+                              <Text style={{color : '#0588BC'}} onPress={() => handleLink("https://twitter.com/samadritsarkar2")} >Twitter. </Text>
+                            </Text>  
                         </View>
 
-                      </View>
-                      <Button title="Hide modal" onPress={toggleModal} />
+                      </ScrollView>
+                      <Button title="Close" color={'#1DB954'} onPress={toggleModal} />
                     </View>
                   </View>
             </Modal>
@@ -169,6 +202,6 @@ const styles = StyleSheet.create({
      fontWeight : 'bold'
     },
   faqAnswer : {
-
+      fontSize : 14,
   }
 });
