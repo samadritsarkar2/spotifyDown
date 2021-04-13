@@ -22,7 +22,7 @@ import RNBackgroundDownloader from 'react-native-background-downloader';
 import RNFetchBlob from 'rn-fetch-blob';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Spinner from "react-native-spinkit";
-
+import { API  } from "@env";
 
 
 const perm = async () => {
@@ -97,7 +97,7 @@ const Playlist = ({navigation, route}) => {
 
     const fetchData = async () => {
       setLoading(true);
-      let api = `https://spotify-offline-sam.herokuapp.com/redirect?id=${URlID}`
+      let api = `${API}/redirect?id=${URlID}`
       const response = await fetch(api, {
         method : 'GET',
       })
@@ -145,7 +145,7 @@ const Playlist = ({navigation, route}) => {
     }, [isFocused]);
 
     const downloader = async (single) => {
-      const api = `https://spotify-offline-sam.herokuapp.com/download?passedQuery=`;
+      const api = `${API}/download?passedQuery=`;
       const req = perm();
       const fileStatus = await checkExists(single);
       if (req) {
