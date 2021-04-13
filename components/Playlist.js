@@ -458,7 +458,7 @@ const Playlist = ({navigation, route}) => {
                           <Text style={{color: 'white', fontSize: 20}}>
                             {item.name}
                           </Text>
-                          <Text style={{color: 'white'}}>{item.album}</Text>
+                          <Text style={{color: 'lightgray'}}>{item.album}</Text>
                               </TouchableOpacity>
                               </View>
                          :

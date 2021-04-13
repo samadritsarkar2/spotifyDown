@@ -60,7 +60,7 @@ const Library = ({navigation}) => {
             <View style={styles.header}>
                 <Text style={styles.heading}>Your Library</Text>
                 <View style={styles.actions}>
-                    <View style={{}} ><Text style={styles.buttons}>Saved Playlists</Text></View>
+                    <View style={{}} ><Text style={styles.buttons}>Saved Playlists  </Text></View>
                 </View>
             </View>
             <View style={styles.library}>
@@ -137,16 +137,16 @@ const styles = StyleSheet.create({
     },
     buttons : {
         fontSize : 25, 
-        color : 'white',
-        textDecorationLine : 'underline'
+        color : 'lightgray',
     },
     listBox : {
         margin : 10,
         
     },
     listText : {
-        fontSize : 20,
-        color : 'white'
+        fontSize : 25,
+        color : 'white',
+        fontWeight : '200'
     },
     submit : {
         justifyContent : "center",
