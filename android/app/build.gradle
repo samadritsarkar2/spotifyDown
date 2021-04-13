@@ -152,9 +152,9 @@ android {
         }
     release {
       storeFile file('my-key.keystore')
-      storePassword 'samadritsarkar123'
-      keyAlias 'version-1-key'
-      keyPassword 'samadritsarkar123'
+      storePassword 'samspotifydown'
+      keyAlias 'final-version-1'
+      keyPassword 'samspotifydown'
     }
     }
     buildTypes {
