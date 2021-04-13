@@ -118,8 +118,6 @@ const styles = StyleSheet.create({
   },
   inputBox : {
       flex : 1,
-
-      marginTop : -40,
   },
   input: {
     color: 'white',
