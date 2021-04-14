@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 
-import React from "react";
+import React, {useRef} from "react";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, TransitionSpecs } from '@react-navigation/stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -11,14 +11,12 @@ import App from './App';
 import New from './components/New';
 import Library from './components/Library';
 import Playlist from './components/Playlist';
-
 import TabBar from "./components/TabBar";
 import Error from './components/Error';
-// import {SvgUri} from "react-native-svg"
 
-// import HomeLogo  from "./assets/home.svg";
+import analytics from "@react-native-firebase/analytics" ;
 
-const Stack = createStackNavigator();
+// const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 // const Routes = () => {
@@ -54,9 +52,28 @@ const Tab = createBottomTabNavigator();
 
 
 const BottomNav = () => {
+    const navigationRef = useRef();
+    const routeNameRef = useRef();
     return (
         <StoreProvider store={store}>
-            <NavigationContainer>
+            <NavigationContainer
+                ref={navigationRef}
+                onReady={() =>
+                    (routeNameRef.current = navigationRef.current.getCurrentRoute().name)
+                  }
+                onStateChange={ async (state) => {
+                        const previousRouteName = routeNameRef.current;
+                        const currentRouteName = navigationRef.current.getCurrentRoute().name;
+
+                        if (previousRouteName !== currentRouteName) {
+                            await analytics().logScreenView({
+                              screen_name: currentRouteName,
+                              screen_class: currentRouteName
+                            });
+                          }
+
+                } }
+            >
                 <Tab.Navigator
                     tabBar={ props => <TabBar {...props} /> }
                     initialRouteName="Home"

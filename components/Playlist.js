@@ -22,6 +22,7 @@ import RNBackgroundDownloader from 'react-native-background-downloader';
 import RNFetchBlob from 'rn-fetch-blob';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Spinner from "react-native-spinkit";
+import analytics from "@react-native-firebase/analytics"
 import { API  } from "@env";
 
 
@@ -108,11 +109,15 @@ const Playlist = ({navigation, route}) => {
         .then( res => {
           setPlaylistData(res.playlistinfo)
           checkData(res.tracks)
-          .then((data) => {
+          .then(async (data) => {
             // console.log(data)
             setTracks(data);
             setLoading(false);
             setError(false);
+            await analytics().logEvent('playlist_view', {
+              id : playlistData.id,
+              name : playlistData.playlistId
+            })
           })
             })
         .catch(err => {

@@ -44,31 +44,30 @@ const App = ({navigation, route}) => {
 
     return (
       <>
-        <View style={{flex: 1, backgroundColor: '#181818'}}>
+        <View style={{flex: 1, backgroundColor: '#181818', justifyContent : 'center'}}>
           <StatusBar backgroundColor={'#282828'} />
-          <View style={{position : 'absolute', top : 10, right : 10}} >
-            
-          </View>
           <View style={styles.container}>
-            <Image
-              source={require('../assets/homeLogo.png')}
-              style={styles.logo}></Image>
-            <Text style={styles.header}>Spotify Offline Downloader</Text>
+                  <View style={styles.logoWrapper}> 
+                    <Image
+                      source={require('../assets/homeLogo.png')}
+                      style={styles.logo}></Image>
+                  </View>
+                <Text style={styles.header}>Spotify Downloader</Text>
           </View>
           <View style={styles.inputBox}>
-            <TouchableOpacity style={styles.submit} onPress={() => { navigation.navigate('New') }}>
-              <Text
-                style={styles.text}>
-                Enter new Playlist
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.submit} onPress={() => {navigation.navigate('Library')}}>
-              <Text style={styles.text}>Library</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.knowMore} onPress={() => { toggleModal() }}>
-            <Image source={require('../assets/info.png')} style={{height : 30, width : 30, }} />
-              <Text style={styles.text}>Know More</Text>
-            </TouchableOpacity>
+                <TouchableOpacity style={styles.submit} onPress={() => { navigation.navigate('New') }}>
+                  <Text
+                    style={styles.text}>
+                    Enter new Playlist
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.submit} onPress={() => {navigation.navigate('Library')}}>
+                  <Text style={styles.text}>Library</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.knowMore} onPress={() => { toggleModal() }}>
+                <Image source={require('../assets/info.png')} style={{height : 30, width : 30, }} />
+                  <Text style={styles.text}>Know More</Text>
+                </TouchableOpacity>
           </View>
         </View>
         <Modal isVisible={isModalVisible} >
@@ -129,37 +128,33 @@ export default App;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-   top : 50,
+    flex: 0.5,
+   marginTop : '7%',
+  },
+  logoWrapper : {
+    flex : 0.5,
+    marginBottom : 0,
+
   },
   logo: {
-    height: 200,
-    width: 200,
-    alignSelf : 'center'
+    height: '100%',
+    aspectRatio : 1/1,
+    alignSelf : 'center',
   },
   header: {
-      marginTop : 20,
-      fontSize : 30,
+      flex : 0.4,
+      marginTop : 15,
+      fontSize : 33,
+      fontWeight : 'bold',
       textAlign : 'center',
     color: 'white',
-    fontFamily : 'Montserrat'
+    fontFamily : 'Montserrat',
    },
   inputBox : {
-      flex : 1,
-      marginTop : -40,
-  },
-  input: {
-    color: 'white',
-    marginHorizontal: 20,
-    height: 50,
-    width : '70%',
-    borderBottomColor: 'white',
-    borderBottomWidth: 1,
-    alignSelf : 'center',
-    
+      flex : 0.5,
+      marginVertical : 20
   },
   submit : {
-
     justifyContent : "center",
     height : 50,
     width : '60%',

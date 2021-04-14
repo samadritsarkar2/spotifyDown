@@ -15,7 +15,8 @@ import {
 } from 'react-native';
 
 var parse = require('url-parse');
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import analytics from "@react-native-firebase/analytics"
 
 
 
@@ -57,6 +58,9 @@ const New = ({navigation, route}) => {
 
          setFetched(true)
           setLoading(false);
+          await analytics().logEvent('new_playlist',{
+            id : URlID
+          })
           navigation.navigate('Playlist');
       }
   }
@@ -98,18 +102,14 @@ export default New;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-   top : 30,
+    flex: 0.4,
+   marginTop : 30,
   },
   logo: {
-    height: 350,
-    width: 350,
+    height: '100%',
+    aspectRatio : 1/1,
     alignSelf : 'center'
   },
-  meme: {height : 350, 
-    width : 350,
-     alignSelf : 'center'
-    },
   header: {
       marginTop : 20,
       fontSize : 30,
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   inputBox : {
-      flex : 1,
+      flex : 0.6,
   },
   input: {
     color: 'white',
