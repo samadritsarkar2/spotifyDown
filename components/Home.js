@@ -108,8 +108,8 @@ const App = ({navigation, route}) => {
                         </View>
                         <View style={styles.faqOne} >
                             <Text style={styles.faqQuestion}>Dev?</Text>
-                            <Text style={styles.faqAnswer} >Samadrit Sarkar - 
-                              <Text style={{color : '#0588BC'}} onPress={() => handleLink("https://github.com/samadritsarkar2")} >Github, </Text>
+                            <Text style={styles.faqAnswer, {fontWeight : 'bold'}} >@samadritsarkar2 - 
+                              <Text style={{color : '#0588BC'}} onPress={() => handleLink("https://github.com/samadritsarkar2")} > Github, </Text>
                               <Text style={{color : '#0588BC'}} onPress={() => handleLink("https://instagram.com/samadritsarkar2")} >Insta, </Text>
                               <Text style={{color : '#0588BC'}} onPress={() => handleLink("https://twitter.com/samadritsarkar2")} >Twitter. </Text>
                             </Text>  

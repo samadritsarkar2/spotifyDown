@@ -36,10 +36,16 @@ const New = ({navigation, route}) => {
 
     const fetchApi = async () => {   
       setLoading(true);
-      let URL = parse(url)
-      let URlID = URL.pathname.split('/')[2]
-      // Santiation of the input URL
-      if(URL.host != 'open.spotify.com'|| URL.pathname.split('/')[1] != 'playlist')
+
+       // Santiation of the input URL
+       
+      let URL = parse(url);
+      let pathArr = URL.pathname.split('/');
+      let playlistIndex = pathArr.indexOf("playlist");
+      let URlID = URL.pathname.split('/')[playlistIndex + 1 ]
+
+     
+      if(URL.host != 'open.spotify.com'|| URL.pathname.split('/')[playlistIndex] != 'playlist')
       {
         setLoading(false)
         Alert.alert(
