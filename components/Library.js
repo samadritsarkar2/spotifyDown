@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFocusEffect } from "@react-navigation/native";
 import allActions from "../redux/actions/index";
+import Spinner from "react-native-spinkit";
 
 
 
@@ -67,7 +68,12 @@ const Library = ({navigation}) => {
  
                 { loading ? 
                     <View>
-                        <Text style={{color : 'white'}}>Loading...</Text> 
+                        <Spinner 
+                            style={{marginBottom : 7, alignSelf : 'center'}}
+                            size={35}
+                            type={'Circle'} 
+                            color={'#FFF'}
+                            />
                     </View> 
                     : 
                     <>

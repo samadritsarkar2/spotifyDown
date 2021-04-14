@@ -393,10 +393,20 @@ const Playlist = ({navigation, route}) => {
                       flexDirection: 'column',
                      
                     }}>
-                    <Image
-                      source={{uri: playlistData.playlistImg}}
+                      { playlistData.playlistImg ? 
+                          <Image
+                          source={{uri: playlistData.playlistImg}}
+                          style={{height: '100%', width: '60%',borderRadius : 10, alignSelf: 'center'}}
+                          
+                        /> 
+                        : 
+                        <Image
+                      source={require("../assets/defaultPlaylist.png")}
                       style={{height: '100%', width: '60%',borderRadius : 10, alignSelf: 'center'}}
+                      
                     />
+                      }
+                    
                     <Text
                       style={{
                         color: 'white',

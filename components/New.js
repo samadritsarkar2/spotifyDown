@@ -38,11 +38,11 @@ const New = ({navigation, route}) => {
       setLoading(true);
 
        // Santiation of the input URL
-       
+
       let URL = parse(url);
       let pathArr = URL.pathname.split('/');
       let playlistIndex = pathArr.indexOf("playlist");
-      let URlID = URL.pathname.split('/')[playlistIndex + 1 ]
+      let URlID = pathArr[playlistIndex + 1 ]
 
      
       if(URL.host != 'open.spotify.com'|| URL.pathname.split('/')[playlistIndex] != 'playlist')
