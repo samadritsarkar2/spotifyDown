@@ -11,13 +11,13 @@ It uses <a href="https://developer.spotify.com/">Spotify offical API</a> to fetc
 P.S:- I have written a lot of Bad code, I will start improving the app and code soon.
 
 ## Screenshots 
-
-    <img src="/screenshots/1.png" width="200" />
+<div>
+    <img src="screenshots/1.png" width="200" />
     <img src="screenshots/2.png" width="200" />
     <img src="screenshots/3.png" width="200" />
     <img src="screenshots/4.png" width="200" />
     <img src="screenshots/5.png" width="200" />
-
+</div>
 
 
 ## Tech Stack
