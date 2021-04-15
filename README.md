@@ -42,7 +42,7 @@ P.S:- I have written a lot of Bad code, I will start improving the app and code 
 
 ## Upcoming  Features 
     - In-app Music Player
-    - Optimized Donload All functionality 
+    - Optimized Download All functionality 
     - Spotify Login to fetch playlists
     - Suggestions are always welcome.
 
