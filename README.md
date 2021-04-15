@@ -4,9 +4,18 @@
 
 </div>
 
+<div align='center' >
+<a href="" >
+
+### Download Apk
+
+</a>
+ </div>
+<br>
 An app that let's you download public Spotify playlists, illegally ofcourse XD 
 <br>
 It uses <a href="https://developer.spotify.com/">Spotify offical API</a> to fetch the tracks and Youtube(youtube-dl) to download the tracks. 
+
 
 P.S:- I have written a lot of Bad code, I will start improving the app and code soon.
 
