@@ -6,9 +6,7 @@
 
 <div align='center' >
 <a href="https://github.com/samadritsarkar2/spotifyDown/blob/main/release/spotifyDown.apk?raw=true" >
-
-### Download Apk
-
+Download Apk
 </a>
  </div>
 <br>
