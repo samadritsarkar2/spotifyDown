@@ -2,12 +2,11 @@ import 'react-native-gesture-handler';
 
 import React, {useRef} from "react";
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator, TransitionSpecs } from '@react-navigation/stack';
+/// import { createStackNavigator, TransitionSpecs } from '@react-navigation/stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Provider as StoreProvider } from "react-redux";
 import store from "./redux/store";
 import Home from "./components/Home"
-import App from './App';
 import New from './components/New';
 import Library from './components/Library';
 import Playlist from './components/Playlist';

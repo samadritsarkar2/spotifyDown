@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import allActions from "../redux/actions/index";
 
 import {
@@ -15,7 +15,6 @@ import {
 } from 'react-native';
 
 var parse = require('url-parse');
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import analytics from "@react-native-firebase/analytics"
 
 

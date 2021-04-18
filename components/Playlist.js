@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import allActions from "../redux/actions/index";
-var {width} = Dimensions.get('window');
 import { useIsFocused } from "@react-navigation/native";
 import {
   StyleSheet,
@@ -10,13 +9,10 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  ActivityIndicator,
   Alert,
    ScrollView,
    PermissionsAndroid,
-   Dimensions,
 } from 'react-native';
-var parse = require('url-parse')
 import Snackbar from 'react-native-snackbar';
 import RNBackgroundDownloader from 'react-native-background-downloader';
 import RNFetchBlob from 'rn-fetch-blob';
