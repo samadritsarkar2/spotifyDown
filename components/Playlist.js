@@ -153,8 +153,9 @@ const Playlist = ({navigation, route}) => {
         if(!fileStatus.path){
         setVisible(true);
         setCurentDownloading(single.id);
+        let artistsString = (single.artists.map(item => item.name)).join();
         let passedQuery =
-          single.name + ' ' + single.album + ' ' + single.artists[0].name;
+          single.name + ' ' + single.album + ' ' + artistsString;
 
         const response = await fetch(api + encodeURIComponent(passedQuery));
 
