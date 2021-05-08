@@ -36,7 +36,7 @@
     "redux": "^4.0.5",
     "rn-fetch-blob": "^0.12.0",
     "spinkit": "^2.0.1",
-    "url-parse": "^1.4.7"
+    "url-parse": "^1.5.0"
   },
   "devDependencies": {
     "@babel/core": "7.12.13",
