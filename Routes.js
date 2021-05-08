@@ -56,6 +56,7 @@ const BottomNav = () => {
     return (
         <StoreProvider store={store}>
             <NavigationContainer
+            
                 ref={navigationRef}
                 onReady={() =>
                     (routeNameRef.current = navigationRef.current.getCurrentRoute().name)
