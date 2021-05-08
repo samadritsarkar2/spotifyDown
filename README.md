@@ -46,6 +46,9 @@ P.S:- I have written a lot of Bad code, I will start improving the app and code 
     - Spotify Login to fetch playlists
     - Suggestions are always welcome.
 
+### For Legal Purposes
+    You can mail me at **samadrit.sarkar2@gmail.com** or DM me.
+
 
 
 
