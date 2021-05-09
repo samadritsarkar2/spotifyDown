@@ -78,10 +78,10 @@ const TabBar = ({ state, descriptors, navigation }) => {
             }
           };
   
-          const onLongPress = (name) => {
+          const onLongPress = () => {
             Vibration.vibrate(200);
             ToastAndroid.show(
-                `${name}`,
+                `${route.name}`,
                 ToastAndroid.SHORT
             )
             navigation.emit({
@@ -97,8 +97,8 @@ const TabBar = ({ state, descriptors, navigation }) => {
               accessibilityLabel={options.tabBarAccessibilityLabel}
               testID={options.tabBarTestID}
               onPress={onPress}
-              onLongPress={() => onLongPress(route.name)}
-              style={{ flex: 1, alignItems : 'center' }}
+              onLongPress={onLongPress}
+              style={styles.touchOpacity}
               key={index}
             > 
               {
@@ -119,17 +119,22 @@ const styles = StyleSheet.create({
         backgroundColor : '#212326',
         flexDirection: 'row',
          height : 40,
+
          alignItems : 'center',
         paddingVertical : 23
         },
-
+        touchOpacity : { 
+          flex: 1, 
+          alignItems : 'center' , 
+        justifyContent : 'space-between'
+      },
     icons : {
-        height : 20,
-         width: 20,  
+        height : 25,
+         width: 25,  
         },
     iconsFocused : {
-      height : 20,
-      width : 20,
+      height : 25,
+      width : 25,
     }
     
 })
