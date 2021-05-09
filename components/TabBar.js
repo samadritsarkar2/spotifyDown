@@ -50,6 +50,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
   }
     return (
       <View style={styles.mainView}>
+     
         {state.routes.map((route, index) => {
 
           if((route.name !== 'Home') && (route.name !== 'New') && (route.name !== 'Library')  ) {
@@ -108,6 +109,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
             </TouchableOpacity>
           );
         })}
+      
       </View>
     );
 }
@@ -118,10 +120,10 @@ const styles = StyleSheet.create({
     mainView : { 
         backgroundColor : '#212326',
         flexDirection: 'row',
-         height : 40,
-
+         height : 43,
+        paddingVertical : 20,
          alignItems : 'center',
-        paddingVertical : 23
+
         },
         touchOpacity : { 
           flex: 1, 
