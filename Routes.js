@@ -15,39 +15,39 @@ import Error from './components/Error';
 
 import analytics from "@react-native-firebase/analytics" ;
 
-// const Stack = createStackNavigator();
+const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// const Routes = () => {
+const Routes = () => {
 
-//     return (
-//         <StoreProvider store={store}>
-//         <NavigationContainer>
-//             <Stack.Navigator
-//             initialRoutName="Home"
-//             screenOptions={{
-//                 headerShown : false,
+    return (
+        <StoreProvider store={store}>
+        <NavigationContainer>
+            <Stack.Navigator
+            initialRoutName="Home"
+            screenOptions={{
+                headerShown : false,
                 
-//             }}
-//             >
-//                 <Stack.Screen name="Home" component={Home} ></Stack.Screen>
-//                 <Stack.Screen name="App" component={App} ></Stack.Screen>
-//                 <Stack.Screen name="New" component={New}></Stack.Screen>
-//                 <Stack.Screen name="Playlist" component={Playlist}></Stack.Screen>
-//                 <Stack.Screen name="Library" component={Library}></Stack.Screen>
-//                 {/* <Stack.Screen name="User" component={User}
-//                 options ={{
-//                     transitionSpec : {
-//                         open : TransitionSpecs.ScaleFromCenterAndroidSpec,
-//                         close : TransitionSpecs.TransitionIOSSpec
-//                     }
-//                 }}
-//                 ></Stack.Screen> */}
-//             </Stack.Navigator>
-//         </NavigationContainer>
-//         </StoreProvider>
-//     )
-// }
+            }}
+            >
+                <Stack.Screen name="Home" component={Home} ></Stack.Screen>
+                <Stack.Screen name="App" component={App} ></Stack.Screen>
+                <Stack.Screen name="New" component={New}></Stack.Screen>
+                <Stack.Screen name="Playlist" component={Playlist}></Stack.Screen>
+                <Stack.Screen name="Library" component={Library}></Stack.Screen>
+                {/* <Stack.Screen name="User" component={User}
+                options ={{
+                    transitionSpec : {
+                        open : TransitionSpecs.ScaleFromCenterAndroidSpec,
+                        close : TransitionSpecs.TransitionIOSSpec
+                    }
+                }}
+                ></Stack.Screen> */}
+            </Stack.Navigator>
+        </NavigationContainer>
+        </StoreProvider>
+    )
+}
 
 
 const BottomNav = () => {
