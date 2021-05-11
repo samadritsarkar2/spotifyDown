@@ -64,3 +64,4 @@ buck-out/
 .vscode/
 .env
 android/app/google-services.json
+.prettierrc.js
