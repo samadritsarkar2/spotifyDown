@@ -1,10 +1,11 @@
 import React from "react"
-import { Text, View, TouchableOpacity, Image, StyleSheet, Vibration, ToastAndroid } from 'react-native';
-import MiniPlayer from "./MiniPlayer"
+import { Text, View, TouchableOpacity, Image, StyleSheet, Vibration, ToastAndroid, Dimensions} from 'react-native';
+import MiniPlayer from "./MiniPlayer";
 
+const screen = Dimensions.get('window');
 const TabBar = ({ state, descriptors, navigation }) => {
     const focusedOptions = descriptors[state.routes[state.index].key].options;
-
+    
     if (focusedOptions.tabBarVisible === false) {
       return null;
     }
@@ -51,7 +52,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
     return (
       <>
 
-      <MiniPlayer />
+      {/* <MiniPlayer /> */}
 
       <View style={styles.mainView}>
      
@@ -84,6 +85,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
           };
   
           const onLongPress = () => {
+            console.log(screen)
             Vibration.vibrate(200);
             ToastAndroid.show(
                 `${route.name}`,
@@ -125,7 +127,7 @@ const styles = StyleSheet.create({
     mainView : { 
         backgroundColor : '#212326',
         flexDirection: 'row',
-         height : 43,
+        height : 43,
         paddingVertical : 20,
          alignItems : 'center',
 

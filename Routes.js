@@ -14,6 +14,7 @@ import TabBar from "./components/TabBar";
 import Error from './components/Error';
 
 import analytics from "@react-native-firebase/analytics" ;
+import MiniPlayer from './components/MiniPlayer';
 
 //const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -83,8 +84,9 @@ const BottomNav = () => {
                         <Tab.Screen component={Library} name='Library' ></Tab.Screen>
                         <Tab.Screen component={Playlist} name="Playlist" ></Tab.Screen>
                         <Tab.Screen component={Error} name="Error" options={{unmountOnBlur : true}} ></Tab.Screen>
-                </Tab.Navigator>
-            </NavigationContainer>
+                </Tab.Navigator> 
+                <MiniPlayer />
+            </NavigationContainer> 
         </StoreProvider>
     )
 }
