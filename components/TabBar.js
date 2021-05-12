@@ -1,6 +1,6 @@
 import React from "react"
 import { Text, View, TouchableOpacity, Image, StyleSheet, Vibration, ToastAndroid } from 'react-native';
-
+import MiniPlayer from "./MiniPlayer"
 
 const TabBar = ({ state, descriptors, navigation }) => {
     const focusedOptions = descriptors[state.routes[state.index].key].options;
@@ -49,6 +49,10 @@ const TabBar = ({ state, descriptors, navigation }) => {
     }
   }
     return (
+      <>
+
+      <MiniPlayer />
+
       <View style={styles.mainView}>
      
         {state.routes.map((route, index) => {
@@ -111,6 +115,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
         })}
       
       </View>
+      </>
     );
 }
 
