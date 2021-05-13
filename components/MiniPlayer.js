@@ -1,5 +1,5 @@
 import React from "react"
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native"
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 
 
@@ -11,10 +11,22 @@ const MiniPlayer = () => {
                <View style={styles.playerView}>
                    <Text style={{color : 'white'}} >Song Name</Text>
                    <TouchableOpacity>
-                       <Text>Play/Pause</Text>
+                   <Image 
+                       source={require("../assets/previous.png")} 
+                        style={styles.playerIcons}
+                       />
                    </TouchableOpacity>
                    <TouchableOpacity>
-                       <Text>Next</Text>
+                       <Image 
+                       source={require("../assets/play-button.png")} 
+                        style={[styles.playerIcons, {width : 30, height : 30}]}
+                       />
+                   </TouchableOpacity>
+                   <TouchableOpacity>
+                   <Image 
+                       source={require("../assets/next.png")} 
+                        style={styles.playerIcons}
+                       />
                    </TouchableOpacity>
                </View>
             </View>
@@ -40,5 +52,9 @@ const styles = StyleSheet.create({
         flex : 1,
         flexDirection : 'row',
         
-    }
+    },
+    playerIcons : {width : 25, 
+        height : 25,
+         marginHorizontal : 10
+        }
 })
