@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     borderRadius : 30,
     backgroundColor : "#1DB954",
     marginVertical : 20,
-    padding : 20,
+    padding : 10,
     height: 50,
     width : '70%',
     alignSelf : 'center'
@@ -166,22 +166,12 @@ const styles = StyleSheet.create({
        },
        text : {
         color: 'white',
+        alignContent : 'center',
         textAlign: 'center',
         fontWeight: "500",
         fontSize : 17,
         fontFamily : 'Gotham',
         textTransform : 'uppercase'
       },
-       modalContainer: {
-        alignItems: 'center',
-       // backgroundColor: 'rgba(0,0,0,0.2)',
-        flex: 1,
-        justifyContent: 'center',
-        position: 'relative',
-      },
-      modalHeading: {
-        fontSize: 25,
-        color : 'red',
-        marginBottom: 15,
-      },
+  
 });
