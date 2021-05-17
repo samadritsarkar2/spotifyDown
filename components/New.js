@@ -78,7 +78,7 @@ const New = ({navigation, route}) => {
               <View style={styles.container}>
               <Image
               source={require('../assets/Headphone-amico.png')}
-              style={styles.logo}></Image>
+              style={styles.logo} />
               </View>
               <View style={styles.inputBox}>
                 <TextInput
