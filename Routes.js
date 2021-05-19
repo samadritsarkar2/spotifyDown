@@ -5,14 +5,16 @@ import { NavigationContainer } from '@react-navigation/native';
 import React, { useRef } from "react";
 import 'react-native-gesture-handler';
 import { Provider as StoreProvider } from "react-redux";
+
 import Error from './src/components/Error';
-import Library from './src/components/Library';
+import Home from "./src/components/Home";
 import MiniPlayer from './src/components/MiniPlayer';
 import New from './src/components/New';
 import Playlist from './src/components/Playlist';
-import TabBar from "./src/components/TabBar";
+import LibraryStack from './src/navigation/LibraryStack';
+
+import TabBar from "./src/navigation/TabBar";
 import store from "./src/redux/store";
-import Home from "./src/components/Home";
 
 
 
@@ -81,7 +83,7 @@ const BottomNav = () => {
                     >
                         <Tab.Screen options={{}} component={Home} name='Home' ></Tab.Screen>
                         <Tab.Screen component={New} name='New' ></Tab.Screen>
-                        <Tab.Screen component={Library} name='Library' ></Tab.Screen>
+                        <Tab.Screen component={LibraryStack} name='LibraryStack' ></Tab.Screen>
                         <Tab.Screen component={Playlist} name="Playlist" ></Tab.Screen>
                         <Tab.Screen component={Error} name="Error" options={{unmountOnBlur : true}} ></Tab.Screen>
                 </Tab.Navigator> 

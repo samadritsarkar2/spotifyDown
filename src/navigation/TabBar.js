@@ -1,6 +1,6 @@
 import React from "react"
 import { Text, View, TouchableOpacity, Image, StyleSheet, Vibration, ToastAndroid, Dimensions} from 'react-native';
-import MiniPlayer from "./MiniPlayer";
+import MiniPlayer from "../components/MiniPlayer";
 
 const screen = Dimensions.get('window');
 const TabBar = ({ state, descriptors, navigation }) => {
@@ -32,7 +32,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
           }
                 
             </>)
-        case 'Library' : 
+        case 'LibraryStack' : 
           return (
               <>
                 {isFocused ? 
@@ -58,7 +58,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
      
         {state.routes.map((route, index) => {
 
-          if((route.name !== 'Home') && (route.name !== 'New') && (route.name !== 'Library')  ) {
+          if((route.name !== 'Home') && (route.name !== 'New') && (route.name !== 'LibraryStack')  ) {
             return ;
           } 
 
