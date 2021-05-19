@@ -49,7 +49,7 @@ const App = ({navigation, route}) => {
           <View style={styles.container}>
                   <View style={styles.logoWrapper}> 
                     <Image
-                      source={require('../../assets/homeLogo.png')}
+                      source={require('../assets/homeLogo.png')}
                       style={styles.logo}></Image>
                   </View>
                 <Text style={styles.header}>Spotify Downloader</Text>
@@ -65,7 +65,7 @@ const App = ({navigation, route}) => {
                   <Text style={styles.text}>Library</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.knowMore} onPress={() => { toggleModal() }}>
-                <Image source={require('../../assets/info.png')} style={{height : 30, width : 30, }} />
+                <Image source={require('../assets/info.png')} style={{height : 30, width : 30, }} />
                   <Text style={styles.text}>Know More</Text>
                 </TouchableOpacity>
           </View>

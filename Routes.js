@@ -1,20 +1,20 @@
-import 'react-native-gesture-handler';
-
-import React, {useRef} from "react";
-import { NavigationContainer } from '@react-navigation/native';
+import analytics from "@react-native-firebase/analytics";
 /// import { createStackNavigator, TransitionSpecs } from '@react-navigation/stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from '@react-navigation/native';
+import React, { useRef } from "react";
+import 'react-native-gesture-handler';
 import { Provider as StoreProvider } from "react-redux";
-import store from "./redux/store";
-import Home from "./components/Home"
-import New from './components/New';
-import Library from './components/Library';
-import Playlist from './components/Playlist';
-import TabBar from "./components/TabBar";
-import Error from './components/Error';
+import Error from './src/components/Error';
+import Library from './src/components/Library';
+import MiniPlayer from './src/components/MiniPlayer';
+import New from './src/components/New';
+import Playlist from './src/components/Playlist';
+import TabBar from "./src/components/TabBar";
+import store from "./src/redux/store";
+import Home from "./src/components/Home";
 
-import analytics from "@react-native-firebase/analytics" ;
-import MiniPlayer from './components/MiniPlayer';
+
 
 //const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();

@@ -12,7 +12,7 @@ const Error  = ({navigation}) => {
             <View
             style={styles.topSection}
             >
-                <Image source={require('../../assets/Questions-bro.png')} 
+                <Image source={require('../assets/Questions-bro.png')} 
                 style={styles.question} 
                 />
                 <Text 

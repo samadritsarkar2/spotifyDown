@@ -50,7 +50,7 @@ const MiniPlayer = () => {
          let isInit =  await trackPlayerInit();
          setIsTrackPlayerInit(isInit);
       }
-      startPlayer();
+    //   startPlayer();
     }, []);
 
 
@@ -80,7 +80,7 @@ const MiniPlayer = () => {
                         </TouchableOpacity>
                         <TouchableOpacity
                         onPress={ async () => {
-                          await TrackPlayer.skipToNext();
+                        //   await TrackPlayer.destroy();
                         }}
                         >
                         <Image 
