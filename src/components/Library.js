@@ -59,7 +59,11 @@ const Library = ({navigation}) => {
         <>
         <View style={{flex : 1, backgroundColor : '#181818'}}>
             <View style={styles.header}>
+                <TouchableOpacity
+                onPress={() => navigation.navigate("Downloads")}
+                >
                 <Text style={styles.heading}>Your Library</Text>
+                </TouchableOpacity>
                 <View style={styles.actions}>
                     <View style={{}} ><Text style={styles.buttons}>Saved Playlists  </Text></View>
                 </View>
