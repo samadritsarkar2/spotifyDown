@@ -14,7 +14,7 @@ const trackPlayerInit = async () => {
             TrackPlayer.CAPABILITY_PAUSE
         ]
     })
-    await TrackPlayer.add({
+    await TrackPlayer.add([{
       id: '1',
       url:
         'https://audio-previews.elements.envatousercontent.com/files/103682271/preview.mp3',
@@ -23,7 +23,18 @@ const trackPlayerInit = async () => {
       album: 'My Album',
       artist: 'Rohan Bhatia',
       artwork: 'https://picsum.photos/100',
-    });
+    },
+    {
+        id: '1',
+        url:
+          'https://audio-previews.elements.envatousercontent.com/files/103682271/preview.mp3',
+        type: 'default',
+        title: 'My Title',
+        album: 'My Album',
+        artist: 'Rohan Bhatia',
+        artwork: 'https://picsum.photos/100',
+      }
+]);
    
     return true;
    };
@@ -69,7 +80,7 @@ const MiniPlayer = () => {
                         </TouchableOpacity>
                         <TouchableOpacity
                         onPress={ async () => {
-                          await TrackPlayer.pause();
+                          await TrackPlayer.skipToNext();
                         }}
                         >
                         <Image 
