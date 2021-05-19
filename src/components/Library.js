@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFocusEffect } from "@react-navigation/native";
-import allActions from "../redux/actions/index";
+import allActions from "../../redux/actions/index";
 import Spinner from "react-native-spinkit";
 
 
