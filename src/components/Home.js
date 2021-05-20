@@ -61,7 +61,7 @@ const App = ({navigation, route}) => {
                     Enter new Playlist
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.submit} onPress={() => {navigation.navigate('Library')}}>
+                <TouchableOpacity style={styles.submit} onPress={() => {navigation.navigate('LibraryStack')}}>
                   <Text style={styles.text}>Library</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.knowMore} onPress={() => { toggleModal() }}>

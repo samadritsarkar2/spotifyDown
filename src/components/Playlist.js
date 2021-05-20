@@ -181,7 +181,7 @@ const Playlist = ({navigation, route}) => {
                   // console.log(`Downloaded: ${percent * 100}%`);
                   setDownloadPercent(percent);
                 })
-                .done(() => {
+                .done(async () => {
                   console.log('Download is done!');
 
                   const path = `${
@@ -193,7 +193,54 @@ const Playlist = ({navigation, route}) => {
                      const nextState =  prev.map( item => item.id == single.id ? { ...item ,downloaded : true, path : path} : item );
 
                      return nextState;
-                   })
+                   });
+
+                   try {
+                      const newDownload = {
+                        id : single.id,
+                        title : single.name,
+                        artist : single.artists[0].name,
+                        album : single.album,
+                        artwork : single.img,
+                        url : path
+                      }
+                      const storedValue = await AsyncStorage.getItem(`@downloads`)
+                      const prevList = await JSON.parse(storedValue);
+
+                      if(!prevList) {
+                        const newList = [newDownload];
+                        await AsyncStorage.setItem(
+                          `@downloads`,
+                          JSON.stringify(newList),
+                        );
+                        //console.log(newDownload)
+                        Snackbar.show({
+                          text:
+                          'First Track added to Downloads',
+                          duration: Snackbar.LENGTH_SHORT,
+                          backgroundColor: 'red',
+                        });
+                      }
+                      else {
+                        prevList.push(newDownload);
+                        await AsyncStorage.setItem(
+                          `@downloads`,
+                          JSON.stringify(prevList),
+                        );
+                        Snackbar.show({
+                          text:
+                          'Track added to Downloads',
+                          duration: Snackbar.LENGTH_SHORT,
+                          backgroundColor: 'red',
+                        });
+                      }
+
+
+
+
+                   } catch (err) {
+                    console.log(err);
+                   }
 
                   // dispatch(allActions.downloadOne(single, path));
 
