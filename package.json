@@ -35,6 +35,7 @@
     "react-native-track-player": "^1.2.7",
     "react-redux": "^7.2.4",
     "redux": "^4.1.0",
+    "redux-thunk": "^2.3.0",
     "rn-fetch-blob": "^0.12.0",
     "spinkit": "^2.0.1",
     "url-parse": "^1.5.1"

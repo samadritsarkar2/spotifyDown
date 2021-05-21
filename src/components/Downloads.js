@@ -28,7 +28,7 @@ const Downloads = () => {
                 JSON.stringify(updatedList),
               );
               setArr(updatedList);
-            dispatch(allActions.addToPlayer(prevList));
+            //dispatch(allActions.addToPlayer(prevList));
     }
     })
 
@@ -57,7 +57,7 @@ const Downloads = () => {
                 {arr.map((item, index)=> 
                     (<TouchableOpacity
                     key={index}
-                        onPress={() => {dispatch(allActions.addToPlayer(arr))}}
+                        onPress={() => {dispatch(allActions.playOne(item))}}
                     >
                     <Text>{item.title}</Text>
                     </TouchableOpacity>

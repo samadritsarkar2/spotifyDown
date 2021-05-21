@@ -1,10 +1,20 @@
 import React, { useEffect, useState } from "react"
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native"
-import { useNavigation } from "@react-navigation/native";
 import TrackPlayer from "react-native-track-player";
+import { useDispatch, useSelector } from "react-redux";
+import allActions from "../redux/actions/index";
 
 
-const trackPlayerInit = async () => {
+
+const MiniPlayer = () => {
+   
+    const [isTrackPlayerInit, setIsTrackPlayerInit] = useState(false);
+    const dispatch = useDispatch();
+    const queue = useSelector(state => state.player);
+ 
+    
+    const trackPlayerInit = async (queue) => {
+
     await TrackPlayer.setupPlayer();
     await TrackPlayer.updateOptions({
         stopWithApp : true,
@@ -12,48 +22,31 @@ const trackPlayerInit = async () => {
         capabilities : [
             TrackPlayer.CAPABILITY_PLAY,
             TrackPlayer.CAPABILITY_PAUSE
+        ],
+        compactCapabilities : [
+            TrackPlayer.CAPABILITY_PLAY,
+            TrackPlayer.CAPABILITY_PAUSE
         ]
     })
-    await TrackPlayer.add([{
-      id: '1',
-      url:
-        'https://audio-previews.elements.envatousercontent.com/files/103682271/preview.mp3',
-      type: 'default',
-      title: 'My Title',
-      album: 'My Album',
-      artist: 'Rohan Bhatia',
-      artwork: 'https://picsum.photos/100',
-    },
-    {
-        id: '1',
-        url:
-          'https://audio-previews.elements.envatousercontent.com/files/103682271/preview.mp3',
-        type: 'default',
-        title: 'My Title',
-        album: 'My Album',
-        artist: 'Rohan Bhatia',
-        artwork: 'https://picsum.photos/100',
-      }
-]);
-   
+
+   // await TrackPlayer.add(queue);
+    
     return true;
    };
     
-
-const MiniPlayer = () => {
-   
-    const [isTrackPlayerInit, setIsTrackPlayerInit] = useState(false);
- 
     //initialize the TrackPlayer when the App component is mounted
     useEffect(() => {
       const startPlayer = async () => {
-         let isInit =  await trackPlayerInit();
+         let isInit =  await trackPlayerInit(queue);
          setIsTrackPlayerInit(isInit);
       }
-    //   startPlayer();
+       startPlayer();
     }, []);
 
-
+    const handlePlayPause = async () => {
+        console.log(await TrackPlayer.getQueue())
+        await TrackPlayer.play()
+    }
 
     return (
         <>
@@ -64,14 +57,18 @@ const MiniPlayer = () => {
                    </View>
 
                    <View style={styles.playerControls} >
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                         onPress={ async () => {
+                            await TrackPlayer.skipToPrevious();
+                           }}
+                        >
                         <Image 
                             source={require("../assets/previous.png")} 
                                 style={styles.playerIcons}
                             />
                         </TouchableOpacity>
                         <TouchableOpacity
-                        onPress={async () => await TrackPlayer.play()}
+                        onPress={handlePlayPause}
                         >
                             <Image 
                             source={require("../assets/play-button.png")} 
@@ -80,7 +77,7 @@ const MiniPlayer = () => {
                         </TouchableOpacity>
                         <TouchableOpacity
                         onPress={ async () => {
-                        //   await TrackPlayer.destroy();
+                         await TrackPlayer.skipToNext();
                         }}
                         >
                         <Image 

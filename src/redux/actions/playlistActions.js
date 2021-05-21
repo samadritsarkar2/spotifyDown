@@ -1,3 +1,5 @@
+import TrackPlayer from "react-native-track-player"
+
 export const addNew = (playlist) => {
     return {
         type : 'NEW_PLAYLIST',
@@ -20,3 +22,9 @@ export const addToPlayer = (queue) => {
     }
 }
 
+export const playOne = (track) => {
+    return async dispatch => {
+        await TrackPlayer.add(track);
+        dispatch(addToPlayer(track));
+    }
+}
