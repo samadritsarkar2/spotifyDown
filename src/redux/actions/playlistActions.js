@@ -13,5 +13,10 @@ export const downloadOne = (item, path) => {
     }
 }
 
-
+export const addToPlayer = (queue) => {
+    return {
+        type : 'ADD_TO_PLAYER',
+        payload : queue
+    }
+}
 

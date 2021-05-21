@@ -1,8 +1,9 @@
-import { addNew, downloadOne } from "./playlistActions";
+import { addNew, downloadOne, addToPlayer } from "./playlistActions";
 
 const allActions = {
     addNew,
-    downloadOne
+    downloadOne,
+    addToPlayer
 }
 
 export default allActions;

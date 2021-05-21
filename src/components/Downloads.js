@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
-import {Text, View} from "react-native";
-import RNBackgroundDownloader from 'react-native-background-downloader';
-import RNFetchBlob from "rn-fetch-blob";
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import {Text, TouchableOpacity, View} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch, useSelector } from "react-redux";
+import allActions from "../redux/actions/index";
 import { isExist } from "../utils";
 
+
 const Downloads = () => {
+    const dispatch = useDispatch();
+    const queue = useSelector(state => state.player)
 
     const [arr, setArr] = useState([])
 
     const getFileName = async () => {
-     // let x = await RNFetchBlob.fs.lstat(RNBackgroundDownloader.directories.documents);
-    //  console.log(RNBackgroundDownloader.directories.documents)
+
 
     const storedValue = await AsyncStorage.getItem(`@downloads`);
     const prevList = await JSON.parse(storedValue);
@@ -26,11 +28,13 @@ const Downloads = () => {
                 JSON.stringify(updatedList),
               );
               setArr(updatedList);
-        }
+            dispatch(allActions.addToPlayer(prevList));
+    }
     })
 
-
-      setArr(prevList);
+    // console.log(queue)
+        setArr(prevList)
+      
     }
 
     useEffect(() => {
@@ -39,13 +43,29 @@ const Downloads = () => {
 
     return (
         <>
-            <View>
+            <View style ={{flex : 1,}}>
                 <Text>Downloads Page</Text>
+                <View
+                style={{
+                    flex : 1,
+                    justifyContent : 'center',
+                    alignItems : 'center',
+                    
+                }}
+                >
                 
-                {arr.map((item)=> 
-                    (<Text>{item.title}</Text>)
+                {arr.map((item, index)=> 
+                    (<TouchableOpacity
+                    key={index}
+                        onPress={() => {dispatch(allActions.addToPlayer(arr))}}
+                    >
+                    <Text>{item.title}</Text>
+                    </TouchableOpacity>
+                    )
                 )
                 }
+                <Text> { JSON.stringify(queue) } </Text>
+                </View>
             </View>
         </>
     )
