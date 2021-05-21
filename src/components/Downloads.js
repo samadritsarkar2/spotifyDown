@@ -3,6 +3,7 @@ import {Text, View} from "react-native";
 import RNBackgroundDownloader from 'react-native-background-downloader';
 import RNFetchBlob from "rn-fetch-blob";
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { isExist } from "../utils";
 
 const Downloads = () => {
 
@@ -14,7 +15,21 @@ const Downloads = () => {
 
     const storedValue = await AsyncStorage.getItem(`@downloads`);
     const prevList = await JSON.parse(storedValue);
-        
+    
+    prevList.map(async (item) => {
+        const exist = await isExist(item);
+       // console.log(exist, item.title)
+        if(exist === false){
+            const updatedList = prevList.filter(file => file.id != item.id);
+            await AsyncStorage.setItem(
+                `@downloads`,
+                JSON.stringify(updatedList),
+              );
+              setArr(updatedList);
+        }
+    })
+
+
       setArr(prevList);
     }
 
