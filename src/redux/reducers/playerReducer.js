@@ -6,9 +6,8 @@ export const playerReducer = (state = [], action) => {
         case 'ADD_TO_PLAYER':
 
             return [
-                
                 action.payload
-            ]
+            ];
             
         default:
             return state;

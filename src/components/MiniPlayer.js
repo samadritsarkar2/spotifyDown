@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native"
-import TrackPlayer from "react-native-track-player";
+import TrackPlayer, {usePlaybackState} from "react-native-track-player";
 import { useDispatch, useSelector } from "react-redux";
 import allActions from "../redux/actions/index";
 
@@ -9,19 +9,22 @@ import allActions from "../redux/actions/index";
 const MiniPlayer = () => {
    
     const [isTrackPlayerInit, setIsTrackPlayerInit] = useState(false);
+    const [isPlaying, setIsPlaying ] = useState(false);
     const dispatch = useDispatch();
     const queue = useSelector(state => state.player);
+    const playbackState = usePlaybackState();
  
     
     const trackPlayerInit = async (queue) => {
-
     await TrackPlayer.setupPlayer();
     await TrackPlayer.updateOptions({
         stopWithApp : true,
         alwaysPauseOnInterruption : true,
         capabilities : [
             TrackPlayer.CAPABILITY_PLAY,
-            TrackPlayer.CAPABILITY_PAUSE
+            TrackPlayer.CAPABILITY_PAUSE,
+            TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
+            TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
         ],
         compactCapabilities : [
             TrackPlayer.CAPABILITY_PLAY,
@@ -37,16 +40,44 @@ const MiniPlayer = () => {
     //initialize the TrackPlayer when the App component is mounted
     useEffect(() => {
       const startPlayer = async () => {
-         let isInit =  await trackPlayerInit(queue);
+         let isInit =  await trackPlayerInit();
          setIsTrackPlayerInit(isInit);
+         //console.log(playbackState )
       }
        startPlayer();
     }, []);
 
-    const handlePlayPause = async () => {
-        console.log(await TrackPlayer.getQueue())
-        await TrackPlayer.play()
+
+    const togglePlayback = async () => {
+        const currentTrack = await TrackPlayer.getCurrentTrack();
+        if (currentTrack == null) {
+          await TrackPlayer.reset();
+
+          await TrackPlayer.play();
+        } else {
+          if (playbackState === TrackPlayer.STATE_PAUSED) {
+            await TrackPlayer.play();
+          } else {
+            await TrackPlayer.pause();
+          }
+        }
+      }
+    
+
+    const skipToPrevious = async () => {
+        try {
+            await TrackPlayer.skipToPrevious();
+        } catch (_) {  }
     }
+
+    
+    const skipToNext = async () => {
+        try {
+            await TrackPlayer.skipToNext();
+
+        } catch (_) { }
+    }
+
 
     return (
         <>
@@ -58,27 +89,24 @@ const MiniPlayer = () => {
 
                    <View style={styles.playerControls} >
                         <TouchableOpacity
-                         onPress={ async () => {
-                            await TrackPlayer.skipToPrevious();
-                           }}
+                         onPress={ skipToPrevious }
                         >
                         <Image 
                             source={require("../assets/previous.png")} 
                                 style={styles.playerIcons}
                             />
                         </TouchableOpacity>
+
                         <TouchableOpacity
-                        onPress={handlePlayPause}
+                        onPress={togglePlayback}
                         >
                             <Image 
-                            source={require("../assets/play-button.png")} 
+                            source={ playbackState === TrackPlayer.STATE_PLAYING ?  require("../assets/pause.png") : require("../assets/play-button.png")} 
                                 style={[styles.playerIcons]}
                             />
                         </TouchableOpacity>
                         <TouchableOpacity
-                        onPress={ async () => {
-                         await TrackPlayer.skipToNext();
-                        }}
+                        onPress={skipToNext}
                         >
                         <Image 
                             source={require("../assets/next.png")} 
