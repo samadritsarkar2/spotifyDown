@@ -6,54 +6,11 @@ import { useDispatch } from 'react-redux';
 import { useFocusEffect } from "@react-navigation/native";
 import allActions from "../redux/actions/index";
 import Spinner from "react-native-spinkit";
+import SavedPlaylists from './SavedPlaylists';
 
 
 
 const Library = ({navigation}) => {
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
-    const [saved, setSaved] = useState();
-    const [downloaded, setDownloaded] = useState();
-    const dispatch = useDispatch();
-
-    const retriveSaved = async () => {
-        try {
-            const storedValue = await AsyncStorage.getItem(`@saved_playlists`);
-
-            const retrieved = await JSON.parse(storedValue);
-            //console.log(storedValue, retrieved)
-            setSaved(retrieved);
-            setLoading(false);
-        } catch (error) {
-            console.log("Coulnot retrieve saved Playlists", error);
-            setLoading(false);
-            setError(true);
-        }
-    }
-
-    useFocusEffect(
-         React.useCallback(()=> {
-        setLoading(true);
-        retriveSaved();
-            
-        // retriveDownloaded();
-    }, [])
-    )
-    const retriveDownloaded = async () => {
-        try {
-            const storedValue = await AsyncStorage.getItem("@downloads");
-            const retrieved = await JSON.parse(storedValue);
-            setDownloaded(retrieved);
-            setLoading(false);
-        } catch (error) {
-            console.log(error);       
-        }
-    }
-
-    const handleClick = async (id) => {
-        dispatch(allActions.addNew(id));
-        navigation.navigate('Playlist');
-    }
 
     return(
         <>
@@ -68,51 +25,9 @@ const Library = ({navigation}) => {
                     <View style={{}} ><Text style={styles.buttons}>Saved Playlists  </Text></View>
                 </View>
             </View>
-            <View style={styles.library}>
- 
-                { loading ? 
-                    <View>
-                        <Spinner 
-                            style={{marginBottom : 7, alignSelf : 'center'}}
-                            size={35}
-                            type={'Circle'} 
-                            color={'#FFF'}
-                            />
-                    </View> 
-                    : 
-                    <>
-                    <ScrollView>
-                    { (saved == null)  ? 
-                        <View style={{alignItems : 'center'}}>
-                            <Text style={{color : 'red', fontSize : 20, }}>Nothing saved yet</Text> 
-                            <Text style={{color : 'white', fontSize : 20, }}>Try adding one </Text> 
-                            <TouchableOpacity style={styles.submit} onPress={() => { navigation.navigate('New') }}>
-                                    <Text
-                                        style={styles.buttonText}>
-                                        Enter new Playlist
-                                    </Text>
-                            </TouchableOpacity>
-                        </View> 
-                        : 
-                        <View>
-                        {saved?.map((item, index) => (
-                            <View key={index} style={styles.listBox} >
-                                <TouchableOpacity
-                                onPress={() => handleClick(item.id)}
-                                >
-                                    <Text style={styles.listText}  > {item.playlistId}  </Text>
-                                </TouchableOpacity>
-                          
-                            </View>
-                        ))
-                        }
-                        </View>
-                    }
-                    
-                    </ScrollView>
-                </>
-                }
-            </View>
+
+            <SavedPlaylists />
+        
         </View>
         </>
     )
