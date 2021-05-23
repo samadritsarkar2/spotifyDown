@@ -9,8 +9,6 @@ export const addToPlayer = (queue) => {
 }
 
 
-
-
 export const playOne = (track) => {
     return async dispatch => {
 
@@ -31,5 +29,11 @@ export const playOne = (track) => {
         }
       
         dispatch(addToPlayer(track));
+    }
+}
+
+export const addToQueue = track => {
+    return async dispatch => {
+        await TrackPlayer.add(track);
     }
 }

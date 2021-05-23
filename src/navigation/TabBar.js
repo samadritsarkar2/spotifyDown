@@ -85,7 +85,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
           };
   
           const onLongPress = () => {
-            console.log(screen)
+            //console.log(screen)
             Vibration.vibrate(200);
             ToastAndroid.show(
                 `${route.name}`,

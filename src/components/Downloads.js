@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {Text, TouchableOpacity, View} from "react-native";
+import {Text, TouchableOpacity, View, Vibration} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import allActions from "../redux/actions/index";
@@ -41,6 +41,11 @@ const Downloads = () => {
         getFileName();
     }, [])
 
+    const handleLongPress = (item) => {
+        Vibration.vibrate(100);
+        dispatch(allActions.addToQueue(item));
+    }
+
     return (
         <>
             <View style ={{flex : 1,}}>
@@ -58,6 +63,7 @@ const Downloads = () => {
                     (<TouchableOpacity
                     key={index}
                         onPress={() => {dispatch(allActions.playOne(item))}}
+                        onLongPress={() => handleLongPress(item)}
                     >
                     <Text>{item.title}</Text>
                     </TouchableOpacity>

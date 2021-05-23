@@ -50,7 +50,7 @@ const MiniPlayer = () => {
 
     const togglePlayback = async () => {
         const currentTrack = await TrackPlayer.getCurrentTrack();
-        console.log((await TrackPlayer.getQueue()).length)
+        //console.log((await TrackPlayer.getQueue()).length)
         if (currentTrack == null) {
           await TrackPlayer.reset();
 
@@ -62,6 +62,7 @@ const MiniPlayer = () => {
             await TrackPlayer.pause();
           }
         }
+        
       }
     
 
