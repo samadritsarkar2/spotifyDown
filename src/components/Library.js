@@ -1,38 +1,67 @@
-import React, {useState} from 'react'
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, {useEffect, useState} from 'react'
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import KnowMore from './KnowMore.js';
 import SavedPlaylists from './SavedPlaylists';
 
 
 
 const Library = ({navigation}) => {
 
-    return(
-        <>
-        <View style={{flex : 1, backgroundColor : '#181818', paddingHorizontal : 10}}>
-            <View style={styles.header}>
-                <TouchableOpacity
-                onPress={() => navigation.navigate("Downloads")}
-                >
-                <Text style={styles.heading}>Your Library</Text>
-                </TouchableOpacity>
-            </View>
-                <View style={styles.actions}>
-                    <ScrollView
-                   
-                    alwaysBounceVertical={true}
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+ 
+  };
+
+  useEffect(()=> {
+    console.log("rednder")
+  })
+
+    return (
+      <>
+        <View
+          style={{flex: 1, backgroundColor: '#181818', paddingHorizontal: 10}}>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => navigation.navigate('Downloads')}>
+              <Text style={styles.heading}>Your Library</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.actions}>
+            <ScrollView alwaysBounceVertical={true}>
+                    <TouchableOpacity>
+                        <View style={styles.optionWrapper}>
+                        <Image source={require("../assets/heart.png")} style={styles.optionIcon}  />
+                        <Text style={styles.buttons}>Saved Playlists </Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <View style={styles.optionWrapper}>
+                        <Image source={require("../assets/down.png")} style={styles.optionIcon}  />
+                        <Text style={styles.buttons}>Downloads </Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                    onPress={toggleModal}
                     >
-                            <View style={{}} ><Text style={styles.buttons}>Saved Playlists  </Text></View>
-                            
-                    </ScrollView>
-                
-                </View>
-           
-
-
+                        <View style={styles.optionWrapper}>
+                        <Image source={require("../assets/heart.png")} style={styles.optionIcon}  />
+                        <Text style={styles.buttons}>Know More</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <View style={styles.optionWrapper}>
+                        <Image source={require("../assets/heart.png")} style={styles.optionIcon}  />
+                        <Text style={styles.buttons}>Buy Me a Coffee </Text>
+                        </View>
+                    </TouchableOpacity>
+            </ScrollView>
+            <KnowMore isModalVisible={isModalVisible} toggleModal={toggleModal} />
+          </View>
+        </View>
         
-            </View>
-        </>
-    )
+      </>
+    );
 }
 
 
@@ -60,23 +89,20 @@ const styles = StyleSheet.create({
         fontSize : 25, 
         color : 'lightgray',
     },
-    submit : {
-        justifyContent : "center",
-        borderRadius : 30,
-        backgroundColor : "#1DB954",
-        marginVertical : 20,
-        padding : 20,
-        height: 50,
-        width : '70%',
-        alignSelf : 'center'
-        
-        },
-    buttonText : {
-            color: 'white',
-            textAlign: 'center',
-            fontWeight: "500",
-            fontSize : 17,
-            fontFamily : 'Gotham',
-            textTransform : 'uppercase'
+    optionWrapper : {
+        flex : 1,
+        margin : 10,
+        paddingVertical : 20,
+        paddingHorizontal : 10,
+        flexDirection : 'row',
+         alignItems : 'baseline',
+         backgroundColor : '#121212',
+         borderRadius : 10
+    },
+    optionIcon : {
+        height : 25,
+        width : 25,
+        marginHorizontal : 10
     }
+  
 })
