@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, } from 'react'
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import KnowMore from './KnowMore.js';
 import SavedPlaylists from './SavedPlaylists';
@@ -14,10 +14,11 @@ const Library = ({navigation}) => {
  
   };
 
-  useEffect(()=> {
-    console.log("rednder")
-  })
 
+  const BetterKnowMore = React.memo(KnowMore);
+  useEffect(() => {
+   // console.log("rendered")
+  }, [])
     return (
       <>
         <View
@@ -56,7 +57,7 @@ const Library = ({navigation}) => {
                         </View>
                     </TouchableOpacity>
             </ScrollView>
-            <KnowMore isModalVisible={isModalVisible} toggleModal={toggleModal} />
+            <BetterKnowMore isModalVisible={isModalVisible} toggleModal={toggleModal} />
           </View>
         </View>
         
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
         
     },
     buttons : {
-        fontSize : 25, 
+        fontSize : 20, 
         color : 'lightgray',
     },
     optionWrapper : {

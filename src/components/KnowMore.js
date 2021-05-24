@@ -25,6 +25,7 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
           });
         }
     }
+    
     return (
         <>
                <Modal isVisible={isModalVisible} >
