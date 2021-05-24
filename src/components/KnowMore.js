@@ -25,10 +25,10 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
           });
         }
     }
-    
+
     return (
         <>
-               <Modal isVisible={isModalVisible} >
+               <Modal isVisible={isModalVisible} onBackButtonPress={toggleModal} onBackdropPress={toggleModal} >
              
                   <View style={{flex: 1, justifyContent : 'center', alignItems : 'center' }}>
 
