@@ -70,17 +70,24 @@ const Downloads = () => {
                 {arr.map((item, index)=> 
                     (
                     <TouchableOpacity
+                        key={index}
                         onPress={() => {dispatch(allActions.playOne(item))}}
                         onLongPress={() => handleLongPress(item)}
                     >
                     <View
-                    key={index}
                     style={styles.itemWrapper}
                     >
-                    
+                        <View
+                        style={{flex : 0.2, }}
+                        >
                         <Image style={styles.trackArtwork}source={{uri : `${item.artwork}`, }} />
-                          <Text style={styles.trackTitle}>{item.title}</Text>
-                    
+                        </View>
+                        <View
+                        style={{flex : 0.8, flexDirection : 'column'}}
+                        >
+                            <Text style={styles.trackTitle}>{item.title}</Text>
+                            <Text style={{color : 'gray'}}>{item.artist} - {item.album}</Text>
+                        </View>
                     </View>
                     </TouchableOpacity>
                     )
@@ -110,7 +117,7 @@ const styles = StyleSheet.create({
     itemWrapper : {
         flex : 1,
         flexDirection : "row",
-        marginVertical : 10,
+        marginVertical : 7,
         paddingHorizontal : '1%',
         paddingVertical : '3%',
         
@@ -118,11 +125,14 @@ const styles = StyleSheet.create({
     },
     trackTitle : {
         color : 'white',
-        fontSize : 20
+        fontSize : 20,
+        alignSelf : 'flex-start',
+        backgroundColor : 'red'
     },
     trackArtwork : {
         marginRight : 20,
-        height : 30,
-        width : 30
+        height : '70%',
+        width : '70%',
+        alignSelf : 'center'
     }
 })
