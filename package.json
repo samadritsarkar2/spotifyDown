@@ -18,6 +18,7 @@
     "@react-navigation/bottom-tabs": "^5.11.10",
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.4",
+    "expo-updates": "^0.5.5",
     "react": "16.13.1",
     "react-native": "^0.64.1",
     "react-native-background-downloader": "^2.3.4",
