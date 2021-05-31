@@ -11,11 +11,16 @@ module.exports = async function () {
   );
 
   TrackPlayer.addEventListener('remote-duck', (e) => {
-    if (e.paused === true) TrackPlayer.pause();
-    else TrackPlayer.play();
+    console.log(e);
+    if (e.permanent === true) {
+      TrackPlayer.pause();
+    } else {
+      if (e.paused === true) TrackPlayer.pause();
+      else TrackPlayer.play();
+    }
   });
 
   TrackPlayer.addEventListener('remote-seek', (e) => {
-    console.log(e);
+    TrackPlayer.seekTo(e.position);
   });
 };

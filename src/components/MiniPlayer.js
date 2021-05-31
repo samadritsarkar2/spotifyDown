@@ -23,7 +23,7 @@ const MiniPlayer = () => {
     await TrackPlayer.setupPlayer();
     await TrackPlayer.updateOptions({
       stopWithApp: true,
-      alwaysPauseOnInterruption: true,
+      alwaysPauseOnInterruption: false,
       capabilities: [
         TrackPlayer.CAPABILITY_PLAY,
         TrackPlayer.CAPABILITY_PAUSE,
@@ -54,7 +54,8 @@ const MiniPlayer = () => {
 
   const togglePlayback = async () => {
     const currentTrack = await TrackPlayer.getCurrentTrack();
-    //console.log((await TrackPlayer.getQueue()).length)
+
+    // console.log(await TrackPlayer.getQueue());
     if (currentTrack == null) {
       await TrackPlayer.reset();
 

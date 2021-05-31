@@ -23,7 +23,7 @@ const Downloads = ({navigation}) => {
   const getFileName = async () => {
     const storedValue = await AsyncStorage.getItem(`@downloads`);
     const prevList = await JSON.parse(storedValue);
-    console.log(prevList);
+    //  console.log(prevList);
     prevList.map(async (item) => {
       const exist = await isExist(item);
       if (exist === false) {

@@ -149,6 +149,7 @@ const Playlist = ({navigation, route}) => {
           //  console.log('link fetched ....');
           let link = res.url;
           let duration = res.duration;
+          console.log(res);
           let promise = new Promise((resolve, reject) => {
             if (link) {
               let task = RNBackgroundDownloader.download({
@@ -173,7 +174,12 @@ const Playlist = ({navigation, route}) => {
                   setTracks((prev) => {
                     const nextState = prev.map((item) =>
                       item.id == single.id
-                        ? {...item, downloaded: true, path: path}
+                        ? {
+                            ...item,
+                            downloaded: true,
+                            path: path,
+                            duration: duration,
+                          }
                         : item,
                     );
 
@@ -355,15 +361,13 @@ const Playlist = ({navigation, route}) => {
   };
 
   const openFile = (single) => {
-    const android = RNFetchBlob.android;
-    // const path = `${RNBackgroundDownloader.directories.documents}/${playlistData.playlistId}/${single.name}.mp3`
-    // let path = single.path;
     const track = {
       id: single.id,
       title: single.name,
       artist: single.artists[0].name,
       album: single.album,
       artwork: single.img,
+      duration: single.duration,
       url: single.path,
     };
     const exists = checkExists(single);
