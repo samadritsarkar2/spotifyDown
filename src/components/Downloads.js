@@ -14,7 +14,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import allActions from '../redux/actions/index';
 import {isExist} from '../utils';
 
-const Downloads = () => {
+const Downloads = ({navigation}) => {
   const dispatch = useDispatch();
   const queue = useSelector((state) => state.player);
   const windowHeight = Dimensions.get('window').height;
@@ -23,7 +23,7 @@ const Downloads = () => {
   const getFileName = async () => {
     const storedValue = await AsyncStorage.getItem(`@downloads`);
     const prevList = await JSON.parse(storedValue);
-
+    console.log(prevList);
     prevList.map(async (item) => {
       const exist = await isExist(item);
       if (exist === false) {
@@ -58,39 +58,59 @@ const Downloads = () => {
         <View
           style={{
             flex: 1,
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
 
             marginHorizontal: '1%',
           }}>
-          <ScrollView showsVerticalScrollIndicator={false} style={{}}>
-            {arr.map((item, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => {
-                  dispatch(allActions.playOne(item));
-                }}
-                style={{flex: 1, marginBottom: 15}}
-                onLongPress={() => handleLongPress(item)}>
-                <View style={styles.itemWrapper}>
-                  <Image
-                    style={styles.trackArtwork}
-                    source={{uri: `${item.artwork}`}}
-                  />
-                  <View
-                    style={{
-                      flex: 9,
-                      flexDirection: 'column',
-                    }}>
-                    <Text style={styles.trackTitle}>{item.title}</Text>
-                    <Text style={{color: 'gray'}}>
-                      {item.artist} - {item.album}
-                    </Text>
+          {arr.length === 0 ? (
+            <>
+              <View>
+                <Text style={{color: 'red', fontSize: 20}}>
+                  No tracks Downloaded
+                </Text>
+                <Text style={{color: 'white', fontSize: 20}}>
+                  Try adding one{' '}
+                </Text>
+                <TouchableOpacity
+                  style={styles.submit}
+                  onPress={() => {
+                    navigation.navigate('New');
+                  }}>
+                  <Text style={styles.buttonText}>Enter New</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          ) : (
+            <ScrollView showsVerticalScrollIndicator={false} style={{}}>
+              {arr.map((item, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => {
+                    dispatch(allActions.playOne(item));
+                  }}
+                  style={{flex: 1, marginBottom: 15}}
+                  onLongPress={() => handleLongPress(item)}>
+                  <View style={styles.itemWrapper}>
+                    <Image
+                      style={styles.trackArtwork}
+                      source={{uri: `${item.artwork}`}}
+                    />
+                    <View
+                      style={{
+                        flex: 9,
+                        flexDirection: 'column',
+                      }}>
+                      <Text style={styles.trackTitle}>{item.title}</Text>
+                      <Text style={{color: 'gray'}}>
+                        {item.artist} - {item.album}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-              </TouchableOpacity>
-            ))}
-            <View style={{height: windowHeight * 0.06}} />
-          </ScrollView>
+                </TouchableOpacity>
+              ))}
+              <View style={{height: windowHeight * 0.06}} />
+            </ScrollView>
+          )}
         </View>
       </View>
     </>
@@ -126,5 +146,22 @@ const styles = StyleSheet.create({
     aspectRatio: 1 / 1,
     alignSelf: 'center',
     backgroundColor: 'blue',
+  },
+  submit: {
+    justifyContent: 'center',
+    borderRadius: 30,
+    backgroundColor: '#1DB954',
+    marginVertical: 20,
+    height: 50,
+    width: '70%',
+    alignSelf: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: '500',
+    fontSize: 17,
+    fontFamily: 'Gotham',
+    textTransform: 'uppercase',
   },
 });
