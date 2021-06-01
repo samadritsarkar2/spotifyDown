@@ -26,12 +26,12 @@ module.exports = async function () {
 
   TrackPlayer.addEventListener('remote-duck', (e) => {
     console.log(e);
-    if (e.permanent === true) {
-      TrackPlayer.pause();
-    } else {
-      if (e.paused === true) TrackPlayer.pause();
-      else TrackPlayer.play();
-    }
+    // if (e.permanent === true) {
+    //   TrackPlayer.pause();
+    // } else {
+    //   if (e.paused === true) TrackPlayer.pause();
+    //   else TrackPlayer.play();
+    // }
   });
 
   TrackPlayer.addEventListener('remote-seek', (e) => {
