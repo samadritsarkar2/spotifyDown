@@ -100,7 +100,7 @@ const Downloads = ({navigation}) => {
                         justifyContent: 'center',
                       }}>
                       <Text style={styles.trackTitle}>{item.title}</Text>
-                      <Text style={{color: 'gray'}}>
+                      <Text style={styles.trackInfo}>
                         {item.artist} - {item.album}
                       </Text>
                     </View>
@@ -140,9 +140,13 @@ const styles = StyleSheet.create({
   },
   trackTitle: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 16.9,
     justifyContent: 'flex-start',
     fontFamily: 'serif',
+  },
+  trackInfo: {
+    color: '#6C7A89',
+    fontSize: 12,
   },
   trackArtwork: {
     flex: 1,

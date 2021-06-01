@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {
-  Button,
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -13,6 +13,7 @@ import {useDispatch} from 'react-redux';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import allActions from '../redux/actions/index';
 import Spinner from 'react-native-spinkit';
+import {windowHeight, windowWidth} from '../common';
 
 const SavedPlaylists = () => {
   const [loading, setLoading] = useState(true);
@@ -50,19 +51,23 @@ const SavedPlaylists = () => {
 
   return (
     <>
-      <View style={styles.library}>
+      <View
+        style={{flex: 1, backgroundColor: '#181818', paddingHorizontal: 10}}>
+        <View style={styles.header}>
+          <Text style={styles.heading}>Saved</Text>
+        </View>
         {loading ? (
-          <View>
+          <View style={{flex: 1}}>
             <Spinner
               style={{marginBottom: 7, alignSelf: 'center'}}
-              size={35}
+              size={72}
               type={'Circle'}
               color={'#FFF'}
             />
           </View>
         ) : (
           <>
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false} style={{}}>
               {saved == null ? (
                 <View style={{alignItems: 'center'}}>
                   <Text style={{color: 'red', fontSize: 20}}>
@@ -82,11 +87,34 @@ const SavedPlaylists = () => {
               ) : (
                 <View>
                   {saved?.map((item, index) => (
-                    <View key={index} style={styles.listBox}>
-                      <TouchableOpacity onPress={() => handleClick(item.id)}>
-                        <Text style={styles.listText}> {item.playlistId} </Text>
-                      </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => handleClick(item.id)}
+                      style={{flex: 1, marginBottom: 15}}>
+                      <View key={index} style={styles.itemWrapper}>
+                        <Image
+                          style={styles.playlistImg}
+                          source={
+                            item.playlistImg
+                              ? Image.resolveAssetSource({
+                                  uri: `${item.playlistImg}`,
+                                })
+                              : require('../assets/defaultPlaylist.png')
+                          }
+                        />
+                        <View
+                          style={{
+                            flex: 9,
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                          }}>
+                          <Text style={styles.playlistId}>
+                            {item.playlistId}
+                          </Text>
+                        </View>
+                        <Text style={styles.listText}> </Text>
+                      </View>
+                    </TouchableOpacity>
                   ))}
                 </View>
               )}
@@ -103,18 +131,20 @@ export default SavedPlaylists;
 const styles = StyleSheet.create({
   header: {
     flex: 0.3,
-    marginTop: 40,
-    marginHorizontal: 20,
+    marginHorizontal: '1%',
+    alignItems: 'center',
+  },
+  heading: {
+    color: '#1DB954',
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 40,
+    alignSelf: 'center',
+    marginTop: '5%',
   },
   library: {
     flex: 0.7,
 
     marginHorizontal: 10,
-  },
-  heading: {
-    fontSize: 50,
-    color: '#1DB954',
-    fontFamily: 'Gotham',
   },
   actions: {
     flex: 0.7,
@@ -127,8 +157,25 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: 'lightgray',
   },
-  listBox: {
-    margin: 10,
+  itemWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    height: windowHeight * 0.07,
+  },
+  playlistImg: {
+    flex: 1.5,
+    marginLeft: 7,
+    marginRight: 12,
+    height: '100%',
+    aspectRatio: 1 / 1,
+    alignSelf: 'center',
+    padding: 6,
+  },
+  playlistId: {
+    color: 'white',
+    fontSize: 20,
+    justifyContent: 'flex-start',
+    fontFamily: 'serif',
   },
   listText: {
     fontSize: 25,

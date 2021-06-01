@@ -305,6 +305,7 @@ const Playlist = ({navigation, route}) => {
         const playlistToAdd = {
           id: playlistData.id,
           playlistId: playlistData.playlistId,
+          playlistImg: playlistData.playlistImg,
         };
 
         const storedValue = await AsyncStorage.getItem(`@saved_playlists`);
