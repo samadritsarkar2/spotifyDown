@@ -13,6 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import allActions from '../redux/actions/index';
 import {isExist} from '../utils';
+import {windowHeight, windowWidth} from '../common';
 
 const Downloads = ({navigation}) => {
   const dispatch = useDispatch();
@@ -47,21 +48,17 @@ const Downloads = ({navigation}) => {
   };
 
   return (
-    <View
-      style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-end'}}>
+    <>
       <View
-        style={{flex: 0.5, backgroundColor: '#181818', paddingHorizontal: 10}}>
+        style={{flex: 1, backgroundColor: '#181818', paddingHorizontal: 10}}>
         <View style={styles.header}>
-          <View>
-            <Text style={styles.heading}>Downloads</Text>
-          </View>
+          <Text style={styles.heading}>Downloads</Text>
         </View>
         <View
           style={{
             flex: 1,
             justifyContent: 'flex-start',
-
-            marginHorizontal: '1%',
+            marginHorizontal: 10,
           }}>
           {arr.length === 0 ? (
             <>
@@ -100,12 +97,16 @@ const Downloads = ({navigation}) => {
                       style={{
                         flex: 9,
                         flexDirection: 'column',
+                        justifyContent: 'center',
                       }}>
                       <Text style={styles.trackTitle}>{item.title}</Text>
                       <Text style={{color: 'gray'}}>
                         {item.artist} - {item.album}
                       </Text>
                     </View>
+                    {/* <Text style={{color: 'white', alignSelf: 'center'}}>
+                      {Math.floor(item?.duration)}
+                    </Text> */}
                   </View>
                 </TouchableOpacity>
               ))}
@@ -114,7 +115,7 @@ const Downloads = ({navigation}) => {
           )}
         </View>
       </View>
-    </View>
+    </>
   );
 };
 
@@ -123,30 +124,34 @@ export default Downloads;
 const styles = StyleSheet.create({
   header: {
     flex: 0.3,
-    marginTop: '5%',
     marginHorizontal: '1%',
   },
   heading: {
     color: '#1DB954',
     fontFamily: 'OpenSans-SemiBold',
     fontSize: 40,
+    alignSelf: 'center',
+    marginTop: '5%',
   },
   itemWrapper: {
     flex: 1,
     flexDirection: 'row',
+    height: windowHeight * 0.07,
   },
   trackTitle: {
     color: 'white',
-    fontSize: 15,
+    fontSize: 18,
     justifyContent: 'flex-start',
+    fontFamily: 'serif',
   },
   trackArtwork: {
     flex: 1,
     marginRight: 20,
-    width: '100%',
+    height: '100%',
     aspectRatio: 1 / 1,
     alignSelf: 'center',
-    backgroundColor: 'blue',
+    borderRadius: 6,
+    padding: 6,
   },
   submit: {
     justifyContent: 'center',

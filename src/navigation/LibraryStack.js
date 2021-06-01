@@ -9,30 +9,7 @@ const Stack = createStackNavigator();
 
 const LibraryStack = () => {
   return (
-    <Stack.Navigator
-      initialRouteName="Library"
-      headerMode={'none'}
-      mode={'modal'}
-      screenOptions={{
-        headerShown: false,
-        cardStyle: {backgroundColor: 'transparent'},
-        cardOverlayEnabled: true,
-        cardStyleInterpolator: ({current: {progress}}) => ({
-          cardStyle: {
-            opacity: progress.interpolate({
-              inputRange: [0, 0.5, 0.9, 1],
-              outputRange: [0, 0.25, 0.7, 1],
-            }),
-          },
-          overlayStyle: {
-            opacity: progress.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 0.5],
-              extrapolate: 'extend',
-            }),
-          },
-        }),
-      }}>
+    <Stack.Navigator initialRouteName="Library" headerMode={'none'}>
       <Stack.Screen component={Library} name="Library" />
       <Stack.Screen component={SavedPlaylists} name="SavedPlaylists" />
       <Stack.Screen component={Downloads} name="Downloads" />
