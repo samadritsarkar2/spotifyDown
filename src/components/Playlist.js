@@ -362,26 +362,27 @@ const Playlist = ({navigation, route}) => {
   };
 
   const openFile = (single) => {
-    const track = {
-      id: single.id,
-      title: single.name,
-      artist: single.artists[0].name,
-      album: single.album,
-      artwork: single.img,
-      duration: single.duration,
-      url: single.path,
-    };
-    const exists = checkExists(single);
-    if (exists) {
-      dispatch(allActions.playOne(track));
-    } else {
-      Alert.alert(
-        'Please download the file',
-        'hehe',
-        [{text: 'OK', onPress: () => {}}],
-        {cancelable: true},
-      );
-    }
+    // const track = {
+    //   id: single.id,
+    //   title: single.name,
+    //   artist: single.artists[0].name,
+    //   album: single.album,
+    //   artwork: single.img,
+    //   duration: single.duration,
+    //   url: single.path,
+    // };
+    // const exists = checkExists(single);
+    // if (exists) {
+    //   dispatch(allActions.playOne(track));
+    // } else {
+    //   Alert.alert(
+    //     'Please download the file',
+    //     'hehe',
+    //     [{text: 'OK', onPress: () => {}}],
+    //     {cancelable: true},
+    //   );
+    // }
+    navigation.navigate('LibraryStack', {screen: 'Downloads'});
   };
 
   const onRequestClose = () => null;

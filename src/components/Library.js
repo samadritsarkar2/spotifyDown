@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     color: '#1DB954',
-    fontFamily: 'OpenSans-SemiBold',
+    fontFamily: 'GothamMedium',
     fontSize: 50,
     alignSelf: 'center',
   },

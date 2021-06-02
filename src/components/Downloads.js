@@ -49,8 +49,7 @@ const Downloads = ({navigation}) => {
 
   return (
     <>
-      <View
-        style={{flex: 1, backgroundColor: '#181818', paddingHorizontal: 10}}>
+      <View style={{flex: 1, paddingHorizontal: 10}}>
         <View style={styles.header}>
           <Text style={styles.heading}>Downloads</Text>
         </View>
@@ -128,8 +127,9 @@ const styles = StyleSheet.create({
   },
   heading: {
     color: '#1DB954',
-    fontFamily: 'OpenSans-SemiBold',
-    fontSize: 40,
+    fontFamily: 'Roboto',
+    fontWeight: 'bold',
+    fontSize: 45,
     alignSelf: 'center',
     marginTop: '5%',
   },

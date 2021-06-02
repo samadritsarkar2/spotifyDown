@@ -66,7 +66,12 @@ const SavedPlaylists = () => {
             />
           </View>
         ) : (
-          <>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'flex-start',
+              marginHorizontal: 10,
+            }}>
             <ScrollView showsVerticalScrollIndicator={false} style={{}}>
               {saved == null ? (
                 <View style={{alignItems: 'center'}}>
@@ -90,7 +95,7 @@ const SavedPlaylists = () => {
                     <TouchableOpacity
                       key={index}
                       onPress={() => handleClick(item.id)}
-                      style={{flex: 1, marginBottom: 15}}>
+                      style={{flex: 1, marginBottom: 20}}>
                       <View key={index} style={styles.itemWrapper}>
                         <Image
                           style={styles.playlistImg}
@@ -119,7 +124,7 @@ const SavedPlaylists = () => {
                 </View>
               )}
             </ScrollView>
-          </>
+          </View>
         )}
       </View>
     </>
@@ -136,15 +141,11 @@ const styles = StyleSheet.create({
   },
   heading: {
     color: '#1DB954',
-    fontFamily: 'OpenSans-SemiBold',
-    fontSize: 40,
+    fontFamily: 'Roboto',
+    fontWeight: 'bold',
+    fontSize: 45,
     alignSelf: 'center',
     marginTop: '5%',
-  },
-  library: {
-    flex: 0.7,
-
-    marginHorizontal: 10,
   },
   actions: {
     flex: 0.7,

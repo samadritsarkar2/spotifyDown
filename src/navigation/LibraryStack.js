@@ -1,5 +1,9 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  TransitionSpecs,
+  CardStyleInterpolators,
+} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import Library from '../components/Library';
 import Downloads from '../components/Downloads';
@@ -9,10 +13,21 @@ const Stack = createStackNavigator();
 
 const LibraryStack = () => {
   return (
-    <Stack.Navigator initialRouteName="Library" headerMode={'none'}>
+    <Stack.Navigator
+      initialRouteName="Library"
+      headerMode={'none'}
+      screenOptions={{
+        gestureEnabled: true,
+        cardOverlayEnabled: true,
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }}>
       <Stack.Screen component={Library} name="Library" />
-      <Stack.Screen component={SavedPlaylists} name="SavedPlaylists" />
-      <Stack.Screen component={Downloads} name="Downloads" />
+      <Stack.Screen
+        component={SavedPlaylists}
+        name="SavedPlaylists"
+        options={{detachPreviousScreen: true}}
+      />
+      <Stack.Screen component={Downloads} name="Downloads" options={{}} />
     </Stack.Navigator>
   );
 };
