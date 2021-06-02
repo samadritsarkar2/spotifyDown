@@ -130,10 +130,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: windowHeight * 0.06,
     justifyContent: 'center',
-    bottom: 43,
+    bottom: windowHeight * 0.05,
     paddingVertical: 10,
     backgroundColor: '#212326',
-    marginBottom: 0.5,
+    borderTopColor: 'gray',
+    borderBottomColor: 'black',
+    borderWidth: 1,
   },
   playerView: {
     flex: 1,
@@ -149,5 +151,5 @@ const styles = StyleSheet.create({
     marginEnd: 20,
     alignSelf: 'center',
   },
-  playerIcons: {width: 25, height: 25, marginHorizontal: 7},
+  playerIcons: {width: 27, height: 27, marginHorizontal: 7},
 });

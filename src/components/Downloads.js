@@ -14,32 +14,41 @@ import {useDispatch, useSelector} from 'react-redux';
 import allActions from '../redux/actions/index';
 import {isExist} from '../utils';
 import {windowHeight, windowWidth} from '../common';
+import Spinner from 'react-native-spinkit';
 
 const Downloads = ({navigation}) => {
   const dispatch = useDispatch();
-  const queue = useSelector((state) => state.player);
+  const [loading, setLoading] = useState(true);
   const windowHeight = Dimensions.get('window').height;
   const [arr, setArr] = useState([]);
 
   const getFileName = async () => {
-    const storedValue = await AsyncStorage.getItem(`@downloads`);
-    const prevList = await JSON.parse(storedValue);
-    //  console.log(prevList);
-    prevList.map(async (item) => {
-      const exist = await isExist(item);
-      if (exist === false) {
-        const updatedList = prevList.filter((file) => file.id != item.id);
-        await AsyncStorage.setItem(`@downloads`, JSON.stringify(updatedList));
-        setArr(updatedList);
-      }
-    });
-
-    // console.log(queue)
-    setArr(prevList);
+    try {
+      const storedValue = await AsyncStorage.getItem(`@downloads`);
+      const prevList = await JSON.parse(storedValue);
+      //  console.log(prevList);
+      prevList.map(async (item) => {
+        const exist = await isExist(item);
+        if (exist === false) {
+          const updatedList = prevList.filter((file) => file.id != item.id);
+          await AsyncStorage.setItem(`@downloads`, JSON.stringify(updatedList));
+          setArr(updatedList);
+          setLoading(false);
+        } else {
+          setArr(prevList);
+          setLoading(false);
+        }
+      });
+    } catch (error) {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    getFileName();
+    setLoading(true);
+    setTimeout(() => {
+      getFileName();
+    }, 500);
   }, []);
 
   const handleLongPress = (item) => {
@@ -53,66 +62,77 @@ const Downloads = ({navigation}) => {
         <View style={styles.header}>
           <Text style={styles.heading}>Downloads</Text>
         </View>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'flex-start',
-            marginHorizontal: 10,
-          }}>
-          {arr.length === 0 ? (
-            <>
-              <View>
-                <Text style={{color: 'red', fontSize: 20}}>
-                  No tracks Downloaded
-                </Text>
-                <Text style={{color: 'white', fontSize: 20}}>
-                  Try adding one{' '}
-                </Text>
-                <TouchableOpacity
-                  style={styles.submit}
-                  onPress={() => {
-                    navigation.navigate('New');
-                  }}>
-                  <Text style={styles.buttonText}>Enter New</Text>
-                </TouchableOpacity>
-              </View>
-            </>
-          ) : (
-            <ScrollView showsVerticalScrollIndicator={false} style={{}}>
-              {arr.map((item, index) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => {
-                    dispatch(allActions.playOne(item));
-                  }}
-                  style={{flex: 1, marginBottom: 15}}
-                  onLongPress={() => handleLongPress(item)}>
-                  <View style={styles.itemWrapper}>
-                    <Image
-                      style={styles.trackArtwork}
-                      source={{uri: `${item.artwork}`}}
-                    />
-                    <View
-                      style={{
-                        flex: 9,
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                      }}>
-                      <Text style={styles.trackTitle}>{item.title}</Text>
-                      <Text style={styles.trackInfo}>
-                        {item.artist} - {item.album}
-                      </Text>
-                    </View>
-                    {/* <Text style={{color: 'white', alignSelf: 'center'}}>
+        {loading ? (
+          <View style={{flex: 1}}>
+            <Spinner
+              style={{marginBottom: 7, alignSelf: 'center'}}
+              size={72}
+              type={'9CubeGrid'}
+              color={'#FFF'}
+            />
+          </View>
+        ) : (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'flex-start',
+              marginHorizontal: 10,
+            }}>
+            {arr.length === 0 ? (
+              <>
+                <View>
+                  <Text style={{color: 'red', fontSize: 20}}>
+                    No tracks Downloaded
+                  </Text>
+                  <Text style={{color: 'white', fontSize: 20}}>
+                    Try adding one{' '}
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.submit}
+                    onPress={() => {
+                      navigation.navigate('New');
+                    }}>
+                    <Text style={styles.buttonText}>Enter New</Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            ) : (
+              <ScrollView showsVerticalScrollIndicator={false} style={{}}>
+                {arr.map((item, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => {
+                      dispatch(allActions.playOne(item));
+                    }}
+                    style={{flex: 1, marginBottom: 15}}
+                    onLongPress={() => handleLongPress(item)}>
+                    <View style={styles.itemWrapper}>
+                      <Image
+                        style={styles.trackArtwork}
+                        source={{uri: `${item.artwork}`}}
+                      />
+                      <View
+                        style={{
+                          flex: 9,
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                        }}>
+                        <Text style={styles.trackTitle}>{item.title}</Text>
+                        <Text style={styles.trackInfo}>
+                          {item.artist} - {item.album}
+                        </Text>
+                      </View>
+                      {/* <Text style={{color: 'white', alignSelf: 'center'}}>
                       {Math.floor(item?.duration)}
                     </Text> */}
-                  </View>
-                </TouchableOpacity>
-              ))}
-              <View style={{height: windowHeight * 0.06}} />
-            </ScrollView>
-          )}
-        </View>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+                <View style={{height: windowHeight * 0.06}} />
+              </ScrollView>
+            )}
+          </View>
+        )}
       </View>
     </>
   );

@@ -20,6 +20,7 @@ const SavedPlaylists = () => {
   const [saved, setSaved] = useState();
   const dispatch = useDispatch();
   const navigation = useNavigation();
+
   useFocusEffect(
     React.useCallback(() => {
       setLoading(true);
