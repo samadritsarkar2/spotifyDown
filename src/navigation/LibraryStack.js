@@ -17,7 +17,6 @@ const LibraryStack = () => {
       initialRouteName="Library"
       headerMode={'none'}
       screenOptions={{
-        gestureEnabled: true,
         cardOverlayEnabled: true,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>

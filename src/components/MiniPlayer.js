@@ -1,20 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  Dimensions,
-} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import TrackPlayer, {
   usePlaybackState,
   useTrackPlayerEvents,
-  useWhenPlaybackStateChanges,
 } from 'react-native-track-player';
+
 import {useDispatch, useSelector} from 'react-redux';
 import allActions from '../redux/actions/index';
 import {windowHeight} from '../common';
+import TextTicker from 'react-native-text-ticker';
 
 const MiniPlayer = () => {
   const [isTrackPlayerInit, setIsTrackPlayerInit] = useState(false);
@@ -63,9 +57,15 @@ const MiniPlayer = () => {
   useTrackPlayerEvents(['playback-track-changed'], async (event) => {
     if (event.type === TrackPlayer.TrackPlayerEvents.PLAYBACK_TRACK_CHANGED) {
       const track = await TrackPlayer.getTrack(event.nextTrack);
-      const {title, artist, artwork} = track || {};
-      console.log(artist);
+      const {title, artist, album} = track || {
+        title: 'Play something 🎶',
+        artist: 'Go to Library->',
+        album: 'Downloads-> Play a track 🎵',
+      };
+
       setTrackTitle(title);
+      setTrackArtist(artist);
+      setTrackAlbum(album);
     }
   });
 
@@ -100,10 +100,28 @@ const MiniPlayer = () => {
 
   return (
     <>
-      <View style={[styles.box, {borderTopColor: 'white'}]}>
+      <View style={[styles.box]}>
         <View style={styles.playerView}>
           <View style={styles.trackInfo}>
-            <Text style={{color: 'white'}}>{trackTitle}</Text>
+            {/* <Text style={{color: 'white'}}>
+              {trackTitle} {'\u25CF'} {trackArtist}
+            </Text> */}
+
+            <TextTicker
+              style={{
+                color: 'white',
+                fontFamily: 'GothamMedium',
+                fontWeight: 'bold',
+              }}
+              duration={8000}
+              scroll={false}
+              repeatSpacer={150}
+              marqueeDelay={100}>
+              <Text>{trackTitle} </Text>
+              <Text style={{color: 'gray', fontSize: 12}}>
+                {'\u25CF'} {trackArtist} {'\u25CF'} {trackAlbum}
+              </Text>
+            </TextTicker>
           </View>
 
           <View style={styles.playerControls}>
@@ -148,7 +166,7 @@ const styles = StyleSheet.create({
     bottom: windowHeight * 0.05,
     paddingVertical: 10,
     backgroundColor: '#212326',
-    borderTopColor: 'gray',
+    borderTopColor: 'white',
     borderBottomColor: 'black',
     borderWidth: 1,
   },
@@ -158,10 +176,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   trackInfo: {
+    flex: 1,
     marginStart: 10,
     alignSelf: 'center',
   },
   playerControls: {
+    flex: 0.45,
     flexDirection: 'row',
     marginEnd: 20,
     alignSelf: 'center',
