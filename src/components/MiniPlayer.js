@@ -7,16 +7,22 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-import TrackPlayer, {usePlaybackState} from 'react-native-track-player';
+import TrackPlayer, {
+  usePlaybackState,
+  useTrackPlayerEvents,
+  useWhenPlaybackStateChanges,
+} from 'react-native-track-player';
 import {useDispatch, useSelector} from 'react-redux';
 import allActions from '../redux/actions/index';
 import {windowHeight} from '../common';
 
 const MiniPlayer = () => {
   const [isTrackPlayerInit, setIsTrackPlayerInit] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [trackTitle, setTrackTitle] = useState('');
+  const [trackAlbum, setTrackAlbum] = useState('');
+  const [trackArtist, setTrackArtist] = useState('');
   const dispatch = useDispatch();
-  const queue = useSelector((state) => state.player);
+
   const playbackState = usePlaybackState();
 
   const trackPlayerInit = async (queue) => {
@@ -54,6 +60,15 @@ const MiniPlayer = () => {
     startPlayer();
   }, []);
 
+  useTrackPlayerEvents(['playback-track-changed'], async (event) => {
+    if (event.type === TrackPlayer.TrackPlayerEvents.PLAYBACK_TRACK_CHANGED) {
+      const track = await TrackPlayer.getTrack(event.nextTrack);
+      const {title, artist, artwork} = track || {};
+      console.log(artist);
+      setTrackTitle(title);
+    }
+  });
+
   const togglePlayback = async () => {
     const currentTrack = await TrackPlayer.getCurrentTrack();
 
@@ -61,7 +76,7 @@ const MiniPlayer = () => {
     if (currentTrack == null) {
       await TrackPlayer.reset();
 
-      await TrackPlayer.play();
+      // await TrackPlayer.play();
     } else {
       if (playbackState === TrackPlayer.STATE_PAUSED) {
         await TrackPlayer.play();
@@ -85,10 +100,10 @@ const MiniPlayer = () => {
 
   return (
     <>
-      <View style={styles.box}>
+      <View style={[styles.box, {borderTopColor: 'white'}]}>
         <View style={styles.playerView}>
           <View style={styles.trackInfo}>
-            <Text style={{color: 'white'}}>Song Name</Text>
+            <Text style={{color: 'white'}}>{trackTitle}</Text>
           </View>
 
           <View style={styles.playerControls}>
