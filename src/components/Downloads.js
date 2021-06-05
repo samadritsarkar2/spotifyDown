@@ -162,11 +162,12 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16.9,
     justifyContent: 'flex-start',
-    fontFamily: 'serif',
+    fontFamily: 'GothamMedium',
   },
   trackInfo: {
     color: '#6C7A89',
     fontSize: 12,
+    fontFamily: 'GothamMedium',
   },
   trackArtwork: {
     flex: 1,

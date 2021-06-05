@@ -23,10 +23,10 @@ const TabBar = ({state, descriptors, navigation}) => {
     switch (name) {
       case 'Home':
         return (
-          <>
+          <View>
             {isFocused ? (
               <Image
-                style={(styles.icons, styles.iconsFocused)}
+                style={styles.icons}
                 source={require('../assets/homeFill.png')}
               />
             ) : (
@@ -35,11 +35,11 @@ const TabBar = ({state, descriptors, navigation}) => {
                 source={require('../assets/home.png')}
               />
             )}
-          </>
+          </View>
         );
       case 'New':
         return (
-          <>
+          <View>
             {isFocused ? (
               <Image
                 style={styles.icons}
@@ -51,11 +51,11 @@ const TabBar = ({state, descriptors, navigation}) => {
                 source={require('../assets/plus.png')}
               />
             )}
-          </>
+          </View>
         );
       case 'LibraryStack':
         return (
-          <>
+          <View>
             {isFocused ? (
               <Image
                 style={styles.icons}
@@ -67,7 +67,7 @@ const TabBar = ({state, descriptors, navigation}) => {
                 source={require('../assets/square.png')}
               />
             )}
-          </>
+          </View>
         );
       default:
         return (
