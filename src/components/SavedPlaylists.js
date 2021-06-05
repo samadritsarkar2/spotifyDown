@@ -177,7 +177,8 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
     justifyContent: 'flex-start',
-    fontFamily: 'serif',
+    fontFamily: 'GothamMedium',
+    fontWeight: 'bold',
   },
   listText: {
     fontSize: 25,

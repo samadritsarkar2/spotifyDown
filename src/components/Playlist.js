@@ -430,14 +430,7 @@ const Playlist = ({navigation, route}) => {
                   />
                 )}
 
-                <Text
-                  style={{
-                    color: 'white',
-                    alignSelf: 'center',
-                    fontSize: 25,
-                  }}>
-                  {playlistData.playlistId}
-                </Text>
+                <Text style={styles.playlistId}>{playlistData.playlistId}</Text>
               </View>
               <View
                 style={{
@@ -494,18 +487,18 @@ const Playlist = ({navigation, route}) => {
                           onPress={() => {
                             openFile(item);
                           }}>
-                          <Text style={{color: 'white', fontSize: 20}}>
-                            {item.name}
+                          <Text style={styles.trackTitle}>{item.name}</Text>
+                          <Text style={styles.trackInfo}>
+                            {item?.artists[0].name} - {item.album}
                           </Text>
-                          <Text style={{color: 'lightgray'}}>{item.album}</Text>
                         </TouchableOpacity>
                       </View>
                     ) : (
                       <View style={{flex: 0.7}}>
-                        <Text style={{color: 'white', fontSize: 20}}>
-                          {item.name}
+                        <Text style={styles.trackTitle}>{item.name}</Text>
+                        <Text style={styles.trackInfo}>
+                          {item?.artists[0].name} - {item.album}
                         </Text>
-                        <Text style={{color: 'lightgray'}}>{item.album}</Text>
                       </View>
                     )}
                     {item.downloaded ? (
@@ -599,6 +592,23 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     alignSelf: 'center',
   },
+  playlistId: {
+    color: 'white',
+    alignSelf: 'center',
+    fontSize: 25,
+    fontFamily: 'Montserrat-Regular',
+    fontWeight: 'bold',
+  },
+  trackTitle: {
+    color: 'white',
+    fontSize: 17,
+    fontFamily: 'GothamMedium',
+  },
+  trackInfo: {
+    color: '#6C7A89',
+    fontSize: 12,
+    fontFamily: 'GothamMedium',
+  },
   downloadAllButton: {
     justifyContent: 'center',
     borderRadius: 30,
@@ -611,7 +621,7 @@ const styles = StyleSheet.create({
   downloadAllButtonText: {
     color: 'white',
     alignSelf: 'center',
-    fontWeight: 'bold',
+    fontFamily: 'GothamMedium',
   },
   playlistHeader: {
     flex: 0.6,
