@@ -20,12 +20,8 @@ import analytics from '@react-native-firebase/analytics';
 const New = ({navigation, route}) => {
   const [id, setId] = useState('');
   const [url, setUrl] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [tracks, setTracks] = useState([]);
-  const [playlistData, setPlaylistData] = useState();
   const [fetched, setFetched] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const [downloadPercent, setDownloadPercent] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -36,21 +32,31 @@ const New = ({navigation, route}) => {
 
     let URL = parse(url);
     let pathArr = URL.pathname.split('/');
-    console.log(pathArr);
+
     var supported = ['album', 'playlist'];
-    let typeIndex = supported.map((val) => {
-      let i = pathArr.indexOf(val);
+    // let index;
+    // supported.map((val) => {
+    //   let i = pathArr.indexOf(val);
 
-      if (i !== -1) return i;
-    });
-    //   let typeIndex = pathArr.indexOf('playlist') || pathArr.indexOf('album');
-    console.log(typeIndex);
-    let URlID = pathArr[typeIndex + 1];
+    //   if (i !== -1) index = i;
+    // });
+    let playlistIndex = pathArr.indexOf('playlist');
+    let albumIndex = pathArr.indexOf('album');
+    let finalIndex;
 
+    if (albumIndex === -1 && playlistIndex !== -1) {
+      finalIndex = playlistIndex;
+    } else if (playlistIndex === -1 && albumIndex !== -1) {
+      finalIndex = albumIndex;
+    } else {
+      finalIndex = -1;
+    }
+
+    let URlID = pathArr[finalIndex + 1];
+    console.log(finalIndex, URlID);
     if (
       URL.host != 'open.spotify.com' ||
-      pathArr[typeIndex] != 'playlist' ||
-      pathArr[typeIndex] != 'album'
+      (pathArr[finalIndex] !== 'playlist' && pathArr[finalIndex] !== 'album')
     ) {
       setLoading(false);
       Alert.alert(

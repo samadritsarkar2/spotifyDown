@@ -101,9 +101,9 @@ const SavedPlaylists = () => {
                         <Image
                           style={styles.playlistImg}
                           source={
-                            item.playlistImg
+                            item.image
                               ? Image.resolveAssetSource({
-                                  uri: `${item.playlistImg}`,
+                                  uri: `${item.image}`,
                                 })
                               : require('../assets/defaultPlaylist.png')
                           }
@@ -114,9 +114,7 @@ const SavedPlaylists = () => {
                             flexDirection: 'column',
                             justifyContent: 'center',
                           }}>
-                          <Text style={styles.playlistId}>
-                            {item.playlistId}
-                          </Text>
+                          <Text style={styles.playlistId}>{item.name}</Text>
                         </View>
                         <Text style={styles.listText}> </Text>
                       </View>
@@ -175,7 +173,7 @@ const styles = StyleSheet.create({
   },
   playlistId: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 17,
     justifyContent: 'flex-start',
     fontFamily: 'GothamMedium',
     fontWeight: 'bold',
