@@ -51,7 +51,11 @@ const MiniPlayer = () => {
       setIsTrackPlayerInit(isInit);
       //console.log(playbackState )
     };
+
     startPlayer();
+    return async () => {
+      TrackPlayer.destroy();
+    };
   }, []);
 
   useTrackPlayerEvents(['playback-track-changed'], async (event) => {

@@ -39,7 +39,7 @@ const Library = ({navigation}) => {
                   source={require('../assets/heart.png')}
                   style={styles.optionIcon}
                 />
-                <Text style={styles.buttons}>Saved Playlists </Text>
+                <Text style={styles.buttons}>Saved</Text>
               </View>
             </TouchableOpacity>
 
@@ -55,7 +55,7 @@ const Library = ({navigation}) => {
             <TouchableOpacity onPress={toggleModal}>
               <View style={styles.optionWrapper}>
                 <Image
-                  source={require('../assets/heart.png')}
+                  source={require('../assets/info.png')}
                   style={styles.optionIcon}
                 />
                 <Text style={styles.buttons}>Know More</Text>

@@ -97,7 +97,7 @@ const New = ({navigation, route}) => {
               onChangeText={(value) => {
                 setUrl(value);
               }}
-              placeholder={'Enter Spotify Playlist Link'}
+              placeholder={'Enter Spotify Album/Playlist Link'}
               placeholderTextColor={'#B3B3b3'}
             />
             <TouchableOpacity style={styles.submit} onPress={fetchApi}>
