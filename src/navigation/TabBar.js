@@ -9,7 +9,6 @@ import {
   ToastAndroid,
   Dimensions,
 } from 'react-native';
-import MiniPlayer from '../components/MiniPlayer';
 import {windowHeight} from '../common';
 
 const TabBar = ({state, descriptors, navigation}) => {
@@ -147,7 +146,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#212326',
     flexDirection: 'row',
     height: windowHeight * 0.05,
-    paddingVertical: 20,
+    paddingVertical: windowHeight * 0.005,
     alignItems: 'center',
   },
   touchOpacity: {

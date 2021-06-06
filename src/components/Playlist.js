@@ -47,13 +47,11 @@ const perm = async () => {
 };
 
 const Playlist = ({navigation, route}) => {
-  const [id, setId] = useState('');
-  const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [tracks, setTracks] = useState([]);
-  const [playlistData, setPlaylistData] = useState({});
-  const [fetched, setFetched] = useState(false);
+  const [responseData, setResponseData] = useState({});
+
   const [visible, setVisible] = useState(false);
   const [downloadPercent, setDownloadPercent] = useState(0);
   const [curentDownloading, setCurentDownloading] = useState(null);
@@ -96,15 +94,16 @@ const Playlist = ({navigation, route}) => {
       response
         .json()
         .then((res) => {
-          setPlaylistData(res.playlistinfo);
+          setResponseData(res.responseInfo);
           checkData(res.tracks).then(async (data) => {
             // console.log(data)
             setTracks(data);
             setLoading(false);
             setError(false);
             await analytics().logEvent('playlist_view', {
-              id: playlistData.id,
-              name: playlistData.playlistId,
+              id: responseData.id,
+              name: responseData.name,
+              type: responseData.type,
             });
           });
         })
@@ -139,7 +138,7 @@ const Playlist = ({navigation, route}) => {
       if (!fileStatus.path) {
         setVisible(true);
         setCurentDownloading(single.id);
-        let artistsString = single.artists.map((item) => item.name).join();
+        let artistsString = single.artist.map((item) => item.name).join();
         let passedQuery =
           single.name + ' ' + single.album + ' ' + artistsString;
 
@@ -149,13 +148,13 @@ const Playlist = ({navigation, route}) => {
           //  console.log('link fetched ....');
           let link = res.url;
           let duration = res.duration;
-          console.log(res);
+
           let promise = new Promise((resolve, reject) => {
             if (link) {
               let task = RNBackgroundDownloader.download({
-                id: single.name,
+                id: single.title,
                 url: `${link}`,
-                destination: `${RNBackgroundDownloader.directories.documents}/${single.name}.mp3`,
+                destination: `${RNBackgroundDownloader.directories.documents}/${single.title}.mp3`,
               })
                 .begin((expectedBytes) => {
                   // console.log(`Going to download ${expectedBytes} bytes!`);
@@ -169,7 +168,7 @@ const Playlist = ({navigation, route}) => {
                 .done(async () => {
                   console.log('Download is done!');
 
-                  const path = `${RNBackgroundDownloader.directories.documents}/${single.name}.mp3`;
+                  const path = `${RNBackgroundDownloader.directories.documents}/${single.title}.mp3`;
 
                   setTracks((prev) => {
                     const nextState = prev.map((item) =>
@@ -189,10 +188,10 @@ const Playlist = ({navigation, route}) => {
                   try {
                     const newDownload = {
                       id: single.id,
-                      title: single.name,
-                      artist: single.artists[0].name,
+                      title: single.title,
+                      artist: single.artist[0].name,
                       album: single.album,
-                      artwork: single.img,
+                      artwork: single.artwork,
                       url: path,
                       duration: duration,
                     };
@@ -300,12 +299,12 @@ const Playlist = ({navigation, route}) => {
   };
 
   const savePlaylist = async () => {
-    if (playlistData.saved == false) {
+    if (responseData.saved == false) {
       try {
         const playlistToAdd = {
-          id: playlistData.id,
-          playlistId: playlistData.playlistId,
-          playlistImg: playlistData.playlistImg,
+          id: responseData.id,
+          name: responseData.name,
+          image: responseData.image,
         };
 
         const storedValue = await AsyncStorage.getItem(`@saved_playlists`);
@@ -322,11 +321,11 @@ const Playlist = ({navigation, route}) => {
             duration: Snackbar.LENGTH_LONG,
             backgroundColor: 'red',
           });
-          setPlaylistData((item) =>
+          setResponseData((item) =>
             !item.saved ? {...item, saved: true} : item,
           );
         } else {
-          const exists = prevList.some((item) => item.id === playlistToAdd.id);
+          const exists = prevList.some((item) => item.id === responseData.id);
 
           if (!exists) {
             prevList.push(playlistToAdd);
@@ -340,7 +339,7 @@ const Playlist = ({navigation, route}) => {
               duration: Snackbar.LENGTH_LONG,
               backgroundColor: 'red',
             });
-            setPlaylistData((item) =>
+            setResponseData((item) =>
               !item.saved ? {...item, saved: true} : item,
             );
           } else {
@@ -349,7 +348,7 @@ const Playlist = ({navigation, route}) => {
               duration: Snackbar.LENGTH_LONG,
               backgroundColor: 'red',
             });
-            setPlaylistData((item) =>
+            setResponseData((item) =>
               !item.saved ? {...item, saved: true} : item,
             );
           }
@@ -362,26 +361,6 @@ const Playlist = ({navigation, route}) => {
   };
 
   const openFile = (single) => {
-    // const track = {
-    //   id: single.id,
-    //   title: single.name,
-    //   artist: single.artists[0].name,
-    //   album: single.album,
-    //   artwork: single.img,
-    //   duration: single.duration,
-    //   url: single.path,
-    // };
-    // const exists = checkExists(single);
-    // if (exists) {
-    //   dispatch(allActions.playOne(track));
-    // } else {
-    //   Alert.alert(
-    //     'Please download the file',
-    //     'hehe',
-    //     [{text: 'OK', onPress: () => {}}],
-    //     {cancelable: true},
-    //   );
-    // }
     navigation.navigate('LibraryStack', {screen: 'Downloads'});
   };
 
@@ -408,9 +387,9 @@ const Playlist = ({navigation, route}) => {
                   flex: 0.9,
                   flexDirection: 'column',
                 }}>
-                {playlistData.playlistImg ? (
+                {responseData.image ? (
                   <Image
-                    source={{uri: playlistData.playlistImg}}
+                    source={{uri: responseData.image}}
                     style={{
                       height: '100%',
                       width: '60%',
@@ -430,7 +409,7 @@ const Playlist = ({navigation, route}) => {
                   />
                 )}
 
-                <Text style={styles.playlistId}>{playlistData.playlistId}</Text>
+                <Text style={styles.playlistId}>{responseData.name}</Text>
               </View>
               <View
                 style={{
@@ -459,7 +438,7 @@ const Playlist = ({navigation, route}) => {
                         backgroundColor: 'red',
                       });
                     }}>
-                    {playlistData.saved ? (
+                    {responseData.saved ? (
                       <Image
                         source={require('../assets/red-heart.png')}
                         style={{height: 30, width: 30}}
@@ -487,17 +466,17 @@ const Playlist = ({navigation, route}) => {
                           onPress={() => {
                             openFile(item);
                           }}>
-                          <Text style={styles.trackTitle}>{item.name}</Text>
+                          <Text style={styles.trackTitle}>{item.title}</Text>
                           <Text style={styles.trackInfo}>
-                            {item?.artists[0].name} - {item.album}
+                            {item?.artist[0].name} - {item.album}
                           </Text>
                         </TouchableOpacity>
                       </View>
                     ) : (
                       <View style={{flex: 0.7}}>
-                        <Text style={styles.trackTitle}>{item.name}</Text>
+                        <Text style={styles.trackTitle}>{item.title}</Text>
                         <Text style={styles.trackInfo}>
-                          {item?.artists[0].name} - {item.album}
+                          {item?.artist[0].name} - {item.album}
                         </Text>
                       </View>
                     )}
