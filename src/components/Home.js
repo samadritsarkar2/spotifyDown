@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
-
+import {spotifyGreenButton, spotifyGreenButtonText} from '../common';
 const App = ({navigation, route}) => {
   return (
     <>
@@ -27,18 +27,18 @@ const App = ({navigation, route}) => {
         </View>
         <View style={styles.inputBox}>
           <TouchableOpacity
-            style={styles.submit}
+            style={spotifyGreenButton}
             onPress={() => {
               navigation.navigate('New');
             }}>
-            <Text style={styles.text}>Add New </Text>
+            <Text style={spotifyGreenButtonText}>Add New </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.submit}
+            style={spotifyGreenButton}
             onPress={() => {
               navigation.navigate('LibraryStack');
             }}>
-            <Text style={styles.text}>Library</Text>
+            <Text style={spotifyGreenButtonText}>Library</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -75,16 +75,6 @@ const styles = StyleSheet.create({
     flex: 0.5,
     marginVertical: 20,
   },
-  submit: {
-    justifyContent: 'center',
-    height: 50,
-    width: '60%',
-    borderRadius: 30,
-    alignSelf: 'center',
-    marginTop: 25,
-    backgroundColor: '#1DB954',
-    paddingHorizontal: 20,
-  },
   knowMore: {
     display: 'flex',
     flexDirection: 'row',
@@ -97,13 +87,5 @@ const styles = StyleSheet.create({
     marginTop: 25,
     backgroundColor: '#ff3c3c',
     paddingHorizontal: 20,
-  },
-  text: {
-    color: 'white',
-    textAlign: 'center',
-    fontWeight: '500',
-    fontSize: 17,
-    fontFamily: 'Gotham',
-    textTransform: 'uppercase',
   },
 });
