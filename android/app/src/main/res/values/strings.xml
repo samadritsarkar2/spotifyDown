@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SpotifyDownloader</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">znhNv-MCkWK-d2i9GphumDFane2E1OTgjFvV2</string>
 </resources>

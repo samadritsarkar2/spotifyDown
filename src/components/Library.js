@@ -32,6 +32,15 @@ const Library = ({navigation}) => {
         </View>
         <View style={styles.actions}>
           <ScrollView alwaysBounceVertical={true}>
+            <TouchableOpacity onPress={() => navigation.navigate('Downloads')}>
+              <View style={styles.optionWrapper}>
+                <Image
+                  source={require('../assets/down.png')}
+                  style={styles.optionIcon}
+                />
+                <Text style={styles.buttons}>Downloads </Text>
+              </View>
+            </TouchableOpacity>
             <TouchableOpacity
               onPress={() => navigation.navigate('SavedPlaylists')}>
               <View style={styles.optionWrapper}>
@@ -43,15 +52,6 @@ const Library = ({navigation}) => {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.navigate('Downloads')}>
-              <View style={styles.optionWrapper}>
-                <Image
-                  source={require('../assets/down.png')}
-                  style={styles.optionIcon}
-                />
-                <Text style={styles.buttons}>Downloads </Text>
-              </View>
-            </TouchableOpacity>
             <TouchableOpacity onPress={toggleModal}>
               <View style={styles.optionWrapper}>
                 <Image

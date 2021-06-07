@@ -11,6 +11,7 @@ import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import androidx.multidex.MultiDexApplication;
+import com.microsoft.codepush.react.CodePush;
 
 public class MainApplication extends MultiDexApplication implements ReactApplication {
 
@@ -29,7 +30,10 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
           // packages.add(new MyReactNativePackage());
           return packages;
         }
-
+        @Override
+        protected String getJSBundleFile() {
+            return CodePush.getJSBundleFile();
+        }
         @Override
         protected String getJSMainModuleName() {
           return "index";

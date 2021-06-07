@@ -37,6 +37,8 @@ const MiniPlayer = () => {
         TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
         TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
       ],
+      icon: require('../assets/homeLogo.png'),
+      nextIcon: require('../assets/next.png'),
     });
 
     // await TrackPlayer.add(queue);
