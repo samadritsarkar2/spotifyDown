@@ -3,15 +3,22 @@ import {
   StyleSheet,
   View,
   Text,
-  Button,
   Image,
-  ScrollView,
   StatusBar,
+  Alert,
   TouchableOpacity,
-  Linking,
 } from 'react-native';
+import messaging from '@react-native-firebase/messaging';
 import {spotifyGreenButton, spotifyGreenButtonText} from '../common';
+
 const App = ({navigation, route}) => {
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+    return unsubscribe;
+  }, []);
+
   return (
     <>
       <View

@@ -16,6 +16,7 @@ import {
 
 var parse = require('url-parse');
 import analytics from '@react-native-firebase/analytics';
+import {spotifyGreenButton, spotifyGreenButtonText} from '../common';
 
 const New = ({navigation, route}) => {
   const [id, setId] = useState('');
@@ -100,8 +101,8 @@ const New = ({navigation, route}) => {
               placeholder={'Enter Spotify Album/Playlist Link'}
               placeholderTextColor={'#B3B3b3'}
             />
-            <TouchableOpacity style={styles.submit} onPress={fetchApi}>
-              <Text style={styles.text}>Submit</Text>
+            <TouchableOpacity style={spotifyGreenButton} onPress={fetchApi}>
+              <Text style={spotifyGreenButtonText}>Submit</Text>
             </TouchableOpacity>
           </View>
         </View>

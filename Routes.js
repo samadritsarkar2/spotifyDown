@@ -53,6 +53,7 @@ const Tab = createBottomTabNavigator();
 const BottomNav = () => {
   const navigationRef = useRef();
   const routeNameRef = useRef();
+
   const MyTheme = {
     ...DefaultTheme,
     colors: {
@@ -60,6 +61,7 @@ const BottomNav = () => {
       background: '#181818',
     },
   };
+
   return (
     <StoreProvider store={store}>
       <NavigationContainer
