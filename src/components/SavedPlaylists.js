@@ -13,7 +13,12 @@ import {useDispatch} from 'react-redux';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import allActions from '../redux/actions/index';
 import Spinner from 'react-native-spinkit';
-import {windowHeight, windowWidth} from '../common';
+import {
+  spotifyGreenButton,
+  spotifyGreenButtonText,
+  windowHeight,
+  windowWidth,
+} from '../common';
 
 const SavedPlaylists = () => {
   const [loading, setLoading] = useState(true);
@@ -74,22 +79,40 @@ const SavedPlaylists = () => {
               marginHorizontal: 10,
             }}>
             <ScrollView showsVerticalScrollIndicator={false} style={{}}>
-              {saved == null ? (
-                <View style={{alignItems: 'center'}}>
-                  <Text style={{color: 'red', fontSize: 20}}>
-                    Nothing saved yet
-                  </Text>
-                  <Text style={{color: 'white', fontSize: 20}}>
-                    Try adding one{' '}
-                  </Text>
-                  <TouchableOpacity
-                    style={styles.submit}
-                    onPress={() => {
-                      navigation.navigate('New');
+              {saved !== null ? (
+                <>
+                  <View
+                    style={{
+                      flex: 1,
+                      alignItems: 'center',
                     }}>
-                    <Text style={styles.buttonText}>Enter new Playlist</Text>
-                  </TouchableOpacity>
-                </View>
+                    <Text
+                      style={{
+                        color: 'red',
+                        fontSize: 25,
+                        fontFamily: 'GothamMedium',
+                        marginVertical: 15,
+                      }}>
+                      Nothing Saved
+                    </Text>
+                    <Text
+                      style={{
+                        color: 'white',
+                        fontSize: 15,
+                        fontFamily: 'Montserrat-Regular ',
+                        alignItems: 'center',
+                      }}>
+                      Try saving a Playlist/Album
+                    </Text>
+                    <TouchableOpacity
+                      style={spotifyGreenButton}
+                      onPress={() => {
+                        navigation.navigate('New');
+                      }}>
+                      <Text style={spotifyGreenButtonText}>Add New</Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
               ) : (
                 <View>
                   {saved?.map((item, index) => (

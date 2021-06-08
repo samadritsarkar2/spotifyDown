@@ -13,7 +13,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import allActions from '../redux/actions/index';
 import {isExist} from '../utils';
-import {windowHeight, windowWidth} from '../common';
+import {
+  spotifyGreenButton,
+  spotifyGreenButtonText,
+  windowHeight,
+  windowWidth,
+} from '../common';
 import Spinner from 'react-native-spinkit';
 
 const Downloads = ({navigation}) => {
@@ -80,19 +85,35 @@ const Downloads = ({navigation}) => {
             }}>
             {arr.length === 0 ? (
               <>
-                <View>
-                  <Text style={{color: 'red', fontSize: 20}}>
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                  }}>
+                  <Text
+                    style={{
+                      color: 'red',
+                      fontSize: 25,
+                      fontFamily: 'GothamMedium',
+                      marginVertical: 15,
+                    }}>
                     No tracks Downloaded
                   </Text>
-                  <Text style={{color: 'white', fontSize: 20}}>
-                    Try adding one{' '}
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontSize: 15,
+                      fontFamily: 'Montserrat-Regular ',
+                      alignItems: 'center',
+                    }}>
+                    Try adding a Playlist/Album & download a Track
                   </Text>
                   <TouchableOpacity
-                    style={styles.submit}
+                    style={spotifyGreenButton}
                     onPress={() => {
                       navigation.navigate('New');
                     }}>
-                    <Text style={styles.buttonText}>Enter New</Text>
+                    <Text style={spotifyGreenButtonText}>Add New</Text>
                   </TouchableOpacity>
                 </View>
               </>

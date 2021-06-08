@@ -118,6 +118,6 @@ const styles = StyleSheet.create({
   optionIcon: {
     height: 25,
     width: 25,
-    marginHorizontal: 10,
+    marginHorizontal: 15,
   },
 });
