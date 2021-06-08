@@ -79,7 +79,7 @@ const SavedPlaylists = () => {
               marginHorizontal: 10,
             }}>
             <ScrollView showsVerticalScrollIndicator={false} style={{}}>
-              {saved !== null ? (
+              {saved === null ? (
                 <>
                   <View
                     style={{
