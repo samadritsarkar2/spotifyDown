@@ -44,15 +44,23 @@
   },
   "devDependencies": {
     "@babel/core": "7.12.13",
+    "@babel/preset-env": "^7.14.4",
     "@babel/runtime": "7.12.13",
     "@react-native-community/eslint-config": "1.1.0",
-    "babel-jest": "25.5.1",
+    "babel-jest": "^25.5.1",
     "eslint": "6.8.0",
     "jest": "25.5.4",
     "metro-react-native-babel-preset": "0.59.0",
     "react-test-renderer": "16.13.1"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(@react-native|react-native)/)"
+    ],
+    "globals": {
+      "__DEV__": true
+    },
+    "testEnvironment": "node"
   }
 }
