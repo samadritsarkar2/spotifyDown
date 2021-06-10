@@ -77,3 +77,5 @@ export default codePush({
   updateDialog: true,
   installMode: codePush.InstallMode.ON_NEXT_RESTART,
 })(BottomNav);
+
+// appcenter codepush release-react -a samadritsarkar2/Spotify-Downloader
