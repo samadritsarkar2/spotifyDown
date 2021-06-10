@@ -63,7 +63,8 @@ const Playlist = ({navigation, route}) => {
 
   const checkExists = async (single) => {
     // const path = `${RNBackgroundDownloader.directories.documents}/${playlistData.playlistId}/${single.name}.mp3`;
-    const path = `${RNBackgroundDownloader.directories.documents}/${single.name}.mp3`;
+    const path = `${RNBackgroundDownloader.directories.documents}/${single.
+    title}.mp3`;
     const exists = await RNFetchBlob.fs.exists(path);
 
     //console.log(exists, path)
@@ -140,7 +141,7 @@ const Playlist = ({navigation, route}) => {
         setCurentDownloading(single.id);
         let artistsString = single.artist.map((item) => item.name).join();
         let passedQuery =
-          single.name + ' ' + single.album + ' ' + artistsString;
+          single.title + ' ' + single.album + ' ' + artistsString;
 
         const response = await fetch(api + encodeURIComponent(passedQuery));
 

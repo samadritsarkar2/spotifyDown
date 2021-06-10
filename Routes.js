@@ -75,5 +75,5 @@ const BottomNav = () => {
 
 export default codePush({
   updateDialog: true,
-  installMode: codePush.InstallMode.IMMEDIATE,
+  installMode: codePush.InstallMode.ON_NEXT_RESTART,
 })(BottomNav);

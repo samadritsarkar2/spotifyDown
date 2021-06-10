@@ -160,16 +160,30 @@ android {
     }
     }
     buildTypes {
-        debug {
-            signingConfig signingConfigs.debug
-        }
-        release {
+        
+         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
+            resValue "string", "CodePushDeploymentKey", 'MrtStoGjqDUkPugYZgtUfV-5BeXCJTcUHAviP'
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            
         }
+        releaseStaging {
+            initWith release    
+            applicationIdSuffix ".releasestaging"
+            resValue "string", "CodePushDeploymentKey", 'znhNv-MCkWK-d2i9GphumDFane2E1OTgjFvV2'
+            // Note: It's a good idea to provide matchingFallbacks for the new buildType you create to prevent build issues
+            // Add the following line if not already there
+            matchingFallbacks = ['release']
+        }
+        debug {
+            signingConfig signingConfigs.debug
+            resValue "string", "CodePushDeploymentKey", 'znhNv-MCkWK-d2i9GphumDFane2E1OTgjFvV2'
+
+        }
+       
     }
 
     // applicationVariants are e.g. debug, release
@@ -214,6 +228,7 @@ dependencies {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")
         releaseImplementation files(hermesPath + "hermes-release.aar")
+        releasestagingImplementation files(hermesPath +"hermes-release.aar")
     } else {
         implementation jscFlavor
     }

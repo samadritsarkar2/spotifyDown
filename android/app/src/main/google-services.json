@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "313799778337",
+    "project_id": "spotify-downloader-sam",
+    "storage_bucket": "spotify-downloader-sam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:313799778337:android:fc8a385b518bafa969c360",
+        "android_client_info": {
+          "package_name": "com.sam.spotifydown"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "313799778337-tkhaahjnaeid8hrlkjgbcva2gn4pm9ie.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sam.spotifydown",
+            "certificate_hash": "2d3d5dbb7592732c3ab906e5bb88b69d480e98b0"
+          }
+        },
+        {
+          "client_id": "313799778337-cggkipera46317o09p6tk10knjltvals.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfr5ocUhOEoZqireZDY6YwMvm2Lnh8I0Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "313799778337-cggkipera46317o09p6tk10knjltvals.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
