@@ -20,7 +20,8 @@ const Donations = () => {
     let finalAmount = amount * 100;
     var options = {
       description: name,
-      image: 'https://i.imgur.com/3g7nmJC.png',
+      image:
+        'https://raw.githubusercontent.com/samadritsarkar2/spotifyDown/main/src/assets/homeLogo.png',
       currency: 'INR',
       key: 'rzp_test_y3Hb75HPXaG3us',
       amount: finalAmount,
