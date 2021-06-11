@@ -61,13 +61,13 @@ const Library = ({navigation}) => {
                 <Text style={styles.buttons}>Know More</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Donations')}>
               <View style={styles.optionWrapper}>
                 <Image
                   source={require('../assets/heart.png')}
                   style={styles.optionIcon}
                 />
-                <Text style={styles.buttons}>Buy Me a Coffee </Text>
+                <Text style={styles.buttons}>Support the Devs</Text>
               </View>
             </TouchableOpacity>
           </ScrollView>

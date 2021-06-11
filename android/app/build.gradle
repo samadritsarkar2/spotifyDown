@@ -160,7 +160,11 @@ android {
     }
     }
     buildTypes {
-        
+          debug {
+            signingConfig signingConfigs.release
+            resValue "string", "CodePushDeploymentKey", 'znhNv-MCkWK-d2i9GphumDFane2E1OTgjFvV2'
+
+        }
          release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
@@ -178,11 +182,7 @@ android {
             // Add the following line if not already there
             matchingFallbacks = ['release']
         }
-        debug {
-            signingConfig signingConfigs.release
-            resValue "string", "CodePushDeploymentKey", 'znhNv-MCkWK-d2i9GphumDFane2E1OTgjFvV2'
-
-        }
+      
        
     }
 
