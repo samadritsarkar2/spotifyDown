@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {windowHeight} from '../common';
 
 const Donations = () => {
   return (
@@ -16,19 +17,44 @@ const Donations = () => {
         <View style={styles.header}>
           <Text style={styles.heading}>Support the Devs</Text>
           <Text style={styles.subHeading}>
-            Spotify Downloader is Ad-free and to support us, you can donate any
-            amount or from the options below.
+            Spotify Downloader is Ad-free app with more updates and features on
+            its way.
           </Text>
           <Text style={[styles.subHeading]}>
-            More updates and features are on its way.{'   '}Thank you for your
-            support! You are awesome 🎉
+            To support us, you can donate any amount or from the options below.
+            Thank you for your support! You are awesome 🎉
           </Text>
         </View>
+
         <ScrollView style={styles.scroller}>
           <TouchableOpacity>
             <View style={styles.optionWrapper}>
-              <Text style={styles.optionText}>Tea</Text>
+              <Text style={styles.optionText}>Tea{'  '}☕</Text>
               <Text style={styles.optionSubText}>Rs. 10</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <View style={styles.optionWrapper}>
+              <Text style={styles.optionText}>Pastry{'  '}🍰</Text>
+              <Text style={styles.optionSubText}>Rs. 49</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <View style={styles.optionWrapper}>
+              <Text style={styles.optionText}>Pizza {'  '}🍕</Text>
+              <Text style={styles.optionSubText}>Rs. 149</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <View style={styles.optionWrapper}>
+              <Text style={styles.optionText}>56 bhog{'  '}🍱 </Text>
+              <Text style={styles.optionSubText}>Rs. 2000</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <View style={styles.optionWrapper}>
+              <Text style={styles.optionText}>Custom</Text>
+              <Text style={styles.optionSubText}>Rs. 2000</Text>
             </View>
           </TouchableOpacity>
         </ScrollView>
@@ -62,14 +88,16 @@ const styles = StyleSheet.create({
   },
   scroller: {
     flex: 0.7,
-    marginTop: 15,
+    marginTop: windowHeight * 0.05,
   },
   optionWrapper: {
     flex: 1,
     margin: 10,
     paddingVertical: 20,
     paddingHorizontal: 10,
-    flexDirection: 'column',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignContent: 'center',
     alignItems: 'baseline',
     backgroundColor: '#111111',
     borderRadius: 10,
@@ -81,7 +109,7 @@ const styles = StyleSheet.create({
   },
   optionSubText: {
     color: '#6C7A89',
-    fontSize: 12,
+    fontSize: 15,
     fontFamily: 'GothamMedium',
   },
 });

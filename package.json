@@ -27,6 +27,7 @@
     "react-native-fs": "^2.18.0",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-modal": "^11.10.0",
+    "react-native-razorpay": "^2.2.7",
     "react-native-reanimated": "^1.13.3",
     "react-native-responsive-screen": "^1.4.2",
     "react-native-safe-area-context": "^3.2.0",
