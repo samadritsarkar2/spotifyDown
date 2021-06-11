@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {
+  Alert,
   Image,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -12,6 +14,8 @@ import RazorpayCheckout from 'react-native-razorpay';
 import {windowHeight} from '../common';
 
 const Donations = () => {
+  const [num, setNum] = useState('');
+
   const handlePress = (name, amount) => {
     let finalAmount = amount * 100;
     var options = {
@@ -32,6 +36,19 @@ const Donations = () => {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const handleCustomAmount = () => {
+    if (num !== '') {
+      let finalVal = parseInt(num, 10);
+      // console.log(finalVal, num);
+      if (finalVal < 1) {
+        Alert.alert('Please enter amount greater than or equal to Re. 1');
+        setNum('');
+      } else {
+        handlePress('Custom', finalVal);
+      }
+    }
   };
 
   return (
@@ -74,12 +91,35 @@ const Donations = () => {
               <Text style={styles.optionSubText}>Rs. 2000</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handlePress('Custom', 69)}>
-            <View style={styles.optionWrapper}>
-              <Text style={styles.optionText}>Custom</Text>
-              <Text style={styles.optionSubText}>Rs. 2000</Text>
+          <View onPress={() => {}}>
+            <View style={[styles.optionWrapper]}>
+              <TextInput
+                style={{
+                  color: 'white',
+                  width: '50%',
+                  borderBottomColor: 'white',
+                  borderBottomWidth: 1,
+                  alignSelf: 'center',
+                }}
+                keyboardType={'number-pad'}
+                returnKeyType={'done'}
+                placeholder={'Enter Custom Amount'}
+                placeholderTextColor={'#B3B3b3'}
+                value={num}
+                onChangeText={(val) => {
+                  setNum(val);
+                }}
+                onSubmitEditing={() => handleCustomAmount()}
+              />
+              <TouchableOpacity
+                style={[styles.optionText, {alignSelf: 'center'}]}
+                onPress={() => handleCustomAmount()}>
+                <Text style={[styles.optionText, {alignSelf: 'center'}]}>
+                  Submit
+                </Text>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
+          </View>
         </ScrollView>
       </View>
     </>
