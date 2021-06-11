@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ScrollView,
   Dimensions,
+  RefreshControl,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
@@ -55,6 +56,13 @@ const Downloads = ({navigation}) => {
       getFileName();
     }, 500);
   }, []);
+
+  const onRefresh = () => {
+    setLoading(true);
+    setTimeout(() => {
+      getFileName();
+    }, 500);
+  };
 
   const handleLongPress = (item) => {
     Vibration.vibrate(100);
@@ -118,7 +126,12 @@ const Downloads = ({navigation}) => {
                 </View>
               </>
             ) : (
-              <ScrollView showsVerticalScrollIndicator={false} style={{}}>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                style={{}}
+                refreshControl={
+                  <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+                }>
                 {arr.map((item, index) => (
                   <TouchableOpacity
                     key={index}
