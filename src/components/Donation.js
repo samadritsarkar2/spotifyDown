@@ -8,9 +8,32 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import RazorpayCheckout from 'react-native-razorpay';
 import {windowHeight} from '../common';
 
 const Donations = () => {
+  const handlePress = (name, amount) => {
+    let finalAmount = amount * 100;
+    var options = {
+      description: name,
+      image: 'https://i.imgur.com/3g7nmJC.png',
+      currency: 'INR',
+      key: 'rzp_test_y3Hb75HPXaG3us',
+      amount: finalAmount,
+      name: 'Samadrit Sarkar',
+      //order_id: 'order_DslnoIgkIDL8Zt', //Replace this with an order_id created using Orders API.
+
+      theme: {color: '#1DB954', backdrop_color: '#1DB954'},
+    };
+    RazorpayCheckout.open(options)
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <>
       <View style={{flex: 1, paddingHorizontal: 10}}>
@@ -27,31 +50,31 @@ const Donations = () => {
         </View>
 
         <ScrollView style={styles.scroller}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => handlePress('Tea', 10)}>
             <View style={styles.optionWrapper}>
               <Text style={styles.optionText}>Tea{'  '}☕</Text>
               <Text style={styles.optionSubText}>Rs. 10</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => handlePress('Pastry', 49)}>
             <View style={styles.optionWrapper}>
               <Text style={styles.optionText}>Pastry{'  '}🍰</Text>
               <Text style={styles.optionSubText}>Rs. 49</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => handlePress('Pizza', 149)}>
             <View style={styles.optionWrapper}>
               <Text style={styles.optionText}>Pizza {'  '}🍕</Text>
               <Text style={styles.optionSubText}>Rs. 149</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => handlePress('56 bhog', 2000)}>
             <View style={styles.optionWrapper}>
               <Text style={styles.optionText}>56 bhog{'  '}🍱 </Text>
               <Text style={styles.optionSubText}>Rs. 2000</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => handlePress('Custom', 69)}>
             <View style={styles.optionWrapper}>
               <Text style={styles.optionText}>Custom</Text>
               <Text style={styles.optionSubText}>Rs. 2000</Text>
