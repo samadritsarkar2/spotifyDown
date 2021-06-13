@@ -64,17 +64,17 @@ const Library = ({navigation}) => {
             <TouchableOpacity onPress={() => navigation.navigate('Donations')}>
               <View style={styles.optionWrapper}>
                 <Image
-                  source={require('../assets/heart.png')}
+                  source={require('../assets/red-heart.png')}
                   style={styles.optionIcon}
                 />
                 <Text style={styles.buttons}>Support the Devs</Text>
               </View>
             </TouchableOpacity>
+            <BetterKnowMore
+              isModalVisible={isModalVisible}
+              toggleModal={toggleModal}
+            />
           </ScrollView>
-          <BetterKnowMore
-            isModalVisible={isModalVisible}
-            toggleModal={toggleModal}
-          />
         </View>
       </View>
     </>

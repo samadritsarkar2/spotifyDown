@@ -12,12 +12,15 @@ import {
 } from 'react-native';
 import RazorpayCheckout from 'react-native-razorpay';
 import {windowHeight} from '../common';
-
+import CustomModal from './CustomModal';
 const Donations = () => {
   const [num, setNum] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const handlePress = (name, amount) => {
     let finalAmount = amount * 100;
+
     var options = {
       description: name,
       image:
@@ -32,11 +35,17 @@ const Donations = () => {
     };
     RazorpayCheckout.open(options)
       .then((data) => {
-        console.log(data);
+        setModalVisible(true);
+        setSuccess(true);
       })
       .catch((error) => {
-        console.log(error);
+        setModalVisible(true);
+        setSuccess(false);
       });
+  };
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
   };
 
   const handleCustomAmount = () => {
@@ -123,6 +132,16 @@ const Donations = () => {
           </View>
         </ScrollView>
       </View>
+      <CustomModal
+        isModalVisible={isModalVisible}
+        toggleModal={toggleModal}
+        title={success ? 'Thank You ❤' : 'So sad 💔'}
+        text={
+          success
+            ? 'Your contribution means a lot to me. Thanks for encoraging and supporting the project.'
+            : 'The donation somehow failed. Its okay, atleast you thought of donating, it means a lot. Keep using the app, it encourages me too.'
+        }
+      />
     </>
   );
 };

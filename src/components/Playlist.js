@@ -11,6 +11,7 @@ import {
   Alert,
   ScrollView,
   PermissionsAndroid,
+  Linking,
 } from 'react-native';
 import Snackbar from 'react-native-snackbar';
 import RNBackgroundDownloader from 'react-native-background-downloader';
@@ -20,8 +21,6 @@ import Spinner from 'react-native-spinkit';
 import analytics from '@react-native-firebase/analytics';
 import {API} from '@env';
 import {windowWidth, windowHeight} from '../common';
-import {isConnected} from '../utils';
-import {useNetInfo} from '@react-native-community/netinfo';
 
 const perm = async () => {
   try {
@@ -49,7 +48,6 @@ const perm = async () => {
 };
 
 const Playlist = ({navigation, route}) => {
-  const netInfo = useNetInfo();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [tracks, setTracks] = useState([]);
@@ -87,63 +85,69 @@ const Playlist = ({navigation, route}) => {
   };
 
   const fetchData = async () => {
-    let api = `${API}/redirect?id=${URlID}`;
-    const response = await fetch(api, {
-      method: 'GET',
-    });
+    try {
+      let api = `${API}/redirect?id=${URlID}`;
+      const response = await fetch(api, {
+        method: 'GET',
+      });
 
-    if (response.status === 200) {
-      response
-        .json()
-        .then((res) => {
-          setResponseData(res.responseInfo);
-          checkData(res.tracks).then(async (data) => {
-            // console.log(data)
-            setTracks(data);
-            setLoading(false);
-            setError(false);
-            await analytics().logEvent('playlist_view', {
-              id: responseData.id,
-              name: responseData.name,
-              type: responseData.type,
+      if (response.status === 200) {
+        response
+          .json()
+          .then((res) => {
+            setResponseData(res.responseInfo);
+            checkData(res.tracks).then(async (data) => {
+              // console.log(data)
+              setTracks(data);
+              setLoading(false);
+              setError(false);
+              await analytics().logEvent('playlist_view', {
+                id: responseData.id,
+                name: responseData.name,
+                type: responseData.type,
+              });
             });
+          })
+          .catch((err) => {
+            console.log(err);
+            setLoading(false);
+            setError(true);
+            //navigation.goBack();
+            Alert.alert(
+              'Server Error',
+              'Server Error',
+              [{text: 'OK', onPress: () => {}}],
+              {cancelable: true},
+            );
           });
-        })
-        .catch((err) => {
-          console.log(err);
-          setLoading(false);
-          setError(true);
-          //navigation.goBack();
-          Alert.alert(
-            'Server Error',
-            'Server Error',
-            [{text: 'OK', onPress: () => {}}],
-            {cancelable: true},
-          );
-        });
-    } else {
-      setLoading(false);
-      setError(true);
-      navigation.navigate('Error', {error: error});
+      } else {
+        setLoading(false);
+        setError(true);
+        navigation.navigate('Error', {error: error});
+      }
+    } catch (error) {
+      setTimeout(() => {
+        Alert.alert(
+          'Please check if Internet is available',
+          'Internet is required to fetch the tracks and other data. \nYou can listen to Downloaded Tracks while being OFFLINE',
+          [
+            {
+              text: 'Open settings',
+              onPress: () => {
+                Linking.openURL('');
+              },
+            },
+          ],
+          {cancelable: true},
+        );
+        navigation.goBack();
+      }, 2000);
     }
   };
 
   useEffect(() => {
-    // const proccessing = () => {
-    //   // console.log(netInfo);
-    //   setLoading(true);
-    //   if (netInfo.isInternetReachable) {
-    //     fetchData();
-    //   } else {
-    //     setLoading(false);
-    //     Alert.alert('No Internet');
-    //     setTimeout(() => {
-    //       navigation.goBack();
-    //     }, 2000);
-    //   }
-    // };
-    // proccessing();
     setLoading(true);
+
     fetchData();
   }, [isFocused]);
 
