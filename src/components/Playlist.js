@@ -20,6 +20,8 @@ import Spinner from 'react-native-spinkit';
 import analytics from '@react-native-firebase/analytics';
 import {API} from '@env';
 import {windowWidth, windowHeight} from '../common';
+import {isConnected} from '../utils';
+import {useNetInfo} from '@react-native-community/netinfo';
 
 const perm = async () => {
   try {
@@ -47,6 +49,7 @@ const perm = async () => {
 };
 
 const Playlist = ({navigation, route}) => {
+  const netInfo = useNetInfo();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [tracks, setTracks] = useState([]);
@@ -63,8 +66,7 @@ const Playlist = ({navigation, route}) => {
 
   const checkExists = async (single) => {
     // const path = `${RNBackgroundDownloader.directories.documents}/${playlistData.playlistId}/${single.name}.mp3`;
-    const path = `${RNBackgroundDownloader.directories.documents}/${single.
-    title}.mp3`;
+    const path = `${RNBackgroundDownloader.directories.documents}/${single.title}.mp3`;
     const exists = await RNFetchBlob.fs.exists(path);
 
     //console.log(exists, path)
@@ -85,7 +87,6 @@ const Playlist = ({navigation, route}) => {
   };
 
   const fetchData = async () => {
-    setLoading(true);
     let api = `${API}/redirect?id=${URlID}`;
     const response = await fetch(api, {
       method: 'GET',
@@ -128,6 +129,21 @@ const Playlist = ({navigation, route}) => {
   };
 
   useEffect(() => {
+    // const proccessing = () => {
+    //   // console.log(netInfo);
+    //   setLoading(true);
+    //   if (netInfo.isInternetReachable) {
+    //     fetchData();
+    //   } else {
+    //     setLoading(false);
+    //     Alert.alert('No Internet');
+    //     setTimeout(() => {
+    //       navigation.goBack();
+    //     }, 2000);
+    //   }
+    // };
+    // proccessing();
+    setLoading(true);
     fetchData();
   }, [isFocused]);
 

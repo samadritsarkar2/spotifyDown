@@ -20,6 +20,7 @@ import LibraryStack from './src/navigation/LibraryStack';
 
 import TabBar from './src/navigation/TabBar';
 import store from './src/redux/store';
+import NewStack from './src/navigation/NewStack';
 
 //const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -59,9 +60,9 @@ const BottomNav = () => {
           tabBar={(props) => <TabBar {...props} />}
           initialRouteName="Home">
           <Tab.Screen options={{}} component={Home} name="Home"></Tab.Screen>
-          <Tab.Screen component={New} name="New"></Tab.Screen>
+          <Tab.Screen component={NewStack} name="NewStack"></Tab.Screen>
           <Tab.Screen component={LibraryStack} name="LibraryStack"></Tab.Screen>
-          <Tab.Screen component={Playlist} name="Playlist"></Tab.Screen>
+
           <Tab.Screen
             component={Error}
             name="Error"

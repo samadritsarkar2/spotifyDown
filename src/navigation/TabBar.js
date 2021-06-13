@@ -36,7 +36,7 @@ const TabBar = ({state, descriptors, navigation}) => {
             )}
           </View>
         );
-      case 'New':
+      case 'NewStack':
         return (
           <View>
             {isFocused ? (
@@ -82,7 +82,7 @@ const TabBar = ({state, descriptors, navigation}) => {
         {state.routes.map((route, index) => {
           if (
             route.name !== 'Home' &&
-            route.name !== 'New' &&
+            route.name !== 'NewStack' &&
             route.name !== 'LibraryStack'
           ) {
             return;

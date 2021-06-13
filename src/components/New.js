@@ -54,7 +54,7 @@ const New = ({navigation, route}) => {
     }
 
     let URlID = pathArr[finalIndex + 1];
-    console.log(finalIndex, URlID);
+    // console.log(finalIndex, URlID);
     if (
       URL.host != 'open.spotify.com' ||
       (pathArr[finalIndex] !== 'playlist' && pathArr[finalIndex] !== 'album')

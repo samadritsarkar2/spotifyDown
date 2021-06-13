@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   createStackNavigator,
-  TransitionSpecs,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
