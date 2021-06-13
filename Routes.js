@@ -62,7 +62,12 @@ const BottomNav = () => {
           <Tab.Screen options={{}} component={Home} name="Home"></Tab.Screen>
           <Tab.Screen component={NewStack} name="NewStack"></Tab.Screen>
           <Tab.Screen component={LibraryStack} name="LibraryStack"></Tab.Screen>
-
+          <Tab.Screen
+            component={Playlist}
+            name="Playlist"
+            options={{
+              unmountOnBlur: true,
+            }}></Tab.Screen>
           <Tab.Screen
             component={Error}
             name="Error"

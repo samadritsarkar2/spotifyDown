@@ -17,15 +17,12 @@ const LibraryStack = () => {
       initialRouteName="Library"
       headerMode={'none'}
       screenOptions={{
+        detachPreviousScreen: true,
         cardOverlayEnabled: true,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
       <Stack.Screen component={Library} name="Library" />
-      <Stack.Screen
-        component={SavedPlaylists}
-        name="SavedPlaylists"
-        options={{detachPreviousScreen: true}}
-      />
+      <Stack.Screen component={SavedPlaylists} name="SavedPlaylists" />
       <Stack.Screen component={Downloads} name="Downloads" options={{}} />
       <Stack.Screen component={Donations} name="Donations" />
     </Stack.Navigator>

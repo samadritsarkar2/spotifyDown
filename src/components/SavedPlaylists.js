@@ -52,7 +52,7 @@ const SavedPlaylists = () => {
 
   const handleClick = async (id) => {
     dispatch(allActions.addNew(id));
-    navigation.navigate('NewStack', {screen: 'Playlist'});
+    navigation.navigate('Playlist');
   };
 
   return (
