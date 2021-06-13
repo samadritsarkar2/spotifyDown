@@ -17,6 +17,12 @@ module.exports = async function () {
       await TrackPlayer.skipToNext();
     } catch (_) {}
   });
+  TrackPlayer.addEventListener('remote-stop', async () => {
+    try {
+      // await TrackPlayer.stop();
+      await TrackPlayer.reset();
+    } catch (_) {}
+  });
 
   TrackPlayer.addEventListener('remote-previous', async () => {
     try {
