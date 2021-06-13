@@ -45,6 +45,24 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
               showsVerticalScrollIndicator={false}
               style={{margin: 10}}>
               <View style={styles.faqOne}>
+                <Text style={styles.faqQuestion}>Changelog v1.5</Text>
+                <Text style={styles.faqAnswer}>
+                  {'\u25CF'} Added Music Player
+                </Text>
+                <Text style={styles.faqAnswer}>
+                  {'\u25CF'} Added Downloads section
+                </Text>
+                <Text style={styles.faqAnswer}>
+                  {'\u25CF'} Supports Spotify Albums now
+                </Text>
+                <Text style={styles.faqAnswer}>
+                  {'\u25CF'} Donation page added :)
+                </Text>
+                <Text style={styles.faqAnswer}>
+                  {'\u25CF'} UI changes and few minor changes too.
+                </Text>
+              </View>
+              <View style={styles.faqOne}>
                 <Text style={styles.faqQuestion}>How to use?</Text>
                 <Text style={styles.faqAnswer}>
                   {' '}
@@ -83,24 +101,6 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
                 </Text>
               </View>
               <View style={styles.faqOne}>
-                <Text style={styles.faqQuestion}>Changelog v1.5</Text>
-                <Text style={styles.faqAnswer}>
-                  {'\u25CF'} Added Music Player
-                </Text>
-                <Text style={styles.faqAnswer}>
-                  {'\u25CF'} Added Music Player
-                </Text>
-                <Text style={styles.faqAnswer}>
-                  {'\u25CF'} Added Music Player
-                </Text>
-                <Text style={styles.faqAnswer}>
-                  I plan to add in-app Music Player and{' '}
-                  <Text style={{color: '#1DB954'}}>Spotify</Text> login, so that
-                  no need of copy-pasting playlist links and few more. Also, I
-                  know I suck in UI design :( Will improve on that!
-                </Text>
-              </View>
-              <View style={styles.faqOne}>
                 <Text style={styles.faqQuestion}>Tech Stack?</Text>
                 <Text style={styles.faqAnswer}>
                   React Native + Node.Js (Backend server)
@@ -116,14 +116,14 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
                       handleLink('https://github.com/samadritsarkar2')
                     }>
                     {' '}
-                    Github,{' '}
+                    Github,{'   '}
                   </Text>
                   <Text
                     style={{color: '#0588BC'}}
                     onPress={() =>
                       handleLink('https://instagram.com/samadritsarkar2')
                     }>
-                    Insta,{' '}
+                    Insta,{'  '}
                   </Text>
                   <Text
                     style={{color: '#0588BC'}}
