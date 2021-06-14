@@ -34,9 +34,10 @@ module.exports = async function () {
     // console.log(e);
     if (e.permanent === true || e.paused == true) {
       TrackPlayer.pause();
-    } else if (e.pause != true) {
-      TrackPlayer.play();
     }
+    // else if (e.pause != true) {
+    //   TrackPlayer.play();
+    // }
   });
 
   TrackPlayer.addEventListener('remote-seek', (e) => {

@@ -65,7 +65,7 @@ const Donations = () => {
     <>
       <View style={{flex: 1, paddingHorizontal: 10}}>
         <View style={styles.header}>
-          <Text style={styles.heading}>Support the Devs</Text>
+          <Text style={styles.heading}>Support the App</Text>
           <Text style={styles.subHeading}>
             Spotify Downloader is Ad-free app with more updates and features on
             its way.
