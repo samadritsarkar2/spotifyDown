@@ -67,8 +67,7 @@ const Donations = () => {
         <View style={styles.header}>
           <Text style={styles.heading}>Support the App</Text>
           <Text style={styles.subHeading}>
-            Spotify Downloader is Ad-free app with more updates and features on
-            its way.
+            Downify is Ad-free app with more updates and features on its way.
           </Text>
           <Text style={[styles.subHeading]}>
             To support us, you can donate any amount or from the options below.

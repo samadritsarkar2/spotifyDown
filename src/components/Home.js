@@ -30,7 +30,7 @@ const App = ({navigation, route}) => {
               source={require('../assets/homeLogo.png')}
               style={styles.logo}></Image>
           </View>
-          <Text style={styles.header}>Spotify Downloader</Text>
+          <Text style={styles.header}>Downify</Text>
         </View>
         <View style={styles.inputBox}>
           <TouchableOpacity

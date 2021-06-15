@@ -1,4 +1,4 @@
-package com.sam.spotifydown;
+package com.sam.downify;
 
 import android.app.Application;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.sam.spotifydown;
+package com.sam.downify;
 
 import com.facebook.react.ReactActivity;
 
