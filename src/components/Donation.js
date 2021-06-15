@@ -26,7 +26,7 @@ const Donations = () => {
       image:
         'https://raw.githubusercontent.com/samadritsarkar2/spotifyDown/main/src/assets/homeLogo.png',
       currency: 'INR',
-      key: 'rzp_test_y3Hb75HPXaG3us',
+      key: 'rzp_live_4WPra5TfgDBu25', // live api key
       amount: finalAmount,
       name: 'Samadrit Sarkar',
       //order_id: 'order_DslnoIgkIDL8Zt', //Replace this with an order_id created using Orders API.
