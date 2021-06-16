@@ -119,7 +119,7 @@ const Downloads = ({navigation}) => {
                   <TouchableOpacity
                     style={spotifyGreenButton}
                     onPress={() => {
-                      navigation.navigate('New');
+                      navigation.navigate('NewStack', {screen: 'New'});
                     }}>
                     <Text style={spotifyGreenButtonText}>Add New</Text>
                   </TouchableOpacity>

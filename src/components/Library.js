@@ -67,7 +67,7 @@ const Library = ({navigation}) => {
                   source={require('../assets/red-heart.png')}
                   style={styles.optionIcon}
                 />
-                <Text style={styles.buttons}>Support the Apps</Text>
+                <Text style={styles.buttons}>Support the App</Text>
               </View>
             </TouchableOpacity>
             <BetterKnowMore

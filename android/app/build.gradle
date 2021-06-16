@@ -165,7 +165,7 @@ android {
     buildTypes {
           debug {
             signingConfig signingConfigs.release
-            resValue "string", "CodePushDeploymentKey", 'znhNv-MCkWK-d2i9GphumDFane2E1OTgjFvV2'
+            resValue "string", "CodePushDeploymentKey", 'TCMtmuQ4X68FcUqFUVqUlMTytsjroPIVcF4vwB'
 
         }
          release {
@@ -173,14 +173,14 @@ android {
             // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
-            resValue "string", "CodePushDeploymentKey", 'MrtStoGjqDUkPugYZgtUfV-5BeXCJTcUHAviP'
+            resValue "string", "CodePushDeploymentKey", '3PZGCl14jxeBTJU3yT6U-8HNZJQ6CjxlOWQ5T'
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             
         }
         releaseStaging {
             initWith release    
             applicationIdSuffix ".releasestaging"
-            resValue "string", "CodePushDeploymentKey", 'znhNv-MCkWK-d2i9GphumDFane2E1OTgjFvV2'
+            resValue "string", "CodePushDeploymentKey", 'TCMtmuQ4X68FcUqFUVqUlMTytsjroPIVcF4vwB'
             // Note: It's a good idea to provide matchingFallbacks for the new buildType you create to prevent build issues
             // Add the following line if not already there
             matchingFallbacks = ['release']
@@ -209,7 +209,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    implementation platform('com.google.firebase:firebase-bom:27.0.0')
+    implementation platform('com.google.firebase:firebase-bom:28.1.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"

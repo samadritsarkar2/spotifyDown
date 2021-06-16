@@ -43,7 +43,7 @@ const App = ({navigation, route}) => {
           <TouchableOpacity
             style={spotifyGreenButton}
             onPress={() => {
-              navigation.navigate('LibraryStack');
+              navigation.navigate('LibraryStack', {screen: 'Library'});
             }}>
             <Text style={spotifyGreenButtonText}>Library</Text>
           </TouchableOpacity>

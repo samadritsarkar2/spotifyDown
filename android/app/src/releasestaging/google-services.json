@@ -1,41 +1,33 @@
 {
   "project_info": {
-    "project_number": "313799778337",
-    "project_id": "spotify-downloader-sam",
-    "storage_bucket": "spotify-downloader-sam.appspot.com"
+    "project_number": "714569810554",
+    "project_id": "downify-sam",
+    "storage_bucket": "downify-sam.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:313799778337:android:fc8a385b518bafa969c360",
+        "mobilesdk_app_id": "1:714569810554:android:2590bf076e41e011f331c3",
         "android_client_info": {
-          "package_name": "com.sam.spotifydown.releasestaging"
+          "package_name": "com.sam.downify.releasestaging"
         }
       },
       "oauth_client": [
         {
-          "client_id": "313799778337-tkhaahjnaeid8hrlkjgbcva2gn4pm9ie.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.sam.spotifydown",
-            "certificate_hash": "2d3d5dbb7592732c3ab906e5bb88b69d480e98b0"
-          }
-        },
-        {
-          "client_id": "313799778337-cggkipera46317o09p6tk10knjltvals.apps.googleusercontent.com",
+          "client_id": "714569810554-ubhni9cciomsm9urpc31utjcci3ngo1b.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAfr5ocUhOEoZqireZDY6YwMvm2Lnh8I0Q"
+          "current_key": "AIzaSyCKrBJFzYm0PrqvXL_NJ67x2QNmYEgRJ_A"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "313799778337-cggkipera46317o09p6tk10knjltvals.apps.googleusercontent.com",
+              "client_id": "714569810554-ubhni9cciomsm9urpc31utjcci3ngo1b.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
