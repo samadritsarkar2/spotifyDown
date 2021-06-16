@@ -35,14 +35,14 @@ const perm = async () => {
       },
     );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      console.log('You can use the Storage');
+      //console.log('You can use the Storage');
       return true;
     } else {
-      console.log('Storage permission denied');
+      //console.log('Storage permission denied');
       return false;
     }
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return false;
   }
 };
@@ -187,7 +187,7 @@ const Playlist = ({navigation, route}) => {
                   setDownloadPercent(percent);
                 })
                 .done(async () => {
-                  console.log('Download is done!');
+                  //console.log('Download is done!');
 
                   const path = `${RNBackgroundDownloader.directories.documents}/${single.title}.mp3`;
 
@@ -246,7 +246,7 @@ const Playlist = ({navigation, route}) => {
                       });
                     }
                   } catch (err) {
-                    console.log(err);
+                    //console.log(err);
                   }
 
                   // dispatch(allActions.downloadOne(single, path));
@@ -531,7 +531,7 @@ const Playlist = ({navigation, route}) => {
                         onPress={() => downloader(item)}>
                         {visible && curentDownloading === item.id ? (
                           <Spinner
-                            style={{marginBottom: 7}}
+                            style={{marginBottom: 7, justifyContent: 'center'}}
                             size={30}
                             type={'Circle'}
                             color={'#FFF'}
@@ -543,6 +543,7 @@ const Playlist = ({navigation, route}) => {
                               height: 25,
                               width: 25,
                               borderRadius: 25 / 2,
+                              justifyContent: 'center',
                             }}
                           />
                         )}
