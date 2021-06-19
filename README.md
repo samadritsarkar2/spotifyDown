@@ -1,6 +1,6 @@
 <div align='center'>
 
-# Spotify Downloader
+# Downify
 
 </div>
 
@@ -10,7 +10,8 @@ Download Apk
 </a>
  </div>
 <br>
-An app that let's you download public Spotify playlists, illegally ofcourse XD 
+Downify let's you enjoy music on-the-go, even when you are offline.
+You can download public Spotify playlists and albums(added in v1.5).
 <br>
 It uses <a href="https://developer.spotify.com/">Spotify offical API</a> to fetch the tracks and Youtube(youtube-dl) to download the tracks.
 
