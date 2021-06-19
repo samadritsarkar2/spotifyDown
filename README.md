@@ -30,11 +30,20 @@ You can download public Spotify playlists and albums(added in v1.5).
 
 # Changelog
 
- ## v1.5
-    - Added Music Player
-    - Supports Spotify Albums now, alongside Playlists
-    - Added Downloads Page
-    - Support for OTA Updates
+- [**v1.5**](https://github.com/samadritsarkar2/spotifyDown/tree/version1.5)
+  - Added Music Player
+  - Supports Spotify Albums now, alongside Playlists
+  - Added Downloads Page
+  - Support for OTA Updates
+  - UI Changes
+  - See [CHANGELOG](/CHANGELOG.MD)
+    <br>
+    <br>
+- [**v1**](https://github.com/samadritsarkar2/spotifyDown/tree/version1) (Intial Release)
+  - Supports Spotify Playlist
+  - Playing a downloaded a song, launches Music player Intent.
+  - Download All functionality
+  - Save the playlist for later
 
 # How?
 
