@@ -30,7 +30,11 @@ You can download public Spotify playlists and albums(added in v1.5).
 
 # Changelog
 
-### v1.5
+ ## v1.5
+    - Added Music Player
+    - Supports Spotify Albums now, alongside Playlists
+    - Added Downloads Page
+    - Support for OTA Updates
 
 # How?
 
@@ -38,13 +42,13 @@ It uses <a href="https://developer.spotify.com/">Spotify offical API</a> to fetc
 
 P.S:- I have written a lot of Bad code, I will start improving the app and code soon.
 
-## Tech Stack
+# Tech Stack
 
     - React Native
     - Node Js (Backend Server) [Will make the backend code public soon]
     - Firebase (For Analytics
 
-## Known Issues
+# Known Issues
 
     - Few playlist may give error unexpectedly.
     - If playlist name is too long, other components overlaps it
@@ -52,13 +56,13 @@ P.S:- I have written a lot of Bad code, I will start improving the app and code 
     - Downloads wrong tracks
     - If you encounter anything else, feel free to report an issue or DM me.
 
-## Upcoming Features
+# Upcoming Features
 
     - In-app Music Player
     - Optimized Download All functionality
     - Spotify Login to fetch playlists
     - Suggestions are always welcome.
 
-### For Legal Purposes
+# For Legal Purposes
 
     You can mail me at **samadrit.sarkar2@gmail.com** or DM me.
