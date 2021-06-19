@@ -1,6 +1,6 @@
-<div align='center'>
-
-# Downify
+<div style="text-align:center">
+<img src='src/assets/homeLogo.png' width='100'>
+<h1><strong>Downify</strong></h1>
 
 </div>
 
@@ -10,14 +10,15 @@ Download Apk
 </a>
  </div>
 <br>
-Downify let's you enjoy music on-the-go, even when you are offline.
+<div align='center'>
+    <h2 >
+    Downify let's you enjoy music on-the-go, even when you are offline.
+    </h2>
 You can download public Spotify playlists and albums(added in v1.5).
+</div>
 <br>
-It uses <a href="https://developer.spotify.com/">Spotify offical API</a> to fetch the tracks and Youtube(youtube-dl) to download the tracks.
 
-P.S:- I have written a lot of Bad code, I will start improving the app and code soon.
-
-## Screenshots
+# Screenshots
 
 <div>
     <img src="screenshots/1.png" width="200" />
@@ -26,6 +27,16 @@ P.S:- I have written a lot of Bad code, I will start improving the app and code 
     <img src="screenshots/4.png" width="200" />
     <img src="screenshots/5.png" width="200" />
 </div>
+
+# Changelog
+
+### v1.5
+
+# How?
+
+It uses <a href="https://developer.spotify.com/">Spotify offical API</a> to fetch the tracks and Youtube(youtube-dl) to download the tracks.
+
+P.S:- I have written a lot of Bad code, I will start improving the app and code soon.
 
 ## Tech Stack
 
