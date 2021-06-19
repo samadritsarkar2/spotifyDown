@@ -1,4 +1,4 @@
-<div style="text-align:center">
+<div align="center">
 <img src='src/assets/homeLogo.png' width='100'>
 <h1><strong>Downify</strong></h1>
 
@@ -71,8 +71,8 @@ I improved the code a little bit and the overall code structure. Will work on it
 # Upcoming Features
 
 - [x] In-app Music Player
-- [] Optimized Download All functionality
-- [] Spotify Login to fetch playlists
+- [ ] Optimized Download All functionality
+- [ ] Spotify Login to fetch playlists
 - [x] Suggestions are always welcome.
 
 # For Legal Purposes
