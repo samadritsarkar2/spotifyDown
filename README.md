@@ -1,7 +1,9 @@
 <div align="center">
 <img src='src/assets/homeLogo.png' width='100'>
 <h1><strong>Downify</strong></h1>
-
+<h2 >
+    Downify let's you enjoy music on-the-go, even when you are offline.
+    </h2>
 </div>
 
 <div align='center' >
@@ -10,12 +12,14 @@ Download Apk
 </a>
  </div>
 <br>
-<div align='center'>
-    <h2 >
-    Downify let's you enjoy music on-the-go, even when you are offline.
-    </h2>
-You can download public Spotify playlists and albums(added in v1.5).
-</div>
+
+# 🎯 Goal
+
+<h3>
+Downify wants to make sure that, no one is deprived of music on that long road trip or airplane when there is no Internet Connection.
+You can download your Spotify playlists/albums in advance and enjoy music everywhere. And that too without annoying ads.
+</h3>
+<br>
 <br>
 
 # Screenshots
@@ -27,6 +31,8 @@ You can download public Spotify playlists and albums(added in v1.5).
     <img src="screenshots/4.png" width="200" />
     <img src="screenshots/5.png" width="200" />
 </div>
+<br>
+<br>
 
 # Changelog
 
@@ -47,7 +53,7 @@ You can download public Spotify playlists and albums(added in v1.5).
   - Download All functionality
   - Save the playlist for later
 
-# How?
+# How it works?
 
 It uses <a href="https://developer.spotify.com/">Spotify offical API</a> to fetch the tracks and Youtube(youtube-dl) to download the tracks.
 
@@ -62,16 +68,18 @@ I improved the code a little bit and the overall code structure. Will work on it
 
 # Known Issues
 
-    - Few playlist may give error unexpectedly.
-    - If playlist name is too long, other components overlaps it
-    - UI may break in low resolution devices(Tho I almost fixed that)
-    - Downloads wrong tracks
-    - If you encounter anything else, feel free to report an issue or DM me.
+- While a track(/s) is getting downloaded from a particular playlist, if user exists the screen or another playlist is loaded, then the download gets cancelled.
+- Few playlist may give error unexpectedly.
+- Due to youtube policies, few songs are not downloadable. This is because some videos are regionally restriced or so. [See these limitations](https://github.com/fent/node-ytdl-core#limitations)
+- Downloads wrong tracks
+- If you encounter anything else, feel free to report an issue or DM me. I will definetly work on it.
 
 # Upcoming Features
 
 - [x] In-app Music Player
-- [ ] Optimized Download All functionality
+- [x] Support for Spotify Albums. ([#2](https://github.com/samadritsarkar2/spotifyDown/issues/2))
+- [ ] In-app music controller such as, queue, seek bar etc.
+- [ ] Optimized Download functionality
 - [ ] Spotify Login to fetch playlists
 - [x] Suggestions are always welcome.
 
