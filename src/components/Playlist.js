@@ -19,6 +19,8 @@ import RNFetchBlob from 'rn-fetch-blob';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-spinkit';
 import analytics from '@react-native-firebase/analytics';
+import TextTicker from 'react-native-text-ticker';
+
 import {API} from '@env';
 import {windowWidth, windowHeight} from '../common';
 
@@ -413,7 +415,7 @@ const Playlist = ({navigation, route}) => {
                     source={{uri: responseData.image}}
                     style={{
                       height: '100%',
-                      width: '60%',
+                      aspectRatio: 1 / 1,
                       borderRadius: 10,
                       alignSelf: 'center',
                     }}
@@ -429,8 +431,20 @@ const Playlist = ({navigation, route}) => {
                     }}
                   />
                 )}
-
-                <Text style={styles.playlistId}>{responseData.name}</Text>
+                <View
+                  style={{
+                    alignContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <TextTicker
+                    style={[styles.playlistId, {}]}
+                    duration={10000}
+                    scroll={false}
+                    repeatSpacer={150}
+                    marqueeDelay={2000}>
+                    {responseData.name}
+                  </TextTicker>
+                </View>
               </View>
               <View
                 style={{
@@ -580,22 +594,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
   },
-  inputBox: {
-    flex: 1,
 
-    marginTop: -40,
-  },
-  input: {
-    color: 'white',
-    marginHorizontal: 20,
-    width: '70%',
-    borderBottomColor: 'white',
-    borderBottomWidth: 1,
-    alignSelf: 'center',
-  },
   playlistId: {
     color: 'white',
     alignSelf: 'center',
+    textAlign: 'center',
     fontSize: 25,
     fontFamily: 'Montserrat-Regular',
     fontWeight: 'bold',
@@ -615,7 +618,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: '#1DB954',
     marginVertical: 20,
-    height: 50,
+    height: windowHeight * 0.07,
     width: windowWidth * 0.3,
     alignSelf: 'center',
   },

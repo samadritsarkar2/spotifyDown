@@ -53,7 +53,7 @@ export default CustomModal;
 
 const styles = StyleSheet.create({
   mainView: {
-    height: windowHeight * 0.23,
+    height: windowHeight * 0.3,
     width: windowWidth * 0.9,
     backgroundColor: 'white',
     alignSelf: 'center',

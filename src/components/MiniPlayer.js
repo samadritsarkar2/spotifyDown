@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     height: windowHeight * 0.06,
     justifyContent: 'center',
     bottom: windowHeight * 0.05,
-    paddingVertical: 10,
+    paddingVertical: windowHeight * 0.01,
     backgroundColor: '#212326',
     borderTopColor: 'white',
     borderBottomColor: 'black',

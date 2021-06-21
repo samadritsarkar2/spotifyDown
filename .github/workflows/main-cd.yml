@@ -1,32 +1,32 @@
-name: react-native-android-build-apk
-on:
-  push:
-    branches:
-      - main
-jobs:
-  install-and-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install npm dependencies
-        run: |
-          npm install
-  build-android:
-    needs: install-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install npm dependencies
-        run: |
-          npm install
-      - name: Make Gradlew Executable
-        run: |
-          cd android && chmod +x ./gradlew
-      - name: Build Android Release
-        run: |
-          cd android && ./gradlew bundleRelease
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: autoBuild.aab
-          path: release/
+# name: react-native-android-build-apk
+# on:
+#   push:
+#     branches:
+#       - main
+# jobs:
+#   install-and-test:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - name: Install npm dependencies
+#         run: |
+#           npm install
+#   build-android:
+#     needs: install-and-test
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - name: Install npm dependencies
+#         run: |
+#           npm install
+#       - name: Make Gradlew Executable
+#         run: |
+#           cd android && chmod +x ./gradlew
+#       - name: Build Android Release
+#         run: |
+#           cd android && ./gradlew bundleRelease
+#       - name: Upload Artifact
+#         uses: actions/upload-artifact@v1
+#         with:
+#           name: autoBuild.aab
+#           path: release/

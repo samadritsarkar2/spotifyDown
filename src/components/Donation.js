@@ -137,6 +137,7 @@ const Donations = () => {
               </TouchableOpacity>
             </View>
           </View>
+          <View style={{height: windowHeight * 0.07}} />
         </ScrollView>
       </View>
       <CustomModal
