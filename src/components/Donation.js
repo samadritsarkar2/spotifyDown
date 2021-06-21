@@ -122,9 +122,16 @@ const Donations = () => {
                 onSubmitEditing={() => handleCustomAmount()}
               />
               <TouchableOpacity
-                style={[styles.optionText, {alignSelf: 'center'}]}
+                style={[
+                  styles.optionText,
+                  {
+                    height: '100%',
+                    paddingLeft: '7%',
+                    justifyContent: 'center',
+                  },
+                ]}
                 onPress={() => handleCustomAmount()}>
-                <Text style={[styles.optionText, {alignSelf: 'center'}]}>
+                <Text style={[styles.optionText, {textAlign: 'center'}]}>
                   Submit
                 </Text>
               </TouchableOpacity>
