@@ -9,6 +9,7 @@ import {
   ScrollView,
   Dimensions,
   RefreshControl,
+  ToastAndroid,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
@@ -66,6 +67,7 @@ const Downloads = ({navigation}) => {
 
   const handleLongPress = (item) => {
     Vibration.vibrate(100);
+    ToastAndroid.show(`Added to Queue`, ToastAndroid.SHORT);
     dispatch(allActions.addToQueue(item));
   };
 

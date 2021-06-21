@@ -64,18 +64,19 @@ const Donations = () => {
   return (
     <>
       <View style={{flex: 1, paddingHorizontal: 10}}>
-        <View style={styles.header}>
-          <Text style={styles.heading}>Support the App</Text>
-          <Text style={styles.subHeading}>
-            Downify is Ad-free app with more updates and features on its way.
-          </Text>
-          <Text style={[styles.subHeading]}>
-            To support us, you can donate any amount or from the options below.
-            Thank you for your support! You are awesome 🎉
-          </Text>
-        </View>
+        <Text style={styles.heading}>Support the App</Text>
 
         <ScrollView style={styles.scroller}>
+          <View style={styles.header}>
+            <Text style={styles.subHeading}>
+              Downify is Ad-free app with more updates and features on its way.
+            </Text>
+            <Text style={[styles.subHeading]}>
+              To support us, you can donate any amount or from the options
+              below. Thank you for your support! You are awesome 🎉
+            </Text>
+          </View>
+
           <TouchableOpacity onPress={() => handlePress('Tea', 10)}>
             <View style={styles.optionWrapper}>
               <Text style={styles.optionText}>Tea{'  '}☕</Text>
@@ -151,6 +152,7 @@ const styles = StyleSheet.create({
   header: {
     flex: 0.4,
     marginHorizontal: '1%',
+    marginBottom: windowHeight * 0.05,
   },
   heading: {
     color: '#1DB954',
@@ -169,8 +171,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   scroller: {
-    flex: 0.7,
-    marginTop: windowHeight * 0.05,
+    flex: 0.9,
+    marginTop: windowHeight * 0.01,
   },
   optionWrapper: {
     flex: 1,
