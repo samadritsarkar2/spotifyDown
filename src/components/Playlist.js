@@ -154,7 +154,7 @@ const Playlist = ({navigation, route}) => {
   }, [isFocused]);
 
   const downloader = async (single) => {
-    const api = `${API}/download?passedQuery=`;
+    const api = `${API}/download?`;
     const req = perm();
     const fileStatus = await checkExists(single);
     if (req) {
@@ -162,12 +162,22 @@ const Playlist = ({navigation, route}) => {
         setVisible(true);
         setCurentDownloading(single.id);
         let artistsString = single.artist.map((item) => item.name).join();
-        let passedQuery =
-          single.title + ' ' + single.album + ' ' + artistsString;
+        let passedQuery = single.title + ' ' + single.album + ' ' + artistsString;
+        const params = {
+          title : single.title,
+          album : single.album,
+          artistsString
+        }
+        const url = new URL(api);
+        let query = Object.keys(params)
+             .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+             .join('&');
+        // url.search = new URLSearchParams(params).toString();
+        //console.log(api+query);
+        const response = await fetch(api+query);
 
-        const response = await fetch(api + encodeURIComponent(passedQuery));
-
-        response.json().then((res) => {
+        response.json()
+        .then((res) => {
           //  console.log('link fetched ....');
           let link = res.url;
           let duration = res.duration;
@@ -262,6 +272,8 @@ const Playlist = ({navigation, route}) => {
                   console.log('Download canceled due to error: ', error);
                   setDownloadPercent(0);
                   setVisible(false);
+                  setCurentDownloading(null);
+
                   Snackbar.show({
                     text:
                       'Pardon!  Could not download this particular file due to Youtube policies',
@@ -271,6 +283,9 @@ const Playlist = ({navigation, route}) => {
                   resolve('Failed');
                 });
             } else {
+              setDownloadPercent(0);
+                  setVisible(false);
+                  setCurentDownloading(null);
               Snackbar.show({
                 text: 'Server Error',
                 duration: Snackbar.LENGTH_SHORT,
@@ -280,7 +295,21 @@ const Playlist = ({navigation, route}) => {
           });
 
           return promise;
-        });
+        })
+        .catch((error) => {
+                  console.log('Download canceled due to error: ', error);
+                  setDownloadPercent(0);
+                  setVisible(false);
+                  setCurentDownloading(null);
+
+                  Snackbar.show({
+                    text:
+                      'Something went wrong in the server',
+                    duration: Snackbar.LENGTH_SHORT,
+                    backgroundColor: 'red',
+                  });
+                  //resolve('Failed');
+                })
       }
     } else {
       Alert.alert(

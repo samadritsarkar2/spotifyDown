@@ -140,7 +140,7 @@ const Downloads = ({navigation}) => {
                     onPress={() => {
                       dispatch(allActions.playOne(item));
                     }}
-                    style={{flex: 1, marginBottom: 15}}
+                    style={styles.itemClickWrapper}
                     onLongPress={() => handleLongPress(item)}>
                     <View style={styles.itemWrapper}>
                       <Image
@@ -189,6 +189,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: '5%',
   },
+  itemClickWrapper: {flex: 1, marginBottom: 15},
   itemWrapper: {
     flex: 1,
     flexDirection: 'row',
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
   trackArtwork: {
     flex: 1,
     marginRight: 20,
-    height: '100%',
+    height: '90%',
     aspectRatio: 1 / 1,
     alignSelf: 'center',
     borderRadius: 6,

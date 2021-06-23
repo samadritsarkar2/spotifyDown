@@ -19,8 +19,6 @@ Download Apk
 Downify wants to make sure that, no one is deprived of music on that long road trip or airplane when there is no Internet Connection.
 You can download your Spotify playlists/albums in advance and enjoy music everywhere. And that too without annoying ads.
 </h3>
-<br>
-<br>
 
 # Screenshots
 
@@ -31,7 +29,6 @@ You can download your Spotify playlists/albums in advance and enjoy music everyw
     <img src="screenshots/4.png" width="200" />
     <img src="screenshots/5.png" width="200" />
 </div>
-<br>
 <br>
 
 # Changelog
@@ -55,7 +52,7 @@ You can download your Spotify playlists/albums in advance and enjoy music everyw
 
 # How it works?
 
-It uses <a href="https://developer.spotify.com/">Spotify offical API</a> to fetch the tracks and Youtube(youtube-dl) to download the tracks.
+It uses <a href="https://developer.spotify.com/">Spotify offical API</a> to fetch the tracks and Youtube(youtube-dl) to download the tracks. All that happens in server side and the app just downloads the mp3 file for later.
 
 P.S:- ~~I have written a lot of Bad code, I will start improving the app and code soon.~~
 I improved the code a little bit and the overall code structure. Will work on it soon.
@@ -71,6 +68,7 @@ I improved the code a little bit and the overall code structure. Will work on it
 - While a track(/s) is getting downloaded from a particular playlist, if user exists the screen or another playlist is loaded, then the download gets cancelled.
 - Few playlist may give error unexpectedly.
 - Due to youtube policies, few songs are not downloadable. This is because some videos are regionally restriced or so. [See these limitations](https://github.com/fent/node-ytdl-core#limitations)
+- Youtube server gives `429 error`.
 - Downloads wrong tracks
 - If you encounter anything else, feel free to report an issue or DM me. I will definetly work on it.
 
