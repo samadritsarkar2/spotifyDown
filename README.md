@@ -7,8 +7,8 @@
 </div>
 
 <div align='center' >
-<a href="https://github.com/samadritsarkar2/spotifyDown/blob/main/release/spotifyDown.apk?raw=true" >
-Download Apk
+<a href="https://play.google.com/store/apps/details?id=com.sam.downify" >
+Get it on Playstore
 </a>
  </div>
 <br>
