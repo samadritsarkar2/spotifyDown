@@ -4,23 +4,73 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
+import AdMob, {useRewardedAd} from '@react-native-admob/admob';
 import KnowMore from './KnowMore.js';
-import SavedPlaylists from './SavedPlaylists';
 
 const Library = ({navigation}) => {
   const [isModalVisible, setModalVisible] = useState(false);
-
+  const [isAdClicked, setIsAdClicked] = useState(false);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
+  const hookOptions = {
+    loadOnDismissed: true,
+  };
+  const {
+    adLoadError,
+    adLoaded,
+    reward,
+    show,
+    adPresented,
+    adDismissed,
+    load,
+  } = useRewardedAd('ca-app-pub-3940256099942544/5224354917', hookOptions);
+
+  const showAd = () => {
+    setIsAdClicked(true);
+
+    if (adLoadError) {
+      ToastAndroid.show(
+        'Something went wrong! Cannot load the App',
+        ToastAndroid.SHORT,
+      );
+    }
+
+    if (adLoaded) {
+      show();
+    } else {
+      ToastAndroid.show('Ad is loading. Please wait', ToastAndroid.SHORT);
+    }
+  };
+
+  useEffect(() => {
+    if (adLoaded && isAdClicked) {
+      show();
+    }
+  }, [adLoaded]);
+
+  useEffect(() => {
+    if (adPresented || adDismissed) {
+      setIsAdClicked(false);
+    }
+  }, [adDismissed, adPresented]);
+
+  useEffect(() => {
+    if (adLoadError) {
+      console.error('Error ::', adLoadError);
+    }
+  }, [adLoadError]);
 
   const BetterKnowMore = React.memo(KnowMore);
   useEffect(() => {
     // console.log("rendered")
   }, []);
+
   return (
     <>
       <View
@@ -51,7 +101,6 @@ const Library = ({navigation}) => {
                 <Text style={styles.buttons}>Saved</Text>
               </View>
             </TouchableOpacity>
-
             <TouchableOpacity onPress={toggleModal}>
               <View style={styles.optionWrapper}>
                 <Image
@@ -68,6 +117,15 @@ const Library = ({navigation}) => {
                   style={styles.optionIcon}
                 />
                 <Text style={styles.buttons}>Support the App</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={showAd}>
+              <View style={styles.optionWrapper}>
+                <Image
+                  source={require('../assets/check.png')}
+                  style={styles.optionIcon}
+                />
+                <Text style={styles.buttons}>Watch an Ad</Text>
               </View>
             </TouchableOpacity>
             <BetterKnowMore

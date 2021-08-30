@@ -9,13 +9,16 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-import {spotifyGreenButton, spotifyGreenButtonText} from '../common';
+import {initAdMob, spotifyGreenButton, spotifyGreenButtonText} from '../common';
+import AdMob, {BannerAd, BannerAdSize} from '@react-native-admob/admob';
 
 const App = ({navigation, route}) => {
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
     });
+    initAdMob(() => console.log('initilized Admob'));
+
     return unsubscribe;
   }, []);
 
@@ -47,6 +50,19 @@ const App = ({navigation, route}) => {
             }}>
             <Text style={spotifyGreenButtonText}>Library</Text>
           </TouchableOpacity>
+          <View
+            style={{
+              margin: 10,
+              alignSelf: 'center',
+            }}>
+            <BannerAd
+              size={BannerAdSize.BANNER}
+              unitId={'ca-app-pub-3940256099942544/6300978111'}
+              onAdFailedToLoad={(error) => console.error(error)}
+
+              // ref={bannerRef}
+            />
+          </View>
         </View>
       </View>
     </>
