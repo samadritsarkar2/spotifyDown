@@ -25,6 +25,7 @@ import Spinner from 'react-native-spinkit';
 
 const Downloads = ({navigation}) => {
   const dispatch = useDispatch();
+  const downloadQueue = useSelector((state) => state.playlist).downloadQueue;
   const [loading, setLoading] = useState(true);
   const windowHeight = Dimensions.get('window').height;
   const [arr, setArr] = useState([]);
@@ -52,6 +53,7 @@ const Downloads = ({navigation}) => {
   };
 
   useEffect(() => {
+    console.log(downloadQueue);
     setLoading(true);
     setTimeout(() => {
       getFileName();
@@ -164,6 +166,7 @@ const Downloads = ({navigation}) => {
                     </View>
                   </TouchableOpacity>
                 ))}
+                <Text style={styles.trackTitle}> {downloadQueue}</Text>
                 <View style={{height: windowHeight * 0.06}} />
               </ScrollView>
             )}
