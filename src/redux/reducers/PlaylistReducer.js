@@ -4,6 +4,7 @@ const initialState = {
   downloadQueue: [],
   currentDownloading: null,
   downloadPercent: 0,
+  loading: true,
 };
 
 export const playlist = (state = initialState, action) => {
@@ -14,11 +15,14 @@ export const playlist = (state = initialState, action) => {
         id: action.payload,
       };
     case 'ADD_NEW_PLAYLIST':
-      //   console.log(action.payload);
+      // console.log(action.payload);
 
       return {
         ...state,
-        currentPlaylist: action.payload,
+        currentPlaylist: {
+          responseInfo: action.payload.responseInfo,
+          tracks: action.payload.tracks,
+        },
       };
 
     case 'SAVE_PLAYLIST':
@@ -40,9 +44,10 @@ export const playlist = (state = initialState, action) => {
         downloadQueue: newArr,
       };
     case 'UPDATE_DOWNLOADED':
-      const {path, duration, id} = action.payload;
+      const {path, duration, track} = action.payload;
+      // console.log(action.payload);
       const updatedTracks = [...state.currentPlaylist.tracks].map((item) =>
-        item.id === id
+        item.id === track.id
           ? {
               ...item,
               downloaded: true,
@@ -51,7 +56,7 @@ export const playlist = (state = initialState, action) => {
             }
           : item,
       );
-
+      console.log(updatedTracks);
       return {
         ...state,
         currentPlaylist: {
@@ -76,6 +81,16 @@ export const playlist = (state = initialState, action) => {
       return {
         ...state,
         downloadPercent: action.payload,
+      };
+    case 'LOADING_TRUE':
+      return {
+        ...state,
+        loading: true,
+      };
+    case 'LOADING_FALSE':
+      return {
+        ...state,
+        loading: false,
       };
     // case 'DOWNLOAD_ONE' : {
     //    const newState = state.map((item) => item.id === action.payload.id ? {...item, downloaded : true, path : action.path}  : item  )

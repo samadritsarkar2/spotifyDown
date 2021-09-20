@@ -30,7 +30,7 @@ import {
 } from '../redux/actions/playlistActions';
 
 const Playlist = ({navigation, route}) => {
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   // const [tracks, setTracks] = useState([]);
   // const [responseData, setResponseData] = useState({});
@@ -43,8 +43,10 @@ const Playlist = ({navigation, route}) => {
   const URlID = useSelector((state) => state.playlist).id;
 
   const dispatch = useDispatch();
-  const state = useSelector((state) => state.playlist).currentPlaylist;
-  const {responseInfo, tracks} = state;
+  const state = useSelector((state) => state.playlist);
+  const {responseInfo, tracks} = state.currentPlaylist;
+  const {loading} = state;
+
   const fetchData = async () => {
     try {
       let api = `${NEW_API}/redirect?id=${URlID}`;
@@ -61,7 +63,7 @@ const Playlist = ({navigation, route}) => {
             // setResponseData(res.responseInfo);
 
             dispatch(addNewPlaylist(res));
-            setLoading(false);
+            // setLoading(false);
 
             // checkData(res.tracks).then(async (data) => {
             //   // console.log(data)
@@ -77,7 +79,7 @@ const Playlist = ({navigation, route}) => {
           })
           .catch((err) => {
             console.log(err);
-            setLoading(false);
+            // setLoading(false);
             setError(true);
             //navigation.goBack();
             Alert.alert(
@@ -113,8 +115,8 @@ const Playlist = ({navigation, route}) => {
   };
 
   useEffect(() => {
-    setLoading(true);
-    console.log(state.responseInfo);
+    // setLoading(true);
+    // console.log(state);
     fetchData();
 
     // return () => {

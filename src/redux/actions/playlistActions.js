@@ -11,14 +11,23 @@ export const addNew = (playlist) => {
     payload: playlist,
   };
 };
+
 export const addNewPlaylist = (playlistData) => {
   return async (dispatch) => {
     // console.log('addNewPlaylist');
-    dispatch({type: 'ADD_NEW_PLAYLIST', payload: playlistData});
-    // checkData(playlistData.tracks);
+    checkData(playlistData.tracks).then((tracks) => {
+      // console.log(tracks);
+      dispatch({
+        type: 'ADD_NEW_PLAYLIST',
+        payload: {tracks, responseInfo: playlistData.responseInfo},
+      });
+      dispatch({type: 'LOADING_FALSE'});
+    });
   };
 };
+
 const downloadItem = async (single, dispatch) => {
+  console.log('Trying to download: ', single.title);
   const api = `${NEW_API}/download?`;
   const req = checkPermission();
   const fileStatus = await checkExists(single);
@@ -69,20 +78,10 @@ const downloadItem = async (single, dispatch) => {
                   dispatch({type: 'SET_DOWNLOAD_PERCENT', payload: percent});
                 })
                 .done(async () => {
-                  //console.log('Download is done!');
-
-                  // setTracks((prev) => {
-                  //   const nextState = prev.map((item) =>
-                  //     item.id == single.id
-                  //       ? {
-                  //           ...item,
-                  //           downloaded: true,
-                  //           path: path,
-                  //           duration: duration,
-                  //         }
-                  //       : item,
-                  //   );
-                  dispatch({type: 'UPDATE_DOWNLOADED', payload: single});
+                  dispatch({
+                    type: 'UPDATE_DOWNLOADED',
+                    payload: {track: single, path, duration},
+                  });
 
                   try {
                     const newDownload = {
@@ -126,13 +125,6 @@ const downloadItem = async (single, dispatch) => {
                   } catch (err) {
                     //console.log(err);
                   }
-
-                  // dispatch(allActions.downloadOne(single, path));
-
-                  // setVisible(false);
-                  // resolve(path);
-                  // setDownloadPercent(1);
-                  // setCurentDownloading(null);
                 })
                 .error((error) => {
                   console.log('Download canceled due to error: ', error);
@@ -159,7 +151,7 @@ const downloadItem = async (single, dispatch) => {
                 type: 'SET_DOWNLOAD_PERCENT',
                 payload: 0,
               });
-              setVisible(false);
+
               dispatch({
                 type: 'SET_CURRENT_DOWNLOADING',
                 payload: null,
@@ -181,7 +173,7 @@ const downloadItem = async (single, dispatch) => {
             type: 'SET_DOWNLOAD_PERCENT',
             payload: 0,
           });
-          setVisible(false);
+
           dispatch({
             type: 'SET_CURRENT_DOWNLOADING',
             payload: null,
@@ -194,6 +186,12 @@ const downloadItem = async (single, dispatch) => {
           });
           //resolve('Failed');
         });
+    } else {
+      Snackbar.show({
+        text: 'The track is already downloaded',
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: 'red',
+      });
     }
   } else {
     Alert.alert(
