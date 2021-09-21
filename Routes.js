@@ -14,7 +14,6 @@ import codePush from 'react-native-code-push';
 import Error from './src/components/Error';
 import Home from './src/components/Home';
 import MiniPlayer from './src/components/MiniPlayer';
-import New from './src/components/New';
 import Playlist from './src/components/Playlist';
 import LibraryStack from './src/navigation/LibraryStack';
 

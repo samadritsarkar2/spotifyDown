@@ -51,8 +51,10 @@ export const checkExists = async (single) => {
   if (exists) {
     const stats = await RNFetchBlob.fs.stat(path);
 
-    if (stats.size === 0) return {...single};
-    else return {...single, downloaded: true, path: path};
+    if (stats.size === 0) {
+      RNFetchBlob.fs.unlink(path);
+      return {...single};
+    } else return {...single, downloaded: true, path: path};
   } else {
     return {...single};
   }

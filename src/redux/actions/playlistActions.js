@@ -26,37 +26,40 @@ export const addNewPlaylist = (playlistData) => {
   };
 };
 
-const downloadItem = async (single, dispatch) => {
+const downloadItem = async (single, dispatch, nameOfPlaylist) => {
   console.log('Trying to download: ', single.title);
   const api = `${NEW_API}/download?`;
   const req = checkPermission();
   const fileStatus = await checkExists(single);
-  if (req) {
-    if (!fileStatus.path) {
-      // setVisible(true);
-      // setCurentDownloading(single.id);
-      let artistsString = single.artist.map((item) => item.name).join();
-      // let passedQuery = single.title + ' ' + single.album + ' ' + artistsString;
-      const params = {
-        title: single.title,
-        album: single.album,
-        artistsString,
-      };
 
-      let query = Object.keys(params)
-        .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
-        .join('&');
+  let promise = new Promise(async (resolve, reject) => {
+    if (req) {
+      if (!fileStatus.path) {
+        // setVisible(true);
+        // setCurentDownloading(single.id);
+        let artistsString = single.artist.map((item) => item.name).join();
+        // let passedQuery = single.title + ' ' + single.album + ' ' + artistsString;
+        const params = {
+          title: single.title,
+          album: single.album,
+          artistsString,
+        };
 
-      const response = await fetch(api + query);
+        let query = Object.keys(params)
+          .map(
+            (k) => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]),
+          )
+          .join('&');
 
-      response
-        .json()
-        .then((res) => {
-          //  console.log('link fetched ....');
-          let link = res.url;
-          let duration = res.duration;
+        const response = await fetch(api + query);
 
-          let promise = new Promise((resolve, reject) => {
+        response
+          .json()
+          .then((res) => {
+            //  console.log('link fetched ....');
+            let link = res.url;
+            let duration = res.duration;
+
             if (link) {
               const path = `${DOWNLOAD_PATH}/${single.title}.mp3`;
 
@@ -70,7 +73,7 @@ const downloadItem = async (single, dispatch) => {
                   // setVisible(true);
                   // setDownloadPercent(0);
                   dispatch({type: 'SET_CURRENT_DOWNLOADING', payload: single});
-                  console.log('reaced here');
+                  console.log('Begin reached');
                 })
                 .progress((percent) => {
                   // console.log(`Downloaded: ${percent * 100}%`);
@@ -84,6 +87,7 @@ const downloadItem = async (single, dispatch) => {
                   });
 
                   try {
+                    console.log('try block');
                     const newDownload = {
                       id: single.id,
                       title: single.title,
@@ -93,28 +97,50 @@ const downloadItem = async (single, dispatch) => {
                       url: path,
                       duration: duration,
                     };
+
                     const storedValue = await AsyncStorage.getItem(
-                      `@downloads`,
+                      `@playlistView`,
                     );
+
                     const prevList = await JSON.parse(storedValue);
 
                     if (!prevList) {
-                      const newList = [newDownload];
+                      const playlistView = {
+                        [nameOfPlaylist]: [newDownload],
+                      };
+                      // const newList = [newDownload];
+                      // await AsyncStorage.setItem(
+                      //   `@downloads`,
+                      //   JSON.stringify(newList),
+                      // );
                       await AsyncStorage.setItem(
-                        `@downloads`,
-                        JSON.stringify(newList),
+                        `@playlistView`,
+                        JSON.stringify(playlistView),
                       );
-                      //console.log(newDownload)
+                      console.log(playlistView);
                       Snackbar.show({
                         text: 'First Track added to Downloads',
                         duration: Snackbar.LENGTH_SHORT,
                         backgroundColor: 'red',
                       });
                     } else {
-                      prevList.push(newDownload);
+                      // prevList.push(newDownload);
+                      const newList = {
+                        ...prevList,
+                      };
+
+                      if (nameOfPlaylist in prevList) {
+                        newList[nameOfPlaylist].push(newDownload);
+                      } else {
+                        newList = {
+                          ...newList,
+                          [nameOfPlaylist]: [newDownload],
+                        };
+                      }
+                      console.log(newList);
                       await AsyncStorage.setItem(
-                        `@downloads`,
-                        JSON.stringify(prevList),
+                        `@playlistView`,
+                        JSON.stringify(newList),
                       );
                       Snackbar.show({
                         text: 'Track added to Downloads',
@@ -123,7 +149,7 @@ const downloadItem = async (single, dispatch) => {
                       });
                     }
                   } catch (err) {
-                    //console.log(err);
+                    console.log(err);
                   }
                 })
                 .error((error) => {
@@ -163,44 +189,44 @@ const downloadItem = async (single, dispatch) => {
                 backgroundColor: 'red',
               });
             }
-          });
+          })
+          .catch((error) => {
+            console.log('Download canceled due to error: ', error);
+            dispatch({
+              type: 'SET_DOWNLOAD_PERCENT',
+              payload: 0,
+            });
 
-          return promise;
-        })
-        .catch((error) => {
-          console.log('Download canceled due to error: ', error);
-          dispatch({
-            type: 'SET_DOWNLOAD_PERCENT',
-            payload: 0,
-          });
+            dispatch({
+              type: 'SET_CURRENT_DOWNLOADING',
+              payload: null,
+            });
 
-          dispatch({
-            type: 'SET_CURRENT_DOWNLOADING',
-            payload: null,
+            Snackbar.show({
+              text: 'Something went wrong in the server',
+              duration: Snackbar.LENGTH_SHORT,
+              backgroundColor: 'red',
+            });
+            //resolve('Failed');
           });
-
-          Snackbar.show({
-            text: 'Something went wrong in the server',
-            duration: Snackbar.LENGTH_SHORT,
-            backgroundColor: 'red',
-          });
-          //resolve('Failed');
+      } else {
+        Snackbar.show({
+          text: 'The track is already downloaded',
+          duration: Snackbar.LENGTH_SHORT,
+          backgroundColor: 'red',
         });
+      }
     } else {
-      Snackbar.show({
-        text: 'The track is already downloaded',
-        duration: Snackbar.LENGTH_SHORT,
-        backgroundColor: 'red',
-      });
+      Alert.alert(
+        'Storage Permision Denied',
+        'Unable to save',
+        [{text: 'OK', onPress: () => {}}],
+        {cancelable: false},
+      );
     }
-  } else {
-    Alert.alert(
-      'Storage Permision Denied',
-      'Unable to save',
-      [{text: 'OK', onPress: () => {}}],
-      {cancelable: false},
-    );
-  }
+  });
+
+  return promise;
 };
 
 export const addToDownloadQueue = (track) => {
@@ -208,10 +234,11 @@ export const addToDownloadQueue = (track) => {
     dispatch({type: 'ADD_TO_DOWNLOAD_QUEUE', payload: track});
     // console.log(getState().playlist.downloadQueue);
     const queue = getState().playlist.downloadQueue;
-
+    const nameOfPlaylist = getState().playlist.currentPlaylist.responseInfo
+      .name;
     const workerFn = async () => {
       while (queue.length > 0) {
-        await downloadItem(queue.shift(), dispatch);
+        await downloadItem(queue.shift(), dispatch, nameOfPlaylist);
       }
     };
     workerFn();

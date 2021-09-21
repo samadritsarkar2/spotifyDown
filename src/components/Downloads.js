@@ -29,6 +29,7 @@ const Downloads = ({navigation}) => {
   const [loading, setLoading] = useState(true);
   const windowHeight = Dimensions.get('window').height;
   const [arr, setArr] = useState([]);
+  const [playlistView, setPlaylistView] = useState();
 
   const getFileName = async () => {
     try {
@@ -52,11 +53,28 @@ const Downloads = ({navigation}) => {
     }
   };
 
+  const getPlaylistView = async () => {
+    try {
+      const storedValue = await AsyncStorage.getItem(`@playlistView`);
+
+      const prevList = await JSON.parse(storedValue);
+      setPlaylistView(prevList);
+
+      for (const playlist in prevList) {
+        console.log(playlist, ':::', prevList[playlist]);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    console.log(downloadQueue);
+    // console.log(downloadQueue);
     setLoading(true);
     setTimeout(() => {
       getFileName();
+      getPlaylistView();
     }, 500);
   }, []);
 
@@ -136,6 +154,18 @@ const Downloads = ({navigation}) => {
                 refreshControl={
                   <RefreshControl refreshing={loading} onRefresh={onRefresh} />
                 }>
+                <TouchableOpacity
+                  style={spotifyGreenButton}
+                  onPress={async () => {
+                    const storedValue = await AsyncStorage.getItem(
+                      `@playlistView`,
+                    );
+
+                    const prevList = await JSON.parse(storedValue);
+                    console.log(prevList);
+                  }}>
+                  <Text style={spotifyGreenButtonText}>Add New</Text>
+                </TouchableOpacity>
                 {arr.map((item, index) => (
                   <TouchableOpacity
                     key={index}

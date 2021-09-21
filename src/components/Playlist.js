@@ -117,6 +117,8 @@ const Playlist = ({navigation, route}) => {
   useEffect(() => {
     // setLoading(true);
     // console.log(state);
+    dispatch({type: 'LOADING_TRUE'});
+
     fetchData();
 
     // return () => {
