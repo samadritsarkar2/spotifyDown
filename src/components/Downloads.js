@@ -29,11 +29,10 @@ const Downloads = ({navigation}) => {
   const [loading, setLoading] = useState(true);
   const windowHeight = Dimensions.get('window').height;
   const [arr, setArr] = useState([]);
-  const [playlistView, setPlaylistView] = useState();
-  const [playlists, setPlaylists] = useState([]);
-
-  const [isPlaylistView, setIsPlaylisView] = useState(true);
-  const [activePlaylist, setActivePlaylist] = useState(null);
+  // const [playlistView, setPlaylistView] = useState();
+  const downloadsState = useSelector((state) => state.downloadsReducer);
+  const {playlists, data, isPlaylistView} = downloadsState;
+  // const [playlists, setPlaylists] = useState([]);
 
   const getFileName = async () => {
     try {
@@ -62,15 +61,21 @@ const Downloads = ({navigation}) => {
       const storedValue = await AsyncStorage.getItem(`@playlistView`);
 
       const prevList = await JSON.parse(storedValue);
-      setPlaylistView(prevList);
-      const playlists = Object.keys(prevList);
+      console.log(prevList);
+      if (prevList !== null) {
+        dispatch({type: 'LOAD_DATA', payload: prevList});
+        let playlists = Object.keys(prevList);
+        console.log(playlists);
+        dispatch({type: 'LOAD_PLAYLISTS', payload: playlists});
+      } else {
+      }
       // for (const playlist in prevList) {
       //   console.log(playlist, ':::', prevList[playlist]);
       // }
       // playlists.forEach((key, index) => {
       //   console.log(key, ' :: ', prevList[key]);
       // });
-      setPlaylists(playlists);
+      // setPlaylists(playlists);
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -78,7 +83,7 @@ const Downloads = ({navigation}) => {
   };
 
   useEffect(() => {
-    // console.log(downloadQueue);
+    // console.log(data);
     setLoading(true);
     setTimeout(() => {
       getFileName();
@@ -106,9 +111,11 @@ const Downloads = ({navigation}) => {
           <TouchableOpacity
             key={index}
             onPress={() => {
-              setActivePlaylist(item);
-              setIsPlaylisView(false);
-              console.log(playlistView[item].info);
+              // setActivePlaylist(item);
+              // setIsPlaylisView(false);
+              dispatch({type: 'SET_ACTIVE_PLAYLIST', payload: item});
+
+              navigation.navigate('TracksView');
             }}
             style={styles.itemWrapper}>
             <View
@@ -120,9 +127,9 @@ const Downloads = ({navigation}) => {
               <Image
                 style={styles.playlistImg}
                 source={
-                  playlistView[item].info.image
+                  data[item].info.image
                     ? Image.resolveAssetSource({
-                        uri: `${playlistView[item].info.image}`,
+                        uri: `${data[item].info.image}`,
                       })
                     : require('../assets/defaultPlaylist.png')
                 }
@@ -133,9 +140,7 @@ const Downloads = ({navigation}) => {
                   flexDirection: 'column',
                   justifyContent: 'center',
                 }}>
-                <Text style={styles.playlistId}>
-                  {playlistView[item].info.name}
-                </Text>
+                <Text style={styles.playlistId}>{data[item].info.name}</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -144,51 +149,12 @@ const Downloads = ({navigation}) => {
     );
   };
 
-  const TracksView = () => {
-    return (
-      <View>
-        {playlistView[activePlaylist].tracks.map((item, index) => {
-          return (
-            <TouchableOpacity
-              key={index}
-              onPress={() => {
-                dispatch(allActions.playOne(item));
-              }}
-              style={styles.itemClickWrapper}
-              onLongPress={() => handleLongPress(item)}>
-              <View style={styles.itemWrapper}>
-                <Image
-                  style={styles.trackArtwork}
-                  source={{uri: `${item.artwork}`}}
-                />
-                <View
-                  style={{
-                    flex: 9,
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                  }}>
-                  <Text style={styles.trackTitle}>{item.title}</Text>
-                  <Text style={styles.trackInfo}>
-                    {item.artist} - {item.album}
-                  </Text>
-                </View>
-                {/* <Text style={{color: 'white', alignSelf: 'center'}}>
-                      {Math.floor(item?.duration)}
-                    </Text> */}
-              </View>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    );
-  };
-
   return (
     <>
-      <View style={{flex: 1, paddingHorizontal: 10}}>
-        <View style={styles.header}>
+      <View style={{flex: 1, paddingHorizontal: 10, marginTop: 10}}>
+        {/* <View style={styles.header}>
           <Text style={styles.heading}>Downloads</Text>
-        </View>
+        </View> */}
         {loading ? (
           <View style={{flex: 1}}>
             <Spinner
@@ -246,7 +212,7 @@ const Downloads = ({navigation}) => {
                 refreshControl={
                   <RefreshControl refreshing={loading} onRefresh={onRefresh} />
                 }>
-                {isPlaylistView ? <PlaylistView /> : <TracksView />}
+                <PlaylistView />
 
                 <TouchableOpacity
                   style={spotifyGreenButton}
@@ -254,10 +220,8 @@ const Downloads = ({navigation}) => {
                     // const storedValue = await AsyncStorage.getItem(
                     //   `@playlistView`,
                     // );
-
                     // const prevList = await JSON.parse(storedValue);
                     // console.log(prevList);
-                    console.log(playlistView[activePlaylist].tracks);
                   }}>
                   <Text style={spotifyGreenButtonText}>Add New</Text>
                 </TouchableOpacity>

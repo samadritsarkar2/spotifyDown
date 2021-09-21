@@ -102,16 +102,3 @@ export const playlist = (state = initialState, action) => {
       return state;
   }
 };
-
-export const downloadSong = (state = {}, action) => {
-  switch (action.type) {
-    case 'DOWNLOAD':
-      return {
-        ...state,
-        downloaded: true,
-        path: action.path,
-      };
-    default:
-      return state;
-  }
-};
