@@ -29,7 +29,9 @@ const SavedPlaylists = () => {
   useFocusEffect(
     React.useCallback(() => {
       setLoading(true);
-      retriveSaved();
+      setTimeout(() => {
+        retriveSaved();
+      }, 200);
 
       // retriveDownloaded();
     }, []),

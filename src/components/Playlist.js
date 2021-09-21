@@ -127,7 +127,7 @@ const Playlist = ({navigation, route}) => {
     //   const [tracks, setTracks] = useState([]);
     //   const [responseData, setResponseData] = useState({});
     // };
-  }, []);
+  }, [isFocused]);
 
   const handleDownload = (item) => {
     dispatch(addToDownloadQueue(item));

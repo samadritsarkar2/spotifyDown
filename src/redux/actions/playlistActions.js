@@ -26,7 +26,7 @@ export const addNewPlaylist = (playlistData) => {
   };
 };
 
-const downloadItem = async (single, dispatch, nameOfPlaylist) => {
+const downloadItem = async (single, dispatch, playlistDetails) => {
   console.log('Trying to download: ', single.title);
   const api = `${NEW_API}/download?`;
   const req = checkPermission();
@@ -103,10 +103,17 @@ const downloadItem = async (single, dispatch, nameOfPlaylist) => {
                     );
 
                     const prevList = await JSON.parse(storedValue);
-
+                    const playlistId = playlistDetails.id;
                     if (!prevList) {
-                      const playlistView = {
-                        [nameOfPlaylist]: [newDownload],
+                      let playlistView = {
+                        [playlistId]: {
+                          info: {
+                            id: playlistDetails.id,
+                            name: playlistDetails.name,
+                            image: playlistDetails.image,
+                          },
+                          tracks: [newDownload],
+                        },
                       };
                       // const newList = [newDownload];
                       // await AsyncStorage.setItem(
@@ -125,16 +132,23 @@ const downloadItem = async (single, dispatch, nameOfPlaylist) => {
                       });
                     } else {
                       // prevList.push(newDownload);
-                      const newList = {
+                      let newList = {
                         ...prevList,
                       };
 
-                      if (nameOfPlaylist in prevList) {
-                        newList[nameOfPlaylist].push(newDownload);
+                      if (playlistId in prevList) {
+                        newList[playlistId].tracks.push(newDownload);
                       } else {
                         newList = {
                           ...newList,
-                          [nameOfPlaylist]: [newDownload],
+                          [playlistId]: {
+                            info: {
+                              id: playlistDetails.id,
+                              name: playlistDetails.name,
+                              image: playlistDetails.image,
+                            },
+                            tracks: [newDownload],
+                          },
                         };
                       }
                       console.log(newList);
@@ -234,11 +248,10 @@ export const addToDownloadQueue = (track) => {
     dispatch({type: 'ADD_TO_DOWNLOAD_QUEUE', payload: track});
     // console.log(getState().playlist.downloadQueue);
     const queue = getState().playlist.downloadQueue;
-    const nameOfPlaylist = getState().playlist.currentPlaylist.responseInfo
-      .name;
+    const playlistDetails = getState().playlist.currentPlaylist.responseInfo;
     const workerFn = async () => {
       while (queue.length > 0) {
-        await downloadItem(queue.shift(), dispatch, nameOfPlaylist);
+        await downloadItem(queue.shift(), dispatch, playlistDetails);
       }
     };
     workerFn();

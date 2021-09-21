@@ -64,9 +64,11 @@ const BottomNav = () => {
           <Tab.Screen
             component={Playlist}
             name="Playlist"
-            options={{
-              unmountOnBlur: true,
-            }}></Tab.Screen>
+            options={
+              {
+                // unmountOnBlur: true,
+              }
+            }></Tab.Screen>
           <Tab.Screen
             component={Error}
             name="Error"
