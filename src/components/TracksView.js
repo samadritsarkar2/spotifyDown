@@ -10,8 +10,13 @@ import {
   RefreshControl,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import {windowHeight} from '../common';
+import {
+  spotifyGreenButton,
+  spotifyGreenButtonText,
+  windowHeight,
+} from '../common';
 import allActions from '../redux/actions';
+import {shufflePlay} from '../redux/actions/playerActions';
 
 const TracksView = () => {
   const navigation = useNavigation();
@@ -24,7 +29,12 @@ const TracksView = () => {
   }, []);
   return (
     // <Text>Hello</Text>
-    <>
+    <View
+      style={{
+        flex: 1,
+        paddingHorizontal: 10,
+        marginTop: 10,
+      }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{}}
@@ -32,6 +42,15 @@ const TracksView = () => {
         //   <RefreshControl refreshing={loading} onRefresh={onRefresh} />
         // }
       >
+        <View>
+          <TouchableOpacity
+            style={spotifyGreenButton}
+            onPress={() => {
+              dispatch(shufflePlay(data[activePlaylist].tracks));
+            }}>
+            <Text style={spotifyGreenButtonText}> Shuffle Play</Text>
+          </TouchableOpacity>
+        </View>
         {data[activePlaylist].tracks.map((item, index) => {
           return (
             <TouchableOpacity
@@ -64,15 +83,16 @@ const TracksView = () => {
             </TouchableOpacity>
           );
         })}
+        <View style={{height: windowHeight * 0.06}} />
       </ScrollView>
-    </>
+    </View>
   );
 };
 
 export default TracksView;
 
 const styles = StyleSheet.create({
-  itemClickWrapper: {flex: 1, marginBottom: 15},
+  itemClickWrapper: {flex: 1, marginBottom: 10},
   itemWrapper: {
     flex: 1,
     flexDirection: 'row',

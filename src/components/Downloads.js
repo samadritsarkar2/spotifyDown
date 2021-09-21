@@ -22,6 +22,7 @@ import {
   windowWidth,
 } from '../common';
 import Spinner from 'react-native-spinkit';
+import TrackPlayer from 'react-native-track-player';
 
 const Downloads = ({navigation}) => {
   const dispatch = useDispatch();
@@ -61,11 +62,10 @@ const Downloads = ({navigation}) => {
       const storedValue = await AsyncStorage.getItem(`@playlistView`);
 
       const prevList = await JSON.parse(storedValue);
-      console.log(prevList);
+
       if (prevList !== null) {
         dispatch({type: 'LOAD_DATA', payload: prevList});
         let playlists = Object.keys(prevList);
-        console.log(playlists);
         dispatch({type: 'LOAD_PLAYLISTS', payload: playlists});
       } else {
       }
@@ -111,19 +111,14 @@ const Downloads = ({navigation}) => {
           <TouchableOpacity
             key={index}
             onPress={() => {
-              // setActivePlaylist(item);
-              // setIsPlaylisView(false);
               dispatch({type: 'SET_ACTIVE_PLAYLIST', payload: item});
 
               navigation.navigate('TracksView');
             }}
-            style={styles.itemWrapper}>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                height: windowHeight * 0.07,
-              }}>
+            style={{
+              marginVertical: 10,
+            }}>
+            <View style={styles.itemWrapper}>
               <Image
                 style={styles.playlistImg}
                 source={
@@ -222,6 +217,7 @@ const Downloads = ({navigation}) => {
                     // );
                     // const prevList = await JSON.parse(storedValue);
                     // console.log(prevList);
+                    console.log(await (await TrackPlayer.getQueue()).length);
                   }}>
                   <Text style={spotifyGreenButtonText}>Add New</Text>
                 </TouchableOpacity>
@@ -251,11 +247,17 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: '5%',
   },
-  itemClickWrapper: {flex: 1, marginBottom: 15},
   itemWrapper: {
     flex: 1,
     flexDirection: 'row',
     height: windowHeight * 0.07,
+  },
+  itemClickWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    height: windowHeight * 0.07,
+    marginBottom: 50,
+    backgroundColor: 'blue',
   },
   trackTitle: {
     color: 'white',
