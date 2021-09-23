@@ -5,6 +5,7 @@ import TrackPlayer, {
   useTrackPlayerEvents,
   Capability,
   Event,
+  State,
 } from 'react-native-track-player';
 
 import {useDispatch, useSelector} from 'react-redux';
@@ -15,8 +16,8 @@ import TextTicker from 'react-native-text-ticker';
 const MiniPlayer = () => {
   const [isTrackPlayerInit, setIsTrackPlayerInit] = useState(false);
   const [trackTitle, setTrackTitle] = useState('');
-  const [trackAlbum, setTrackAlbum] = useState('');
-  const [trackArtist, setTrackArtist] = useState('');
+  const [trackAlbum, setTrackAlbum] = useState('Go to Library->');
+  const [trackArtist, setTrackArtist] = useState('Downloads-> Play a track 🎵');
   const dispatch = useDispatch();
 
   const playbackState = usePlaybackState();
@@ -65,16 +66,18 @@ const MiniPlayer = () => {
   }, []);
 
   useTrackPlayerEvents([Event.PlaybackTrackChanged], async (event) => {
+    // console.log(event);
     if (
       event.type === Event.PlaybackTrackChanged &&
       event.nextTrack !== undefined
     ) {
       const track = await TrackPlayer.getTrack(event.nextTrack);
-      const {title, artist, album} = track || {
-        title: 'Play something 🎶',
-        artist: 'Go to Library->',
-        album: 'Downloads-> Play a track 🎵',
-      };
+      const {title, artist, album} = track || {};
+      // {
+      //   title: 'Play something 🎶',
+      //   artist: 'Go to Library->',
+      //   album: 'Downloads-> Play a track 🎵',
+      // };
 
       setTrackTitle(title);
       setTrackArtist(artist);
@@ -87,11 +90,10 @@ const MiniPlayer = () => {
 
     // console.log(await TrackPlayer.getQueue());
     if (currentTrack == null) {
-      await TrackPlayer.reset();
-
+      // await TrackPlayer.reset();
       // await TrackPlayer.play();
     } else {
-      if (playbackState === TrackPlayer.STATE_PAUSED) {
+      if (playbackState === State.Paused) {
         await TrackPlayer.play();
       } else {
         await TrackPlayer.pause();
@@ -130,10 +132,22 @@ const MiniPlayer = () => {
               scroll={false}
               repeatSpacer={150}
               marqueeDelay={100}>
-              <Text>{trackTitle} </Text>
-              <Text style={{color: 'gray', fontSize: 12}}>
-                {'\u25CF'} {trackArtist} {'\u25CF'} {trackAlbum}
-              </Text>
+              {trackTitle === '' ? (
+                <Text>
+                  Play something 🎶{' '}
+                  <Text style={{color: 'gray', fontSize: 12}}>
+                    {'\u25CF'} Go to Library{'->'} {'\u25CF'} Downloads{'->'}{' '}
+                    Select a Playlist 🔖{'->'} Play a track 🎵
+                  </Text>
+                </Text>
+              ) : (
+                <Text>
+                  {trackTitle}
+                  <Text style={{color: 'gray', fontSize: 12}}>
+                    {'\u25CF'} {trackArtist} {'\u25CF'} {trackAlbum}
+                  </Text>
+                </Text>
+              )}
             </TextTicker>
           </View>
 
@@ -148,7 +162,7 @@ const MiniPlayer = () => {
             <TouchableOpacity onPress={togglePlayback}>
               <Image
                 source={
-                  playbackState === TrackPlayer.STATE_PLAYING
+                  playbackState === State.Playing
                     ? require('../assets/pause.png')
                     : require('../assets/play-button.png')
                 }
@@ -174,7 +188,7 @@ const styles = StyleSheet.create({
   box: {
     position: 'absolute',
     width: '100%',
-    height: windowHeight * 0.06,
+    height: windowHeight * 0.065,
     justifyContent: 'center',
     bottom: windowHeight * 0.05,
     paddingVertical: windowHeight * 0.01,

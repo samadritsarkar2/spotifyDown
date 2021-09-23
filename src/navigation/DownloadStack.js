@@ -17,9 +17,9 @@ const DownloadStack = () => {
       screenOptions={{
         cardOverlayEnabled: true,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        headerStyle: {backgroundColor: '#101010', elevation: 0},
+        headerStyle: {backgroundColor: '#181818', elevation: 0},
         headerTitleStyle: {color: 'white'},
-        headerBackTitleStyle: {},
+        headerBackTitleStyle: {alignSelf: 'center'},
         headerTintColor: 'white',
       }}>
       <Stack.Screen component={Downloads} name="Downloads" />

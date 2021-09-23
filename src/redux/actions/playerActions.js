@@ -14,9 +14,11 @@ export const playOne = (track) => {
       await TrackPlayer.add(track);
       await TrackPlayer.play();
     } else {
-      const alreadyExist = queue.some((item) => item.id === track.id);
-      if (alreadyExist) {
-        await TrackPlayer.skip(track.id);
+      // const alreadyExist = queue.some((item) => item.id === track.id);
+      const findIndex = queue.findIndex((item) => item.id === track.id);
+      // console.log(findIndex);
+      if (findIndex !== -1) {
+        await TrackPlayer.skip(findIndex);
         await TrackPlayer.play();
       } else {
         await TrackPlayer.add(track);

@@ -260,7 +260,7 @@ const Downloads = ({navigation}) => {
                   <Text style={spotifyGreenButtonText}>Add New</Text>
                 </TouchableOpacity>
 
-                <View style={{height: windowHeight * 0.06}} />
+                <View style={{height: windowHeight * 0.07}} />
               </ScrollView>
             )}
           </View>
