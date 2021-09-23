@@ -25,7 +25,11 @@ const TracksView = () => {
   const {data, isPlaylistView, activePlaylist} = downloadsState;
   useEffect(() => {
     navigation.setOptions({title: data[activePlaylist].info.name});
-    // console.log(activePlaylist);
+    // if(activePlaylist === 'unorganized')
+    // {
+
+    // }
+    console.log(activePlaylist);
   }, []);
   return (
     // <Text>Hello</Text>
@@ -46,9 +50,13 @@ const TracksView = () => {
           <TouchableOpacity
             style={spotifyGreenButton}
             onPress={() => {
-              dispatch(shufflePlay(data[activePlaylist].tracks));
+              dispatch(shufflePlay(activePlaylist));
             }}>
-            <Text style={spotifyGreenButtonText}> Shuffle Play</Text>
+            <Text
+              style={{...spotifyGreenButtonText, textTransform: 'capitalize'}}>
+              {' '}
+              Shuffle Play
+            </Text>
           </TouchableOpacity>
         </View>
         {data[activePlaylist].tracks.map((item, index) => {

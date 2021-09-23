@@ -3,6 +3,7 @@ const initialState = {
   playlists: [],
   isPlaylistView: true,
   activePlaylist: null,
+  shufflePlaylist: null,
 };
 
 export const downloadsReducer = (state = initialState, action) => {
@@ -17,10 +18,22 @@ export const downloadsReducer = (state = initialState, action) => {
         ...state,
         playlists: action.payload,
       };
+    case 'HANDLE_UNORGANIZED':
+      return {
+        ...state,
+        data: {
+          ['unorganized']: action.payload,
+        },
+      };
     case 'SET_ACTIVE_PLAYLIST':
       return {
         ...state,
         activePlaylist: action.payload,
+      };
+    case 'SET_SHUFFLE_PLAYLIST':
+      return {
+        ...state,
+        shufflePlaylist: action.payload,
       };
     case 'CLEAR_ACTIVE_PLAYLIST':
       return {

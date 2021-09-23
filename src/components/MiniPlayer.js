@@ -3,6 +3,8 @@ import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import TrackPlayer, {
   usePlaybackState,
   useTrackPlayerEvents,
+  Capability,
+  Event,
 } from 'react-native-track-player';
 
 import {useDispatch, useSelector} from 'react-redux';
@@ -19,24 +21,26 @@ const MiniPlayer = () => {
 
   const playbackState = usePlaybackState();
 
-  const trackPlayerInit = async (queue) => {
-    await TrackPlayer.setupPlayer();
+  const trackPlayerInit = async () => {
+    await TrackPlayer.setupPlayer({});
     await TrackPlayer.updateOptions({
       stopWithApp: true,
       alwaysPauseOnInterruption: false,
       capabilities: [
-        TrackPlayer.CAPABILITY_PLAY,
-        TrackPlayer.CAPABILITY_PAUSE,
-        TrackPlayer.CAPABILITY_STOP,
-        TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
-        TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
-        TrackPlayer.CAPABILITY_SEEK_TO,
+        Capability.Play,
+        Capability.Play,
+        Capability.Pause,
+        Capability.SkipToNext,
+        Capability.SkipToPrevious,
+        Capability.Stop,
+        Capability.SeekTo,
       ],
       compactCapabilities: [
-        TrackPlayer.CAPABILITY_PLAY,
-        TrackPlayer.CAPABILITY_PAUSE,
-        TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
-        TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
+        Capability.Play,
+        Capability.Play,
+        Capability.Pause,
+        Capability.SkipToNext,
+        Capability.SkipToPrevious,
       ],
       icon: require('../assets/notification_icon.png'),
     });
@@ -60,8 +64,11 @@ const MiniPlayer = () => {
     };
   }, []);
 
-  useTrackPlayerEvents(['playback-track-changed'], async (event) => {
-    if (event.type === TrackPlayer.TrackPlayerEvents.PLAYBACK_TRACK_CHANGED) {
+  useTrackPlayerEvents([Event.PlaybackTrackChanged], async (event) => {
+    if (
+      event.type === Event.PlaybackTrackChanged &&
+      event.nextTrack !== undefined
+    ) {
       const track = await TrackPlayer.getTrack(event.nextTrack);
       const {title, artist, album} = track || {
         title: 'Play something 🎶',

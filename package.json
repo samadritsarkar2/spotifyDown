@@ -36,7 +36,7 @@
     "react-native-snackbar": "^2.4.0",
     "react-native-spinkit": "^1.5.1",
     "react-native-text-ticker": "^1.12.0",
-    "react-native-track-player": "1.2.7",
+    "react-native-track-player": "^2.0.1",
     "react-redux": "^7.2.4",
     "redux": "^4.1.0",
     "redux-thunk": "^2.3.0",

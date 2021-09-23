@@ -23,6 +23,7 @@ import {
 } from '../common';
 import Spinner from 'react-native-spinkit';
 import TrackPlayer from 'react-native-track-player';
+import {handleUnorganized} from '../redux/actions/downloadsActions';
 
 const Downloads = ({navigation}) => {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const Downloads = ({navigation}) => {
   const [arr, setArr] = useState([]);
   // const [playlistView, setPlaylistView] = useState();
   const downloadsState = useSelector((state) => state.downloadsReducer);
-  const {playlists, data, isPlaylistView} = downloadsState;
+  const {playlists, data, isPlaylistView, activePlaylist} = downloadsState;
   // const [playlists, setPlaylists] = useState([]);
 
   const getFileName = async () => {
@@ -66,6 +67,7 @@ const Downloads = ({navigation}) => {
       if (prevList !== null) {
         dispatch({type: 'LOAD_DATA', payload: prevList});
         let playlists = Object.keys(prevList);
+
         dispatch({type: 'LOAD_PLAYLISTS', payload: playlists});
       } else {
       }
@@ -144,6 +146,40 @@ const Downloads = ({navigation}) => {
     );
   };
 
+  const Unorganized = () => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          dispatch(handleUnorganized(arr));
+          navigation.navigate('TracksView');
+        }}
+        style={{
+          marginVertical: 10,
+        }}>
+        <View style={styles.itemWrapper}>
+          <Image
+            style={styles.playlistImg}
+            source={
+              false
+                ? Image.resolveAssetSource({
+                    uri: `${'https://google.com/img'}`,
+                  })
+                : require('../assets/defaultPlaylist.png')
+            }
+          />
+          <View
+            style={{
+              flex: 9,
+              flexDirection: 'column',
+              justifyContent: 'center',
+            }}>
+            <Text style={styles.playlistId}>Unorganized</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <>
       <View style={{flex: 1, paddingHorizontal: 10, marginTop: 10}}>
@@ -207,6 +243,7 @@ const Downloads = ({navigation}) => {
                 refreshControl={
                   <RefreshControl refreshing={loading} onRefresh={onRefresh} />
                 }>
+                <Unorganized />
                 <PlaylistView />
 
                 <TouchableOpacity
@@ -217,7 +254,8 @@ const Downloads = ({navigation}) => {
                     // );
                     // const prevList = await JSON.parse(storedValue);
                     // console.log(prevList);
-                    console.log(await (await TrackPlayer.getQueue()).length);
+                    let temp = await TrackPlayer.getQueue();
+                    // console.log(data[activePlaylist].tracks);
                   }}>
                   <Text style={spotifyGreenButtonText}>Add New</Text>
                 </TouchableOpacity>
