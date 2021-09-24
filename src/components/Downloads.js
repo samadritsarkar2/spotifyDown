@@ -39,6 +39,7 @@ const Downloads = ({navigation}) => {
   const getFileName = async () => {
     try {
       const storedValue = await AsyncStorage.getItem(`@downloads`);
+
       const prevList = await JSON.parse(storedValue);
       //  console.log(prevList);
       prevList.map(async (item) => {
@@ -84,11 +85,25 @@ const Downloads = ({navigation}) => {
     }
   };
 
+  const checkForUnorganized = (result) => {
+    AsyncStorage.getItem('@unorganized').then((storedValue) => {
+      const bool = JSON.parse(storedValue);
+      result(bool ? true : false);
+    });
+  };
+
   useEffect(() => {
     // console.log(data);
     setLoading(true);
+
+    checkForUnorganized((isDone) => {
+      console.log(isDone);
+      if (!isDone) {
+        getFileName();
+        dispatch(handleUnorganized(arr));
+      }
+    });
     setTimeout(() => {
-      getFileName();
       getPlaylistView();
     }, 500);
   }, []);
@@ -150,7 +165,6 @@ const Downloads = ({navigation}) => {
     return (
       <TouchableOpacity
         onPress={() => {
-          dispatch(handleUnorganized(arr));
           navigation.navigate('TracksView');
         }}
         style={{
@@ -182,7 +196,7 @@ const Downloads = ({navigation}) => {
 
   return (
     <>
-      <View style={{flex: 1, paddingHorizontal: 10, marginTop: 10}}>
+      <View style={{flex: 1, paddingHorizontal: 12, marginTop: 10}}>
         {/* <View style={styles.header}>
           <Text style={styles.heading}>Downloads</Text>
         </View> */}
@@ -200,7 +214,6 @@ const Downloads = ({navigation}) => {
             style={{
               flex: 1,
               justifyContent: 'flex-start',
-              marginHorizontal: 10,
             }}>
             {playlists.length === 0 ? (
               <>
@@ -243,7 +256,7 @@ const Downloads = ({navigation}) => {
                 refreshControl={
                   <RefreshControl refreshing={loading} onRefresh={onRefresh} />
                 }>
-                <Unorganized />
+                {/* <Unorganized /> */}
                 <PlaylistView />
 
                 <TouchableOpacity

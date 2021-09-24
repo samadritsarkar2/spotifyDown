@@ -47,6 +47,7 @@ module.exports = async function () {
     try {
       // await TrackPlayer.stop();
       await TrackPlayer.reset();
+      // await TrackPlayer.destroy();
     } catch (_) {}
   });
 

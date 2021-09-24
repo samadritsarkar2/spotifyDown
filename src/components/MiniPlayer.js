@@ -16,8 +16,8 @@ import TextTicker from 'react-native-text-ticker';
 const MiniPlayer = () => {
   const [isTrackPlayerInit, setIsTrackPlayerInit] = useState(false);
   const [trackTitle, setTrackTitle] = useState('');
-  const [trackAlbum, setTrackAlbum] = useState('Go to Library->');
-  const [trackArtist, setTrackArtist] = useState('Downloads-> Play a track 🎵');
+  const [trackAlbum, setTrackAlbum] = useState('');
+  const [trackArtist, setTrackArtist] = useState('');
   const dispatch = useDispatch();
 
   const playbackState = usePlaybackState();
@@ -65,25 +65,32 @@ const MiniPlayer = () => {
     };
   }, []);
 
-  useTrackPlayerEvents([Event.PlaybackTrackChanged], async (event) => {
-    // console.log(event);
-    if (
-      event.type === Event.PlaybackTrackChanged &&
-      event.nextTrack !== undefined
-    ) {
-      const track = await TrackPlayer.getTrack(event.nextTrack);
-      const {title, artist, album} = track || {};
-      // {
-      //   title: 'Play something 🎶',
-      //   artist: 'Go to Library->',
-      //   album: 'Downloads-> Play a track 🎵',
-      // };
+  useTrackPlayerEvents(
+    [Event.PlaybackTrackChanged, Event.PlaybackState],
+    async (event) => {
+      if (
+        event.type === Event.PlaybackTrackChanged &&
+        event.nextTrack !== undefined
+      ) {
+        const track = await TrackPlayer.getTrack(event.nextTrack);
+        const {title, artist, album} = track || {};
+        // {
+        //   title: 'Play something 🎶',
+        //   artist: 'Go to Library->',
+        //   album: 'Downloads-> Play a track 🎵',
+        // };
 
-      setTrackTitle(title);
-      setTrackArtist(artist);
-      setTrackAlbum(album);
-    }
-  });
+        setTrackTitle(title);
+        setTrackArtist(artist);
+        setTrackAlbum(album);
+      }
+      if (event.type === Event.PlaybackState && event.state === State.Stopped) {
+        setTrackTitle('');
+        setTrackArtist('');
+        setTrackAlbum('');
+      }
+    },
+  );
 
   const togglePlayback = async () => {
     const currentTrack = await TrackPlayer.getCurrentTrack();

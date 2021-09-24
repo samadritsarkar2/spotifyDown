@@ -25,18 +25,13 @@ const TracksView = () => {
   const {data, isPlaylistView, activePlaylist} = downloadsState;
   useEffect(() => {
     navigation.setOptions({title: data[activePlaylist].info.name});
-    // if(activePlaylist === 'unorganized')
-    // {
-
-    // }
-    console.log(activePlaylist);
   }, []);
   return (
     // <Text>Hello</Text>
     <View
       style={{
         flex: 1,
-        paddingHorizontal: 10,
+        paddingHorizontal: 12,
         marginTop: 10,
       }}>
       <ScrollView
@@ -48,10 +43,20 @@ const TracksView = () => {
       >
         <View>
           <TouchableOpacity
-            style={spotifyGreenButton}
+            style={{
+              ...spotifyGreenButton,
+              flexDirection: 'row',
+              width: '50%',
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+            }}
             onPress={() => {
               dispatch(shufflePlay(activePlaylist));
             }}>
+            <Image
+              source={require('../assets/shuffle.png')}
+              style={{height: 30, width: 30}}
+            />
             <Text
               style={{...spotifyGreenButtonText, textTransform: 'capitalize'}}>
               {' '}
@@ -119,7 +124,7 @@ const styles = StyleSheet.create({
   },
   trackArtwork: {
     flex: 1,
-    marginRight: 20,
+    marginRight: 10,
     height: '90%',
     aspectRatio: 1 / 1,
     alignSelf: 'center',
