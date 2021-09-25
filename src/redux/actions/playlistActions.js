@@ -115,16 +115,14 @@ const downloadItem = async (single, dispatch, playlistDetails) => {
                           tracks: [newDownload],
                         },
                       };
-                      // const newList = [newDownload];
-                      // await AsyncStorage.setItem(
-                      //   `@downloads`,
-                      //   JSON.stringify(newList),
-                      // );
+
                       await AsyncStorage.setItem(
                         `@playlistView`,
                         JSON.stringify(playlistView),
                       );
+
                       console.log(playlistView);
+
                       Snackbar.show({
                         text: 'First Track added to Downloads',
                         duration: Snackbar.LENGTH_SHORT,

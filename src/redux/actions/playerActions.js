@@ -53,13 +53,13 @@ export const shufflePlay = (currentPlaylist) => {
     const shuffledTracks = shuffle(tracks);
 
     if (prevShuffle === null) {
-      console.log('Null case');
+      // console.log('Null case');
 
       try {
         await TrackPlayer.add(shuffledTracks);
         await TrackPlayer.play();
       } catch (error) {
-        console.log(err);
+        // console.log(err);
       }
     } else if (
       prevShuffle !== currentPlaylist ||
@@ -72,13 +72,5 @@ export const shufflePlay = (currentPlaylist) => {
         // console.log(await TrackPlayer.getQueue());
       } catch (error) {}
     }
-    // else if () {
-    //   try {
-    //     await TrackPlayer.reset();
-    //     await TrackPlayer.add(shuffledTracks);
-    //     await TrackPlayer.play();
-    //     // console.log(await TrackPlayer.getQueue());
-    //   } catch (error) {}
-    // }
   };
 };

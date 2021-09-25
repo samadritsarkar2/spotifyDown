@@ -149,7 +149,7 @@ const MiniPlayer = () => {
                 </Text>
               ) : (
                 <Text>
-                  {trackTitle}
+                  {trackTitle}{' '}
                   <Text style={{color: 'gray', fontSize: 12}}>
                     {'\u25CF'} {trackArtist} {'\u25CF'} {trackAlbum}
                   </Text>

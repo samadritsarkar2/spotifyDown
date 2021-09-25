@@ -39,7 +39,7 @@ export const playlist = (state = initialState, action) => {
     case 'ADD_TO_DOWNLOAD_QUEUE':
       const newArr = [...state.downloadQueue];
       newArr.push(action.payload);
-      console.log('Queue:', newArr);
+      // console.log('Queue:', newArr);
 
       return {
         ...state,

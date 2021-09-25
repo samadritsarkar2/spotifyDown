@@ -6,23 +6,31 @@ export const handleUnorganized = (arr) => {
 
     const prevList = await JSON.parse(storedValue);
     const playlists = getState().downloadsReducer.playlists;
-    if ('Unorganized' in playlists) {
-      console.log('yes');
-      dispatch({type: 'SET_ACTIVE_PLAYLIST', payload: 'unorganized'});
-    } else {
-      console.log(playlists);
-      const updatedData = {
-        ...prevList,
-        ['Unorganized']: {
-          info: {
-            id: 'Unorganized',
-            name: 'Unorganized',
-          },
-          tracks: arr,
-        },
-      };
-      await AsyncStorage.setItem(`@playlistView`, JSON.stringify(updatedData));
+
+    if (playlists.includes('Unorganized')) {
+      // console.log('yes');
       dispatch({type: 'SET_ACTIVE_PLAYLIST', payload: 'Unorganized'});
+    } else {
+      if (arr.length !== 0) {
+        const updatedData = {
+          ...prevList,
+          ['Unorganized']: {
+            info: {
+              id: 'Unorganized',
+              name: 'Unorganized',
+            },
+            tracks: arr,
+          },
+        };
+        // console.log(updatedData.Unorganized);
+
+        await AsyncStorage.setItem(
+          `@playlistView`,
+          JSON.stringify(updatedData),
+        );
+        await AsyncStorage.setItem('@unorganized', JSON.stringify(true));
+        dispatch({type: 'SET_ACTIVE_PLAYLIST', payload: 'Unorganized'});
+      }
     }
   };
 };

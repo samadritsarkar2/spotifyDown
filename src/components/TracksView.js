@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/core';
 import React, {useEffect} from 'react';
 import {
@@ -8,6 +9,7 @@ import {
   Text,
   ScrollView,
   RefreshControl,
+  ToastAndroid,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {
@@ -17,15 +19,48 @@ import {
 } from '../common';
 import allActions from '../redux/actions';
 import {shufflePlay} from '../redux/actions/playerActions';
+import {checkExists, isExist} from '../utils';
 
 const TracksView = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const downloadsState = useSelector((state) => state.downloadsReducer);
   const {data, isPlaylistView, activePlaylist} = downloadsState;
+
   useEffect(() => {
     navigation.setOptions({title: data[activePlaylist].info.name});
-  }, []);
+    data[activePlaylist].tracks.map((item) => {
+      isExist(item).then(async (exists) => {
+        if (!exists) {
+          let updatedPlaylistTracks = data[activePlaylist].tracks.filter(
+            (file) => file.id !== item.id,
+          );
+          const updatedData = {
+            ...data,
+            [activePlaylist]: {
+              ...data[activePlaylist],
+              ['tracks']: updatedPlaylistTracks,
+            },
+          };
+          await AsyncStorage.setItem(
+            `@playlistView`,
+            JSON.stringify(updatedData),
+          );
+          dispatch({type: 'LOAD_DATA', payload: updatedData});
+
+          // console.log(updatedData[activePlaylist].tracks.length);
+        }
+      });
+    });
+    // console.log(Object.keys(data));
+  }, [data]);
+
+  const handleLongPress = (item) => {
+    Vibration.vibrate(100);
+    ToastAndroid.show(`Added to Queue`, ToastAndroid.SHORT);
+    dispatch(allActions.addToQueue(item));
+  };
+
   return (
     // <Text>Hello</Text>
     <View
@@ -41,7 +76,10 @@ const TracksView = () => {
         //   <RefreshControl refreshing={loading} onRefresh={onRefresh} />
         // }
       >
-        <View>
+        <View
+          style={{
+            marginBottom: 10,
+          }}>
           <TouchableOpacity
             style={{
               ...spotifyGreenButton,
@@ -52,7 +90,8 @@ const TracksView = () => {
             }}
             onPress={() => {
               dispatch(shufflePlay(activePlaylist));
-            }}>
+            }}
+            onLongPress={handleLongPress}>
             <Image
               source={require('../assets/shuffle.png')}
               style={{height: 30, width: 30}}

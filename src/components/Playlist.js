@@ -60,22 +60,7 @@ const Playlist = ({navigation, route}) => {
         response
           .json()
           .then((res) => {
-            // setResponseData(res.responseInfo);
-
             dispatch(addNewPlaylist(res));
-            // setLoading(false);
-
-            // checkData(res.tracks).then(async (data) => {
-            //   // console.log(data)
-            //   setTracks(data);
-            //   setLoading(false);
-            //   setError(false);
-            //   await analytics().logEvent('playlist_view', {
-            //     id: responseData.id,
-            //     name: responseData.name,
-            //     type: responseData.type,
-            //   });
-            // });
           })
           .catch((err) => {
             console.log(err);
@@ -215,7 +200,7 @@ const Playlist = ({navigation, route}) => {
           // console.log(prevList)
         }
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       }
     }
   };

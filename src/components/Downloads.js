@@ -30,33 +30,31 @@ const Downloads = ({navigation}) => {
   const downloadQueue = useSelector((state) => state.playlist).downloadQueue;
   const [loading, setLoading] = useState(true);
   const windowHeight = Dimensions.get('window').height;
-  const [arr, setArr] = useState([]);
+  // const [arr, setArr] = useState([]);
   // const [playlistView, setPlaylistView] = useState();
   const downloadsState = useSelector((state) => state.downloadsReducer);
   const {playlists, data, isPlaylistView, activePlaylist} = downloadsState;
   // const [playlists, setPlaylists] = useState([]);
 
-  const getFileName = async () => {
+  const getFileName = async (fn) => {
     try {
       const storedValue = await AsyncStorage.getItem(`@downloads`);
 
       const prevList = await JSON.parse(storedValue);
-      //  console.log(prevList);
+
       prevList.map(async (item) => {
         const exist = await isExist(item);
         if (exist === false) {
           const updatedList = prevList.filter((file) => file.id != item.id);
           await AsyncStorage.setItem(`@downloads`, JSON.stringify(updatedList));
-          setArr(updatedList);
-          setLoading(false);
+          // setArr(updatedList);
+          fn(updatedList);
         } else {
-          setArr(prevList);
-          setLoading(false);
+          // setArr(prevList);
+          fn(prevList);
         }
       });
-    } catch (error) {
-      setLoading(false);
-    }
+    } catch (error) {}
   };
 
   const getPlaylistView = async () => {
@@ -70,17 +68,12 @@ const Downloads = ({navigation}) => {
         let playlists = Object.keys(prevList);
 
         dispatch({type: 'LOAD_PLAYLISTS', payload: playlists});
+        setLoading(false);
       } else {
+        setLoading(false);
       }
-      // for (const playlist in prevList) {
-      //   console.log(playlist, ':::', prevList[playlist]);
-      // }
-      // playlists.forEach((key, index) => {
-      //   console.log(key, ' :: ', prevList[key]);
-      // });
-      // setPlaylists(playlists);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setLoading(false);
     }
   };
@@ -88,37 +81,39 @@ const Downloads = ({navigation}) => {
   const checkForUnorganized = (result) => {
     AsyncStorage.getItem('@unorganized').then((storedValue) => {
       const bool = JSON.parse(storedValue);
+      // console.log(bool);
+
       result(bool ? true : false);
     });
   };
 
   useEffect(() => {
-    // console.log(data);
     setLoading(true);
 
-    checkForUnorganized((isDone) => {
-      console.log(isDone);
-      if (!isDone) {
-        getFileName();
-        dispatch(handleUnorganized(arr));
-      }
-    });
     setTimeout(() => {
       getPlaylistView();
+      checkForUnorganized((isDone) => {
+        if (!isDone) {
+          getFileName((arr) => {
+            dispatch(handleUnorganized(arr));
+          });
+        }
+      });
     }, 500);
   }, []);
 
   const onRefresh = () => {
     setLoading(true);
+    checkForUnorganized((isDone) => {
+      if (!isDone) {
+        getFileName((arr) => {
+          dispatch(handleUnorganized(arr));
+        });
+      }
+    });
     setTimeout(() => {
-      getFileName();
+      getPlaylistView();
     }, 500);
-  };
-
-  const handleLongPress = (item) => {
-    Vibration.vibrate(100);
-    ToastAndroid.show(`Added to Queue`, ToastAndroid.SHORT);
-    dispatch(allActions.addToQueue(item));
   };
 
   const PlaylistView = () => {
@@ -158,39 +153,6 @@ const Downloads = ({navigation}) => {
           </TouchableOpacity>
         ))}
       </View>
-    );
-  };
-
-  const Unorganized = () => {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('TracksView');
-        }}
-        style={{
-          marginVertical: 10,
-        }}>
-        <View style={styles.itemWrapper}>
-          <Image
-            style={styles.playlistImg}
-            source={
-              false
-                ? Image.resolveAssetSource({
-                    uri: `${'https://google.com/img'}`,
-                  })
-                : require('../assets/defaultPlaylist.png')
-            }
-          />
-          <View
-            style={{
-              flex: 9,
-              flexDirection: 'column',
-              justifyContent: 'center',
-            }}>
-            <Text style={styles.playlistId}>Unorganized</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
     );
   };
 
@@ -262,13 +224,12 @@ const Downloads = ({navigation}) => {
                 <TouchableOpacity
                   style={spotifyGreenButton}
                   onPress={async () => {
-                    // const storedValue = await AsyncStorage.getItem(
-                    //   `@playlistView`,
-                    // );
-                    // const prevList = await JSON.parse(storedValue);
-                    // console.log(prevList);
-                    let temp = await TrackPlayer.getQueue();
-                    // console.log(data[activePlaylist].tracks);
+                    const storedValue = await AsyncStorage.removeItem(
+                      `@unorganized`,
+                    );
+                    const prevList = await JSON.parse(storedValue);
+
+                    console.log(prevList);
                   }}>
                   <Text style={spotifyGreenButtonText}>Add New</Text>
                 </TouchableOpacity>

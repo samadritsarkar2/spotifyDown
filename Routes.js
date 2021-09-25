@@ -20,6 +20,7 @@ import LibraryStack from './src/navigation/LibraryStack';
 import TabBar from './src/navigation/TabBar';
 import store from './src/redux/store';
 import NewStack from './src/navigation/NewStack';
+import DownloadingHelper from './src/components/DownloadingHelper';
 
 //const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -75,6 +76,7 @@ const BottomNav = () => {
             options={{unmountOnBlur: true}}></Tab.Screen>
         </Tab.Navigator>
         <MiniPlayer />
+        <DownloadingHelper />
       </NavigationContainer>
     </StoreProvider>
   );

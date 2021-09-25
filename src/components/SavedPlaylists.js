@@ -46,7 +46,7 @@ const SavedPlaylists = () => {
       setSaved(retrieved);
       setLoading(false);
     } catch (error) {
-      console.log('Coulnot retrieve saved Playlists', error);
+      // console.log('Coulnot retrieve saved Playlists', error);
       setLoading(false);
       setError(true);
     }
