@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Image,
   ScrollView,
@@ -8,9 +8,9 @@ import {
   View,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useEffect} from 'react';
+
 import {useDispatch} from 'react-redux';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import allActions from '../redux/actions/index';
 import Spinner from 'react-native-spinkit';
 import {
@@ -26,16 +26,14 @@ const SavedPlaylists = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  useFocusEffect(
-    React.useCallback(() => {
-      setLoading(true);
-      setTimeout(() => {
-        retriveSaved();
-      }, 200);
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      retriveSaved();
+    }, 200);
 
-      // retriveDownloaded();
-    }, []),
-  );
+    // retriveDownloaded();
+  }, []);
 
   const retriveSaved = async () => {
     try {
@@ -78,7 +76,6 @@ const SavedPlaylists = () => {
             style={{
               flex: 1,
               justifyContent: 'flex-start',
-              marginHorizontal: 10,
             }}>
             <ScrollView showsVerticalScrollIndicator={false} style={{}}>
               {saved === null ? (
@@ -121,7 +118,7 @@ const SavedPlaylists = () => {
                     <TouchableOpacity
                       key={index}
                       onPress={() => handleClick(item.id)}
-                      style={{flex: 1, marginBottom: 20}}>
+                      style={{flex: 1, marginVertical: 10}}>
                       <View key={index} style={styles.itemWrapper}>
                         <Image
                           style={styles.playlistImg}

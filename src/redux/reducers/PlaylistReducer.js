@@ -2,7 +2,7 @@ const initialState = {
   id: '',
   currentPlaylist: {},
   downloadQueue: [],
-  currentDownloading: null,
+  currentDownloading: [],
   downloadPercent: 0,
   loading: true,
 };
@@ -45,9 +45,16 @@ export const playlist = (state = initialState, action) => {
         ...state,
         downloadQueue: newArr,
       };
+    case 'REMOVE_FROM_DOWNLOAD_QUEUE':
+      const tempArr = [...state.downloadQueue];
+      tempArr.shift();
+      // console.log(tempArr);
+      return {
+        ...state,
+        downloadQueue: tempArr,
+      };
     case 'UPDATE_DOWNLOADED':
       const {path, duration, track} = action.payload;
-      // console.log(action.payload);
       const updatedTracks = [...state.currentPlaylist.tracks].map((item) =>
         item.id === track.id
           ? {
@@ -58,7 +65,7 @@ export const playlist = (state = initialState, action) => {
             }
           : item,
       );
-      // console.log(updatedTracks);
+
       return {
         ...state,
         currentPlaylist: {
@@ -66,18 +73,21 @@ export const playlist = (state = initialState, action) => {
           tracks: updatedTracks,
         },
       };
-    case 'REMOVE_FROM_DOWNLOAD_QUEUE':
-      const reducedArr = [...state.downloadQueue];
-      reducedArr.shift();
-      return {
-        ...state,
-        downloadQueue: reducedArr,
-      };
 
     case 'SET_CURRENT_DOWNLOADING':
       return {
         ...state,
-        currentDownloading: action.payload,
+        currentDownloading: [...state.currentDownloading, action.payload],
+      };
+    case 'REMOVE_CURRENT_DOWNLOADING':
+      let currentDownloadingArr = [...state.currentDownloading].filter(
+        (item) => {
+          item.id !== action.payload;
+        },
+      );
+      return {
+        ...state,
+        currentDownloading: currentDownloadingArr,
       };
     case 'SET_DOWNLOAD_PERCENT':
       return {

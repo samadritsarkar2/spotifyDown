@@ -1,4 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNFetchBlob from 'rn-fetch-blob';
+import {DOWNLOAD_PATH} from '../../common';
 
 export const handleUnorganized = (arr) => {
   return async (dispatch, getState) => {
@@ -32,5 +34,14 @@ export const handleUnorganized = (arr) => {
         dispatch({type: 'SET_ACTIVE_PLAYLIST', payload: 'Unorganized'});
       }
     }
+  };
+};
+
+export const deleteTrack = (track) => {
+  return async (dispatch) => {
+    try {
+      const filepath = `${DOWNLOAD_PATH}/${track.title}.mp3`;
+      RNFetchBlob.fs.unlink(filepath);
+    } catch (error) {}
   };
 };

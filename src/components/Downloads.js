@@ -221,19 +221,6 @@ const Downloads = ({navigation}) => {
                 {/* <Unorganized /> */}
                 <PlaylistView />
 
-                <TouchableOpacity
-                  style={spotifyGreenButton}
-                  onPress={async () => {
-                    const storedValue = await AsyncStorage.removeItem(
-                      `@unorganized`,
-                    );
-                    const prevList = await JSON.parse(storedValue);
-
-                    console.log(prevList);
-                  }}>
-                  <Text style={spotifyGreenButtonText}>Add New</Text>
-                </TouchableOpacity>
-
                 <View style={{height: windowHeight * 0.07}} />
               </ScrollView>
             )}

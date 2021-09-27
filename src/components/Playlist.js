@@ -37,7 +37,7 @@ const Playlist = ({navigation, route}) => {
 
   const [visible, setVisible] = useState(false);
   const [downloadPercent, setDownloadPercent] = useState(0);
-  const [curentDownloading, setCurentDownloading] = useState(null);
+  // const [curentDownloading, setCurentDownloading] = useState(null);
 
   const isFocused = useIsFocused();
   const URlID = useSelector((state) => state.playlist).id;
@@ -45,7 +45,7 @@ const Playlist = ({navigation, route}) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state.playlist);
   const {responseInfo, tracks} = state.currentPlaylist;
-  const {loading} = state;
+  const {loading, currentDownloading, downloadQueue} = state;
 
   const fetchData = async () => {
     try {
@@ -119,15 +119,11 @@ const Playlist = ({navigation, route}) => {
   };
 
   const downloadAll = async () => {
-    let promise = new Promise(async (resolve, reject) => {
-      for (let i = 0; i < tracks.length; i++) {
-        let result = await downloader(tracks[i]);
+    tracks.map((item) => {
+      if (!item.downloaded) {
+        handleDownload(item);
       }
-      // setPlaylistData(prev => ({...prev, downloaded : true}) )
-      resolve('Playlist Downloaded');
     });
-
-    return promise;
   };
 
   const handleDownloadAll = async () => {
@@ -365,7 +361,7 @@ const Playlist = ({navigation, route}) => {
                           justifyContent: 'center',
                         }}
                         onPress={() => handleDownload(item)}>
-                        {visible && curentDownloading === item.id ? (
+                        {currentDownloading.includes(item) ? (
                           <Spinner
                             style={{marginBottom: 7, justifyContent: 'center'}}
                             size={30}

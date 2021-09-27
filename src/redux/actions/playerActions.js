@@ -21,8 +21,12 @@ export const playOne = (track) => {
         await TrackPlayer.skip(findIndex);
         await TrackPlayer.play();
       } else {
+        // const playIndex = queue.findIndex((item) => item.id === track.id);
+
         await TrackPlayer.add(track);
-        await TrackPlayer.skip(track.id);
+
+        await TrackPlayer.skipToNext();
+        await TrackPlayer.play();
       }
     }
 
