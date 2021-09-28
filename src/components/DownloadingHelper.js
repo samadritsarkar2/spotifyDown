@@ -18,7 +18,7 @@ const DownloadingHelper = () => {
   const {downloadQueue, currentDownloading, currentPlaylist} = state;
 
   const downloadItem = (single, playlistDetails) => {
-    // console.log('Trying to download: ', single.title);
+    console.log('Trying to download: ', single.title);
     return new Promise(async (resolve, reject) => {
       const api = `${NEW_API}/download?`;
       const req = checkPermission();
@@ -154,7 +154,7 @@ const DownloadingHelper = () => {
                       resolve();
                     } catch (err) {
                       console.log(err);
-                      reject();
+                      reject(err);
                     }
                   })
                   .error((error) => {
@@ -174,12 +174,11 @@ const DownloadingHelper = () => {
                     });
 
                     Snackbar.show({
-                      text:
-                        'Pardon!  Could not download this particular file due to Youtube policies',
+                      text: `Pardon!  Could not download ${single.title} particular file due to Youtube policies`,
                       duration: Snackbar.LENGTH_SHORT,
                       backgroundColor: 'red',
                     });
-                    reject();
+                    reject(error);
                   });
               } else {
                 dispatch({
@@ -187,6 +186,10 @@ const DownloadingHelper = () => {
                   payload: 0,
                 });
 
+                dispatch({
+                  type: 'REMOVE_FROM_DOWNLOAD_QUEUE',
+                  payload: single,
+                });
                 dispatch({
                   type: 'REMOVE_CURRENT_DOWNLOADING',
                   payload: single,
@@ -197,7 +200,7 @@ const DownloadingHelper = () => {
                   duration: Snackbar.LENGTH_SHORT,
                   backgroundColor: 'red',
                 });
-                reject();
+                reject('Server Error');
               }
             })
             .catch((error) => {
@@ -208,24 +211,28 @@ const DownloadingHelper = () => {
               });
 
               dispatch({
-                type: 'SET_CURRENT_DOWNLOADING',
-                payload: null,
+                type: 'REMOVE_FROM_DOWNLOAD_QUEUE',
+                payload: single,
+              });
+              dispatch({
+                type: 'REMOVE_CURRENT_DOWNLOADING',
+                payload: single,
               });
 
               Snackbar.show({
-                text: 'Something went wrong in the server',
+                text: `Could not download ${single.title}. Something went wrong with the yt`,
                 duration: Snackbar.LENGTH_SHORT,
                 backgroundColor: 'red',
               });
-              reject();
+              reject(error);
             });
         } else {
           Snackbar.show({
-            text: 'The track is already downloaded',
+            text: `The track ${single.title} is already downloaded`,
             duration: Snackbar.LENGTH_SHORT,
             backgroundColor: 'red',
           });
-          reject();
+          reject('Already Downloaded');
         }
       } else {
         Alert.alert(
@@ -234,31 +241,19 @@ const DownloadingHelper = () => {
           [{text: 'OK', onPress: () => {}}],
           {cancelable: false},
         );
-        reject();
+        reject('Storage Permision Denied');
       }
     });
   };
 
   useEffect(() => {
-    // console.log(downloadQueue);
-
-    // if (downloadQueue.length !== 0) {
-    //   let promise = new Promise(async (resolve, reject) => {
-    //     downloadQueue.forEach((track, index) => {
-    //       // console.log(track.title, 'Index: ', index);
-    //       downloadItem(track, currentPlaylist.responseInfo);
-    //     });
-    //   });
-    // }
-
     const workerFn = async () => {
       if (downloadQueue.length > 0 && !isExecutingTask) {
-        setIsExecutingTask(true);
-        console.log('starting execution');
-
         const item = downloadQueue[0];
-        await downloadItem(item, currentPlaylist.responseInfo);
-        console.log('finised exec');
+        try {
+          await downloadItem(item, currentPlaylist.responseInfo);
+        } catch (err) {}
+
         setIsExecutingTask(false);
       }
     };

@@ -16,7 +16,12 @@ import {
 
 var parse = require('url-parse');
 import analytics from '@react-native-firebase/analytics';
-import {spotifyGreenButton, spotifyGreenButtonText} from '../common';
+import {
+  spotifyGreenButton,
+  spotifyGreenButtonText,
+  windowHeight,
+} from '../common';
+import {BannerAd, BannerAdSize} from '@react-native-admob/admob';
 
 const New = ({navigation, route}) => {
   const [id, setId] = useState('');
@@ -82,31 +87,43 @@ const New = ({navigation, route}) => {
 
   return (
     <>
-      <>
-        <View style={{flex: 1, backgroundColor: '#181818'}}>
-          <StatusBar backgroundColor={'#282828'} />
-          <View style={styles.container}>
-            <Image
-              source={require('../assets/Headphone-amico.png')}
-              style={styles.logo}
-            />
-          </View>
-          <View style={styles.inputBox}>
-            <TextInput
-              style={styles.input}
-              value={url}
-              onChangeText={(value) => {
-                setUrl(value);
-              }}
-              placeholder={'Enter Spotify Album/Playlist Link'}
-              placeholderTextColor={'#B3B3b3'}
-            />
-            <TouchableOpacity style={spotifyGreenButton} onPress={fetchApi}>
-              <Text style={spotifyGreenButtonText}>Submit</Text>
-            </TouchableOpacity>
-          </View>
+      <View style={{flex: 1, backgroundColor: '#181818'}}>
+        <StatusBar backgroundColor={'#282828'} />
+        <View style={styles.container}>
+          <Image
+            source={require('../assets/Headphone-amico.png')}
+            style={styles.logo}
+          />
         </View>
-      </>
+        <View style={styles.inputBox}>
+          <TextInput
+            style={styles.input}
+            value={url}
+            onChangeText={(value) => {
+              setUrl(value);
+            }}
+            placeholder={'Enter Spotify Album/Playlist Link'}
+            placeholderTextColor={'#B3B3b3'}
+          />
+          <TouchableOpacity style={spotifyGreenButton} onPress={fetchApi}>
+            <Text style={spotifyGreenButtonText}>Submit</Text>
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            position: 'absolute',
+            bottom: windowHeight * 0.07,
+            alignSelf: 'center',
+          }}>
+          <BannerAd
+            size={BannerAdSize.BANNER}
+            unitId={'ca-app-pub-6375556431036607/8815977337'}
+            onAdFailedToLoad={(error) => {}}
+
+            // ref={bannerRef}
+          />
+        </View>
+      </View>
     </>
   );
 };

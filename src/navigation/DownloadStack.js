@@ -20,7 +20,6 @@ const DownloadStack = () => {
         headerStyle: {backgroundColor: '#181818', elevation: 0},
         headerTitleAlign: 'center',
         headerTitleStyle: {color: 'white', fontFamily: 'OpenSans-SemiBold'},
-        headerBackTitleStyle: {},
         headerTintColor: 'white',
       }}>
       <Stack.Screen component={Downloads} name="Downloads" />

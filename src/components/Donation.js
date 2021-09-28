@@ -69,7 +69,10 @@ const Donations = () => {
         <ScrollView style={styles.scroller}>
           <View style={styles.header}>
             <Text style={styles.subHeading}>
-              Downify is Ad-free app with more updates and features on its way.
+              Downify is{' '}
+              <Text style={{textDecorationLine: 'line-through'}}>Ad-free</Text>
+              {'( having little ads) '} just to continue its development and
+              reimburse the server costs. More updates and features on its way.
             </Text>
             <Text style={[styles.subHeading]}>
               To support us, you can donate any amount or from the options

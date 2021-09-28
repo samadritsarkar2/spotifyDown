@@ -16,19 +16,37 @@ const LibraryStack = () => {
   return (
     <Stack.Navigator
       initialRouteName="Library"
-      headerMode={'none'}
+      // headerMode={'none'}
       screenOptions={{
         cardOverlayEnabled: true,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
-      <Stack.Screen component={Library} name="Library" />
-      <Stack.Screen component={SavedPlaylists} name="SavedPlaylists" />
+      <Stack.Screen
+        component={Library}
+        name="Library"
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        component={SavedPlaylists}
+        name="SavedPlaylists"
+        options={{
+          headerTitle: 'Saved Playlists',
+          headerStyle: {backgroundColor: '#181818', elevation: 0},
+          headerTintColor: 'white',
+          headerTitleStyle: {color: 'white', fontFamily: 'OpenSans-SemiBold'},
+          headerTitleAlign: 'center',
+        }}
+      />
       <Stack.Screen
         component={DownloadStack}
         name="Downloads"
-        options={{headerTitle: 'Downloads', headerBackground: {}}}
+        options={{headerShown: false}}
       />
-      <Stack.Screen component={Donations} name="Donations" />
+      <Stack.Screen
+        component={Donations}
+        name="Donations"
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };

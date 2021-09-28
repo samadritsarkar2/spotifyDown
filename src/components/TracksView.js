@@ -66,17 +66,15 @@ const TracksView = () => {
 
   const handleLongPress = (item) => {
     Vibration.vibrate(100);
-    ToastAndroid.show(`Added to Queue`, ToastAndroid.SHORT);
-    dispatch(allActions.addToQueue(item));
-  };
-
-  const handleOptionsClick = (item) => {
-    // console.log(item);
-
-    Vibration.vibrate(100);
-
     setIsVisible(true);
     setSelected(item);
+  };
+
+  const handleAddToQueue = (item) => {
+    // console.log(item);
+    Vibration.vibrate(100);
+    ToastAndroid.show(`Added to Queue`, ToastAndroid.SHORT);
+    dispatch(allActions.addToQueue(item));
   };
 
   return (
@@ -109,6 +107,7 @@ const TracksView = () => {
             onPress={() => {
               dispatch(allActions.shufflePlay(activePlaylist));
             }}
+            delayLongPress={100}
             onLongPress={handleLongPress}>
             <Image
               source={require('../assets/shuffle.png')}
@@ -151,7 +150,7 @@ const TracksView = () => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.trackOption}
-                onPress={() => handleOptionsClick(item)}>
+                onPress={() => handleLongPress(item)}>
                 <Image
                   source={require('../assets/more.png')}
                   style={{height: 21, width: 21}}
@@ -176,7 +175,7 @@ const TracksView = () => {
           <TouchableOpacity
             style={styles.trackOptionTouchable}
             onPress={() => {
-              handleLongPress(selected);
+              handleAddToQueue(selected);
             }}>
             <Image
               source={require('../assets/addTo.png')}

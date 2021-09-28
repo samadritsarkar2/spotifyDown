@@ -47,19 +47,22 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
               {/* // Changelog  */}
 
               <View style={styles.faqOne}>
-                <Text style={styles.faqQuestion}>Changelog v1.5</Text>
+                <Text style={styles.faqQuestion}>Changelog v1.75</Text>
                 <Text style={styles.faqAnswer}>
-                  {'\u25CF'} Added Music Player
+                  {'\u25CF'} Added Shuffle Play
                 </Text>
                 <Text style={styles.faqAnswer}>
-                  {'\u25CF'} Added Downloads section
+                  {'\u25CF'} Added 'Track Delete' feature
                 </Text>
                 <Text style={styles.faqAnswer}>
-                  {'\u25CF'} Supports Spotify Albums now
+                  {'\u25CF'} Downloads are now categorized according to
+                  playlists
                 </Text>
                 <Text style={styles.faqAnswer}>
-                  {'\u25CF'} Donation page added :)
+                  {'\u25CF'} Optimized downloading of Tracks
                 </Text>
+
+                <Text style={styles.faqAnswer}>{'\u25CF'} Ads added</Text>
                 <Text style={styles.faqAnswer}>
                   {'\u25CF'} UI changes and few minor changes too.
                 </Text>
@@ -68,13 +71,11 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
               <View style={styles.faqOne}>
                 <Text style={styles.faqQuestion}>Issues :(</Text>
                 <Text style={styles.faqAnswer}>
-                  {'\u25CF'} While a track(s) is downloaded from a specific
-                  playlist, the download may be cancelled if a user exists that
-                  screen, or if an other playlist is loaded. Rather, user may
-                  minimize the app
+                  {'\u25CF'} A particular track once downloaded from one
+                  playlist, cannot be downloaded from another playlist.
                 </Text>
                 <Text style={styles.faqAnswer}>
-                  {'\u25CF'} Few playlist may give error unexpectedly.
+                  {'\u25CF'} Downloads wrong tracks
                 </Text>
                 <Text style={styles.faqAnswer}>
                   {'\u25CF'} Due to youtube policies, few songs are not

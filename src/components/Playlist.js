@@ -81,21 +81,13 @@ const Playlist = ({navigation, route}) => {
       }
     } catch (error) {
       setTimeout(() => {
-        Alert.alert(
-          'Please check if Internet is available',
-          'Internet is required to fetch the tracks and other data. \nYou can listen to Downloaded Tracks while being OFFLINE',
-          [
-            {
-              text: 'Open settings',
-              onPress: () => {
-                Linking.openURL('');
-              },
-            },
-          ],
-          {cancelable: true},
-        );
         navigation.goBack();
-      }, 2000);
+        Snackbar.show({
+          text: 'Internt connection is required to fetch playlist',
+          duration: Snackbar.LENGTH_LONG,
+          backgroundColor: 'red',
+        });
+      }, 1000);
     }
   };
 
@@ -121,7 +113,10 @@ const Playlist = ({navigation, route}) => {
   const downloadAll = async () => {
     tracks.map((item) => {
       if (!item.downloaded) {
-        handleDownload(item);
+        // console.log(item);
+        setTimeout(() => {
+          handleDownload(item);
+        }, 2000);
       }
     });
   };

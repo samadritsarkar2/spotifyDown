@@ -24,6 +24,7 @@ import {
 import Spinner from 'react-native-spinkit';
 import TrackPlayer from 'react-native-track-player';
 import {handleUnorganized} from '../redux/actions/downloadsActions';
+import {BannerAd, BannerAdSize} from '@react-native-admob/admob';
 
 const Downloads = ({navigation}) => {
   const dispatch = useDispatch();
@@ -220,6 +221,20 @@ const Downloads = ({navigation}) => {
                 }>
                 {/* <Unorganized /> */}
                 <PlaylistView />
+
+                <View
+                  style={{
+                    marginBottom: windowHeight * 0.07,
+                    alignSelf: 'center',
+                  }}>
+                  <BannerAd
+                    size={BannerAdSize.BANNER}
+                    unitId={'ca-app-pub-6375556431036607/6673861278'}
+                    onAdFailedToLoad={(error) => {}}
+
+                    // ref={bannerRef}
+                  />
+                </View>
 
                 <View style={{height: windowHeight * 0.07}} />
               </ScrollView>

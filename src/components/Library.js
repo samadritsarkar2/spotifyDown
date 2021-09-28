@@ -29,14 +29,14 @@ const Library = ({navigation}) => {
     adPresented,
     adDismissed,
     load,
-  } = useRewardedAd('ca-app-pub-3940256099942544/5224354917', hookOptions);
+  } = useRewardedAd('ca-app-pub-6375556431036607/5864179230', hookOptions);
 
   const showAd = () => {
     setIsAdClicked(true);
 
     if (adLoadError) {
       ToastAndroid.show(
-        'Something went wrong! Cannot load the App',
+        'Something went wrong! Cannot load the Ad',
         ToastAndroid.SHORT,
       );
     }
@@ -62,7 +62,8 @@ const Library = ({navigation}) => {
 
   useEffect(() => {
     if (adLoadError) {
-      console.error('Error ::', adLoadError);
+      // console.error('Error ::', adLoadError);
+      setIsAdClicked(false);
     }
   }, [adLoadError]);
 
@@ -122,10 +123,10 @@ const Library = ({navigation}) => {
             <TouchableOpacity onPress={showAd}>
               <View style={styles.optionWrapper}>
                 <Image
-                  source={require('../assets/check.png')}
+                  source={require('../assets/reward.png')}
                   style={styles.optionIcon}
                 />
-                <Text style={styles.buttons}>Watch an Ad</Text>
+                <Text style={styles.buttons}>Watch an Rewarded Ad</Text>
               </View>
             </TouchableOpacity>
             <BetterKnowMore
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
   buttons: {
     fontSize: 20,
     color: 'white',
-    fontFamily: 'Gotham',
+    fontFamily: 'GothamMedium',
   },
   optionWrapper: {
     flex: 1,
