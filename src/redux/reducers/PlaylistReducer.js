@@ -81,10 +81,9 @@ export const playlist = (state = initialState, action) => {
       };
     case 'REMOVE_CURRENT_DOWNLOADING':
       let currentDownloadingArr = [...state.currentDownloading].filter(
-        (item) => {
-          item.id !== action.payload;
-        },
+        (item) => item.id !== action.payload,
       );
+
       return {
         ...state,
         currentDownloading: currentDownloadingArr,

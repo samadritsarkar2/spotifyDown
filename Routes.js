@@ -7,10 +7,6 @@ import 'react-native-gesture-handler';
 import {Provider as StoreProvider} from 'react-redux';
 import codePush from 'react-native-code-push';
 
-// let codePushOptions = {
-//   checkFreq
-// }
-
 import Error from './src/components/Error';
 import Home from './src/components/Home';
 import MiniPlayer from './src/components/MiniPlayer';
@@ -82,9 +78,6 @@ const BottomNav = () => {
   );
 };
 
-export default codePush({
-  updateDialog: true,
-  installMode: codePush.InstallMode.ON_NEXT_RESTART,
-})(BottomNav);
+export default codePush(BottomNav);
 
 // appcenter codepush release-react -a samadritsarkar2/Spotify-Downloader

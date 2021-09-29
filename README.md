@@ -33,6 +33,15 @@ You can download your Spotify playlists/albums in advance and enjoy music everyw
 
 # Changelog
 
+- [**1.75**](https://github.com/samadritsarkar2/spotifyDown/tree/version1.75)
+
+  - Shuffle Play 🔀
+  - Tracks can now be deleted within the app 🚮
+  - Tracks are now arranged according to the playlist
+  - Tracks downloaded in previous versions will be categorized in 'Unorganized'
+  - Minor Banner Ads may be there
+  - Downloading optimized and etc.
+
 - [**v1.5**](https://github.com/samadritsarkar2/spotifyDown/tree/version1.5)
   - Added Music Player
   - Added Notification Bar Music controller
@@ -65,7 +74,8 @@ I improved the code a little bit and the overall code structure. Will work on it
 
 # Known Issues
 
-- While a track(/s) is getting downloaded from a particular playlist, if user exists the screen or another playlist is loaded, then the download gets cancelled.
+- With the latest update, a song can be downloaded only once and hence it can be present in only one playlist. This will be solved in the upcoming version as we go into more complicated database system.
+- ~~While a track(/s) is getting downloaded from a particular playlist, if user exists the screen or another playlist is loaded, then the download gets cancelled.~~
 - Few playlist may give error unexpectedly.
 - Due to youtube policies, few songs are not downloadable. This is because some videos are regionally restriced or so. [See these limitations](https://github.com/fent/node-ytdl-core#limitations)
 - Youtube server gives `429 error`.
