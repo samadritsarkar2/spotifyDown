@@ -249,6 +249,7 @@ const DownloadingHelper = () => {
   useEffect(() => {
     const workerFn = async () => {
       if (downloadQueue.length > 0 && !isExecutingTask) {
+        setIsExecutingTask(true);
         const item = downloadQueue[0];
         try {
           await downloadItem(item, currentPlaylist.responseInfo);

@@ -48,7 +48,6 @@ export const playlist = (state = initialState, action) => {
     case 'REMOVE_FROM_DOWNLOAD_QUEUE':
       const tempArr = [...state.downloadQueue];
       tempArr.shift();
-      // console.log(tempArr);
       return {
         ...state,
         downloadQueue: tempArr,
@@ -81,8 +80,12 @@ export const playlist = (state = initialState, action) => {
       };
     case 'REMOVE_CURRENT_DOWNLOADING':
       let currentDownloadingArr = [...state.currentDownloading].filter(
-        (item) => item.id !== action.payload,
+        (item) => item.id !== action.payload.id,
       );
+      // console.log(
+      //   'After remove from current downloading : : ',
+      //   currentDownloadingArr,
+      // );
 
       return {
         ...state,
