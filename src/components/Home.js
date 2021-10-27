@@ -10,7 +10,10 @@ import {
 } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import {initAdMob, spotifyGreenButton, spotifyGreenButtonText} from '../common';
-import AdMob, {BannerAd, BannerAdSize} from '@react-native-admob/admob';
+// import AdMob, {BannerAd, BannerAdSize} from '@react-native-admob/admob';
+import {IronSource} from '@wowmaking/react-native-iron-source';
+
+import {AdSettings} from 'react-native-fbads';
 
 const App = ({navigation, route}) => {
   useEffect(() => {
@@ -18,6 +21,17 @@ const App = ({navigation, route}) => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
     });
     initAdMob(() => console.log('initilized Admob'));
+    // console.log(AdSettings.currentDeviceHash);
+    // AdSettings.addTestDevice(AdSettings.currentDeviceHash);
+    IronSource.initializeIronSource('118aa3d25', 'userId', {
+      validateIntegration: true,
+    })
+      .then(() => {
+        console.log('Init finished');
+      })
+      .catch(() => {
+        console.warn('error');
+      });
 
     return unsubscribe;
   }, []);

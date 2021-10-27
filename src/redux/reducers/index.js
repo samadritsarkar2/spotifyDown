@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import {playlist} from './playlistReducer';
+import {playlist} from './PlaylistReducer';
 import {playerReducer} from './playerReducer';
 import {downloadsReducer} from './downloadsReducer';
 const rootReducers = combineReducers({
