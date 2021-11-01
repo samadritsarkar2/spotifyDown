@@ -10,6 +10,10 @@ import {
 } from 'react-native';
 import AdMob, {useRewardedAd} from '@react-native-admob/admob';
 import KnowMore from './KnowMore.js';
+import {
+  IronSourceRewardedVideo,
+  IronSourceOfferwall,
+} from '@wowmaking/react-native-iron-source';
 
 const Library = ({navigation}) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -31,21 +35,41 @@ const Library = ({navigation}) => {
     load,
   } = useRewardedAd('ca-app-pub-6375556431036607/5864179230', hookOptions);
 
+  useEffect(() => {
+    console.log('rendered');
+    IronSourceRewardedVideo.addEventListener(
+      'ironSourceRewardedVideoAvailable',
+      (res) => {
+        console.log('Rewarded video became available');
+      },
+    );
+
+    IronSourceRewardedVideo.initializeRewardedVideo();
+  }, []);
+
   const showAd = () => {
     setIsAdClicked(true);
 
-    if (adLoadError) {
-      ToastAndroid.show(
-        'Something went wrong! Cannot load the Ad',
-        ToastAndroid.SHORT,
-      );
-    }
+    IronSourceRewardedVideo.isRewardedVideoAvailable().then((available) => {
+      if (available) {
+        IronSourceRewardedVideo.showRewardedVideo();
+      } else {
+        console.log('Not available', available);
+      }
+    });
 
-    if (adLoaded) {
-      show();
-    } else {
-      ToastAndroid.show('Ad is loading. Please wait', ToastAndroid.SHORT);
-    }
+    // if (adLoadError) {
+    //   ToastAndroid.show(
+    //     'Something went wrong! Cannot load the Ad',
+    //     ToastAndroid.SHORT,
+    //   );
+    // }
+
+    // if (adLoaded) {
+    //   show();
+    // } else {
+    //   ToastAndroid.show('Ad is loading. Please wait', ToastAndroid.SHORT);
+    // }
   };
 
   useEffect(() => {
@@ -68,9 +92,6 @@ const Library = ({navigation}) => {
   }, [adLoadError]);
 
   const BetterKnowMore = React.memo(KnowMore);
-  useEffect(() => {
-    // console.log("rendered")
-  }, []);
 
   return (
     <>

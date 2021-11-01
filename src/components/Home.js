@@ -23,7 +23,7 @@ const App = ({navigation, route}) => {
     initAdMob(() => console.log('initilized Admob'));
     // console.log(AdSettings.currentDeviceHash);
     // AdSettings.addTestDevice(AdSettings.currentDeviceHash);
-    IronSource.initializeIronSource('118aa3d25', 'userId', {
+    IronSource.initializeIronSource('118aa3d25', 'downify', {
       validateIntegration: true,
     })
       .then(() => {

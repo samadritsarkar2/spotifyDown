@@ -102,15 +102,25 @@ const Downloads = ({navigation}) => {
         }
       });
 
-      IronSourceBanner.loadBanner('BANNER', {
-        position: 'top',
-        scaleToFitWidth: true,
-      });
-      IronSourceBanner.addEventListener('ironSourceBannerDidLoad', () => {
-        console.warn('Iron Source banner loaded');
-        IronSourceBanner.showBanner();
-      });
+      // IronSourceBanner.loadBanner('RECTANGLE', {
+      //   position: 'bottom',
+      //   scaleToFitWidth: true,
+      // })
+      //   .then((response) => {
+      //     console.log(response);
+      //   })
+      //   .catch((err) => {
+      //     console.l(err.message);
+      //   });
+      // IronSourceBanner.addEventListener('ironSourceBannerDidLoad', () => {
+      //   // console.log('Iron Source banner loaded');
+      //   IronSourceBanner.showBanner();
+      // });
     }, 500);
+
+    // return () => {
+    //   IronSourceBanner.hideBanner();
+    // };
   }, []);
 
   const onRefresh = () => {
