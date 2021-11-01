@@ -8,39 +8,30 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import AdMob, {useRewardedAd} from '@react-native-admob/admob';
+
 import KnowMore from './KnowMore.js';
-import {
-  IronSourceRewardedVideo,
-  IronSourceOfferwall,
-} from '@wowmaking/react-native-iron-source';
+import {IronSourceRewardedVideo} from '@wowmaking/react-native-iron-source';
 
 const Library = ({navigation}) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isAdClicked, setIsAdClicked] = useState(false);
+  const [isShown, setIsShown] = useState(false);
+
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
-
-  const hookOptions = {
-    loadOnDismissed: true,
-  };
-  const {
-    adLoadError,
-    adLoaded,
-    reward,
-    show,
-    adPresented,
-    adDismissed,
-    load,
-  } = useRewardedAd('ca-app-pub-6375556431036607/5864179230', hookOptions);
 
   useEffect(() => {
     console.log('rendered');
     IronSourceRewardedVideo.addEventListener(
       'ironSourceRewardedVideoAvailable',
-      (res) => {
-        console.log('Rewarded video became available');
+      (res) => {},
+    );
+
+    IronSourceRewardedVideo.addEventListener(
+      'ironSourceRewardedVideoAdRewarded',
+      () => {
+        setIsShown(true);
       },
     );
 
@@ -54,42 +45,24 @@ const Library = ({navigation}) => {
       if (available) {
         IronSourceRewardedVideo.showRewardedVideo();
       } else {
-        console.log('Not available', available);
+        ToastAndroid.show(
+          'Ad is not available right now. Thanks tho ✨',
+          ToastAndroid.SHORT,
+        );
       }
     });
-
-    // if (adLoadError) {
-    //   ToastAndroid.show(
-    //     'Something went wrong! Cannot load the Ad',
-    //     ToastAndroid.SHORT,
-    //   );
-    // }
-
-    // if (adLoaded) {
-    //   show();
-    // } else {
-    //   ToastAndroid.show('Ad is loading. Please wait', ToastAndroid.SHORT);
-    // }
   };
 
   useEffect(() => {
-    if (adLoaded && isAdClicked) {
-      show();
-    }
-  }, [adLoaded]);
-
-  useEffect(() => {
-    if (adPresented || adDismissed) {
+    if (isShown) {
       setIsAdClicked(false);
-    }
-  }, [adDismissed, adPresented]);
 
-  useEffect(() => {
-    if (adLoadError) {
-      // console.error('Error ::', adLoadError);
-      setIsAdClicked(false);
+      ToastAndroid.show(
+        'Thanks for watching the Ad. It will help in the development of Project',
+        ToastAndroid.SHORT,
+      );
     }
-  }, [adLoadError]);
+  }, [isShown]);
 
   const BetterKnowMore = React.memo(KnowMore);
 
@@ -147,7 +120,12 @@ const Library = ({navigation}) => {
                   source={require('../assets/reward.png')}
                   style={styles.optionIcon}
                 />
-                <Text style={styles.buttons}>Watch an Rewarded Ad</Text>
+                <View>
+                  <Text style={styles.buttons}>Watch an Rewarded Ad</Text>
+                  <Text style={styles.smallText}>
+                    This will help in the development of this App ✨
+                  </Text>
+                </View>
               </View>
             </TouchableOpacity>
             <BetterKnowMore
@@ -185,13 +163,18 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'GothamMedium',
   },
+  smallText: {
+    fontSize: 12,
+    color: 'gray',
+    fontFamily: 'Gotham',
+  },
   optionWrapper: {
     flex: 1,
     margin: 10,
     paddingVertical: 20,
     paddingHorizontal: 10,
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'center',
     backgroundColor: '#111111',
     borderRadius: 10,
   },
