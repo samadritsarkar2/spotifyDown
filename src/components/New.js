@@ -21,7 +21,6 @@ import {
   spotifyGreenButtonText,
   windowHeight,
 } from '../common';
-import {BannerAd, BannerAdSize} from '@react-native-admob/admob';
 
 const New = ({navigation, route}) => {
   const [id, setId] = useState('');
@@ -108,20 +107,6 @@ const New = ({navigation, route}) => {
           <TouchableOpacity style={spotifyGreenButton} onPress={fetchApi}>
             <Text style={spotifyGreenButtonText}>Submit</Text>
           </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            position: 'absolute',
-            bottom: windowHeight * 0.07,
-            alignSelf: 'center',
-          }}>
-          <BannerAd
-            size={BannerAdSize.BANNER}
-            unitId={'ca-app-pub-6375556431036607/8815977337'}
-            onAdFailedToLoad={(error) => {}}
-
-            // ref={bannerRef}
-          />
         </View>
       </View>
     </>

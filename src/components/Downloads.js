@@ -23,9 +23,6 @@ import {
 } from '../common';
 import Spinner from 'react-native-spinkit';
 import {handleUnorganized} from '../redux/actions/downloadsActions';
-import {BannerView} from 'react-native-fbads';
-import {BannerAd, BannerAdSize} from '@react-native-admob/admob';
-import {IronSourceBanner} from '@wowmaking/react-native-iron-source';
 
 const Downloads = ({navigation}) => {
   const dispatch = useDispatch();
@@ -184,15 +181,6 @@ const Downloads = ({navigation}) => {
           <Text style={styles.heading}>Downloads</Text>
         </View> */}
 
-        <View>
-          <BannerView
-            placementId="602340830771605_602358980769790"
-            type="standard"
-            onPress={() => console.log('click')}
-            onLoad={() => console.log('loaded')}
-            onError={(err) => console.log('error')}
-          />
-        </View>
         {loading ? (
           <View style={{flex: 1}}>
             <Spinner
@@ -251,20 +239,6 @@ const Downloads = ({navigation}) => {
                 }>
                 {/* <Unorganized /> */}
                 <PlaylistView />
-
-                <View
-                  style={{
-                    marginBottom: windowHeight * 0.07,
-                    alignSelf: 'center',
-                  }}>
-                  <BannerAd
-                    size={BannerAdSize.BANNER}
-                    unitId={'ca-app-pub-6375556431036607/6673861278'}
-                    onAdFailedToLoad={(error) => {}}
-
-                    // ref={bannerRef}
-                  />
-                </View>
 
                 <View style={{height: windowHeight * 0.07}} />
               </ScrollView>

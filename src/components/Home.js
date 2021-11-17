@@ -9,20 +9,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-import {initAdMob, spotifyGreenButton, spotifyGreenButtonText} from '../common';
-// import AdMob, {BannerAd, BannerAdSize} from '@react-native-admob/admob';
+import {spotifyGreenButton, spotifyGreenButtonText} from '../common';
 import {IronSource} from '@wowmaking/react-native-iron-source';
-
-import {AdSettings} from 'react-native-fbads';
 
 const App = ({navigation, route}) => {
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
     });
-    initAdMob(() => console.log('initilized Admob'));
-    // console.log(AdSettings.currentDeviceHash);
-    // AdSettings.addTestDevice(AdSettings.currentDeviceHash);
+
     IronSource.initializeIronSource('118aa3d25', 'downify', {
       validateIntegration: true,
     })

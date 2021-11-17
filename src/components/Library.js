@@ -10,19 +10,17 @@ import {
 } from 'react-native';
 
 import KnowMore from './KnowMore.js';
+import analytics from '@react-native-firebase/analytics';
 import {IronSourceRewardedVideo} from '@wowmaking/react-native-iron-source';
 
 const Library = ({navigation}) => {
   const [isModalVisible, setModalVisible] = useState(false);
-  const [isAdClicked, setIsAdClicked] = useState(false);
-  const [isShown, setIsShown] = useState(false);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
   useEffect(() => {
-    console.log('rendered');
     IronSourceRewardedVideo.addEventListener(
       'ironSourceRewardedVideoAvailable',
       (res) => {},
@@ -30,16 +28,20 @@ const Library = ({navigation}) => {
 
     IronSourceRewardedVideo.addEventListener(
       'ironSourceRewardedVideoAdRewarded',
-      () => {
-        setIsShown(true);
+      async () => {
+        ToastAndroid.show(
+          'Thanks for watching the Ad. It will help in the development of Project',
+          ToastAndroid.LONG,
+        );
+        await analytics().logEvent('rewardedAd_shown');
       },
     );
 
     IronSourceRewardedVideo.initializeRewardedVideo();
   }, []);
 
-  const showAd = () => {
-    setIsAdClicked(true);
+  const showAd = async () => {
+    await analytics().logEvent('rewardedAd_clicked');
 
     IronSourceRewardedVideo.isRewardedVideoAvailable().then((available) => {
       if (available) {
@@ -52,17 +54,6 @@ const Library = ({navigation}) => {
       }
     });
   };
-
-  useEffect(() => {
-    if (isShown) {
-      setIsAdClicked(false);
-
-      ToastAndroid.show(
-        'Thanks for watching the Ad. It will help in the development of Project',
-        ToastAndroid.SHORT,
-      );
-    }
-  }, [isShown]);
 
   const BetterKnowMore = React.memo(KnowMore);
 
@@ -93,7 +84,7 @@ const Library = ({navigation}) => {
                   source={require('../assets/heart.png')}
                   style={styles.optionIcon}
                 />
-                <Text style={styles.buttons}>Saved</Text>
+                <Text style={styles.buttons}>Saved Playlists</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={toggleModal}>
@@ -105,7 +96,7 @@ const Library = ({navigation}) => {
                 <Text style={styles.buttons}>Know More</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Donations')}>
+            {/* <TouchableOpacity onPress={() => navigation.navigate('Donations')}>
               <View style={styles.optionWrapper}>
                 <Image
                   source={require('../assets/red-heart.png')}
@@ -113,7 +104,7 @@ const Library = ({navigation}) => {
                 />
                 <Text style={styles.buttons}>Support the App</Text>
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity onPress={showAd}>
               <View style={styles.optionWrapper}>
                 <Image
@@ -121,7 +112,7 @@ const Library = ({navigation}) => {
                   style={styles.optionIcon}
                 />
                 <View>
-                  <Text style={styles.buttons}>Watch an Rewarded Ad</Text>
+                  <Text style={styles.buttons}>Watch a Rewarded Ad</Text>
                   <Text style={styles.smallText}>
                     This will help in the development of this App ✨
                   </Text>

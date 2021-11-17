@@ -14,16 +14,14 @@ import {
   Linking,
 } from 'react-native';
 import Snackbar from 'react-native-snackbar';
-import RNBackgroundDownloader from 'react-native-background-downloader';
-import RNFetchBlob from 'rn-fetch-blob';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-spinkit';
-import analytics from '@react-native-firebase/analytics';
 import TextTicker from 'react-native-text-ticker';
 
-import {API, NEW_API} from '@env';
+import {NEW_API} from '@env';
 import {windowWidth, windowHeight} from '../common';
-import {checkExists} from '../utils';
+
 import {
   addNewPlaylist,
   addToDownloadQueue,

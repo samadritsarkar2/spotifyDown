@@ -12,7 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import androidx.multidex.MultiDexApplication;
 import com.microsoft.codepush.react.CodePush;
-import com.razorpay.rn.RazorpayPackage;
+
 
 public class MainApplication extends MultiDexApplication implements ReactApplication {
 

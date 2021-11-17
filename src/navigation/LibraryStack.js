@@ -8,7 +8,7 @@ import Library from '../components/Library';
 import SavedPlaylists from '../components/SavedPlaylists';
 import Downloads from '../components/Downloads';
 import DownloadStack from './DownloadStack';
-import Donations from '../components/Donation';
+// import Donations from '../components/Donation';
 
 const Stack = createStackNavigator();
 
@@ -42,11 +42,11 @@ const LibraryStack = () => {
         name="Downloads"
         options={{headerShown: false}}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         component={Donations}
         name="Donations"
         options={{headerShown: false}}
-      />
+      /> */}
     </Stack.Navigator>
   );
 };

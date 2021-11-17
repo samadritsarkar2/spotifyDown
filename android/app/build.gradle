@@ -136,9 +136,11 @@ android {
         applicationId "com.sam.downify"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
-        versionName "1.75"
+        versionCode 8
+        versionName "1.80"
         multiDexEnabled true
+        resValue 'string', "CODE_PUSH_APK_BUILD_TIME", String.format("\"%d\"", System.currentTimeMillis())
+
     }
     splits {
         abi {
@@ -219,10 +221,11 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:28.1.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.ironsource.sdk:mediationsdk:7.1.11.1' 
-    implementation 'com.google.android.gms:play-services-ads:20.3.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
-    implementation project(':react-native-razorpay')
+    implementation("com.squareup.okhttp3:okhttp:4.9.1")
+    implementation("com.squareup.okhttp3:okhttp-urlconnection:4.9.1")
+
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
