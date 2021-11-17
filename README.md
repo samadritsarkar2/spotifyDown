@@ -33,6 +33,13 @@ You can download your Spotify playlists/albums in advance and enjoy music everyw
 
 # Changelog
 
+- [**1.80**](https://github.com/samadritsarkar2/spotifyDown/tree/version1.80)
+
+  - Removed the Google AdMob Package
+  - Added ironSource Ads
+  - Removed Donations
+  - Fixed bugs arising out of updated sdk version
+
 - [**1.75**](https://github.com/samadritsarkar2/spotifyDown/tree/version1.75)
 
   - Shuffle Play 🔀

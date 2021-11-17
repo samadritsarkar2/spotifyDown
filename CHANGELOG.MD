@@ -2,6 +2,22 @@
 
 All minor and major changes to the project will be documented here!
 
+- [**1.80**](https://github.com/samadritsarkar2/spotifyDown/tree/version1.80)
+
+  - Removed the Google AdMob Package
+  - Added ironSource Ads
+  - Removed Donations
+  - Fixed bugs arising out of updated sdk version
+
+- [**1.75**](https://github.com/samadritsarkar2/spotifyDown/tree/version1.75)
+
+  - Shuffle Play 🔀
+  - Tracks can now be deleted within the app 🚮
+  - Tracks are now arranged according to the playlist
+  - Tracks downloaded in previous versions will be categorized in 'Unorganized'
+  - Minor Banner Ads may be there
+  - Downloading optimized and etc.
+
 - [**v1.5**](https://github.com/samadritsarkar2/spotifyDown/tree/version1.5)
 
   - Features
