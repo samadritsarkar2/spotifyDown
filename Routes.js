@@ -17,6 +17,7 @@ import TabBar from './src/navigation/TabBar';
 import store from './src/redux/store';
 import NewStack from './src/navigation/NewStack';
 import DownloadingHelper from './src/components/DownloadingHelper';
+import {View} from 'react-native';
 
 //const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -52,11 +53,19 @@ const BottomNav = () => {
             });
           }
         }}>
+        {/* <View style={{backgroundColor: 'red', height: 50}}></View> */}
         <Tab.Navigator
           tabBar={(props) => <TabBar {...props} />}
           initialRouteName="Home">
           <Tab.Screen options={{}} component={Home} name="Home"></Tab.Screen>
-          <Tab.Screen component={NewStack} name="NewStack"></Tab.Screen>
+          <Tab.Screen
+            component={NewStack}
+            name="NewStack"
+            options={
+              {
+                // unmountOnBlur: true,
+              }
+            }></Tab.Screen>
           <Tab.Screen component={LibraryStack} name="LibraryStack"></Tab.Screen>
           <Tab.Screen
             component={Playlist}
@@ -80,4 +89,4 @@ const BottomNav = () => {
 
 export default codePush(BottomNav);
 
-// appcenter codepush release-react -a samadritsarkar2/Spotify-Downloader
+// appcenter codepush release-react -a samadritsarkar2/Downify

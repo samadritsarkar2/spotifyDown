@@ -21,6 +21,8 @@ import {
   spotifyGreenButtonText,
   windowHeight,
 } from '../common';
+import {IronSourceBanner} from '@wowmaking/react-native-iron-source';
+import {useIsFocused} from '@react-navigation/core';
 
 const New = ({navigation, route}) => {
   const [id, setId] = useState('');
@@ -29,6 +31,7 @@ const New = ({navigation, route}) => {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
 
   const fetchApi = async () => {
     setLoading(true);
@@ -83,6 +86,44 @@ const New = ({navigation, route}) => {
       navigation.navigate('Playlist');
     }
   };
+  useEffect(() => {
+    console.log('hello');
+    IronSourceBanner.loadBanner('BANNER', {
+      position: 'top',
+      scaleToFitWidth: true,
+    })
+      .then((response) => {
+        // console.warn(`width: ${response.width}, height: ${response.height}`);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+
+    IronSourceBanner.addEventListener('ironSourceBannerDidLoad', () => {
+      // console.log('Iron Source banner loaded');
+      if (isFocused) {
+        IronSourceBanner.showBanner();
+      } else {
+        // console.log('else hide');
+        IronSourceBanner.hideBanner();
+      }
+    });
+
+    IronSourceBanner.addEventListener('ironSourceDidClickBanner', () => {
+      // console.log('Banner clicked');
+    });
+
+    if (!isFocused) IronSourceBanner.hideBanner();
+
+    return () => {
+      console.log('unmount hide');
+
+      IronSourceBanner.hideBanner();
+    };
+  }, [isFocused]);
+
+  // useEffect(() => {
+  // }, [isFocused]);
 
   return (
     <>
