@@ -1,9 +1,4 @@
-import {API, NEW_API} from '@env';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import RNBackgroundDownloader from 'react-native-background-downloader';
-import Snackbar from 'react-native-snackbar';
-import {DOWNLOAD_PATH} from '../../common';
-import {checkExists, checkPermission, checkData} from '../../utils';
+import {checkData} from '../../utils';
 
 export const addNew = (playlist) => {
   return {
@@ -15,14 +10,16 @@ export const addNew = (playlist) => {
 export const addNewPlaylist = (playlistData) => {
   return async (dispatch) => {
     // console.log('addNewPlaylist');
-    checkData(playlistData.tracks).then((tracks) => {
-      // console.log(tracks);
-      dispatch({
-        type: 'ADD_NEW_PLAYLIST',
-        payload: {tracks, responseInfo: playlistData.responseInfo},
-      });
-      dispatch({type: 'LOADING_FALSE'});
-    });
+    checkData(playlistData.tracks, playlistData.responseInfo.id).then(
+      (tracks) => {
+        // console.log(tracks);
+        dispatch({
+          type: 'ADD_NEW_PLAYLIST',
+          payload: {tracks, responseInfo: playlistData.responseInfo},
+        });
+        dispatch({type: 'LOADING_FALSE'});
+      },
+    );
   };
 };
 

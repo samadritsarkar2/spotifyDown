@@ -11,8 +11,8 @@ const NewStack = () => {
   return (
     <Stack.Navigator
       initialRouteName="New"
-      headerMode={'none'}
       screenOptions={{
+        headerShown: false,
         detachPreviousScreen: true,
 
         cardOverlayEnabled: true,

@@ -1,17 +1,19 @@
 import {DOWNLOAD_PATH} from '../common';
-import RNFetchBlob from 'rn-fetch-blob';
-import RNBackgroundDownloader from 'react-native-background-downloader';
+
+import RNFS from 'react-native-fs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const isExist = async (single) => {
   const filepath = `${DOWNLOAD_PATH}/${single.title}.mp3`;
-  const exists = await RNFetchBlob.fs.exists(filepath);
+
+  const exists = await RNFS.exists(filepath);
   if (exists) {
-    const stats = await RNFetchBlob.fs.stat(filepath);
+    const stats = await RNFS.stat(filepath);
 
     if (stats.size === 0) {
-      RNFetchBlob.fs.unlink(filepath);
+      RNFS.unlink(filepath);
       return false;
-    } else return true;
+    } else return filepath;
   } else {
     return false;
   }
@@ -42,26 +44,61 @@ export const checkPermission = async () => {
   }
 };
 
-export const checkExists = async (single) => {
-  // const path = `${RNBackgroundDownloader.directories.documents}/${playlistData.playlistId}/${single.name}.mp3`;
-  const path = `${RNBackgroundDownloader.directories.documents}/${single.title}.mp3`;
-  const exists = await RNFetchBlob.fs.exists(path);
+export const checkExists = async (allDownloadedTracks, single) => {
+  try {
+    const path = `${DOWNLOAD_PATH}/${single.title}.mp3`;
 
-  //console.log(exists, path)
-  if (exists) {
-    const stats = await RNFetchBlob.fs.stat(path);
+    if (allDownloadedTracks.includes(single.id)) {
+      const exists = await RNFS.exists(path);
 
-    if (stats.size === 0) {
-      RNFetchBlob.fs.unlink(path);
+      //console.log(exists, path)
+      if (exists) {
+        const stats = await RNFS.stat(path);
+
+        if (stats.size === 0) {
+          RNFS.unlink(path);
+          return {...single};
+        } else return {...single, downloaded: true, path: path};
+      } else {
+        return {...single};
+      }
+    } else {
       return {...single};
-    } else return {...single, downloaded: true, path: path};
-  } else {
+    }
+  } catch (error) {
     return {...single};
   }
-
   // console.log(exists)
 };
 
-export const checkData = (data) => {
-  return Promise.all(data.map((item) => checkExists(item)));
+const findIdOfTrack = (track) => {
+  return track.id;
+};
+
+export const checkData = async (data, playlistId) => {
+  let allDownloadedTracks = [];
+  try {
+    const storedValue = await AsyncStorage.getItem(`@playlistView`);
+
+    const prevList = await JSON.parse(storedValue);
+
+    if (prevList !== null) {
+      let playlists = Object.keys(prevList);
+
+      if (playlists.includes(playlistId)) {
+        allDownloadedTracks = prevList[playlistId].tracks.map((track) =>
+          findIdOfTrack(track),
+        );
+        // console.log(allDownloadedTracks);
+        // allTracks = prevList[playlistId].tracks;
+      }
+    } else {
+    }
+  } catch (error) {
+    // console.log(error);
+  }
+
+  return Promise.all(
+    data.map((item) => checkExists(allDownloadedTracks, item)),
+  );
 };

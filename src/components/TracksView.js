@@ -107,8 +107,7 @@ const TracksView = () => {
             onPress={() => {
               dispatch(allActions.shufflePlay(activePlaylist));
             }}
-            delayLongPress={100}
-            onLongPress={handleLongPress}>
+            delayLongPress={100}>
             <Image
               source={require('../assets/shuffle.png')}
               style={{height: 30, width: 30}}

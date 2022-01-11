@@ -12,8 +12,6 @@ const DownloadStack = () => {
   return (
     <Stack.Navigator
       initialRouteName="Downloads"
-      //   headerMode={'none'}
-
       screenOptions={{
         cardOverlayEnabled: true,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,

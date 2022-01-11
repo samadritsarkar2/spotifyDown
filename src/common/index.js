@@ -1,7 +1,7 @@
-import RNBackgroundDownloader from 'react-native-background-downloader';
 import {Dimensions} from 'react-native';
+import RNFS from 'react-native-fs';
 
-export const DOWNLOAD_PATH = `${RNBackgroundDownloader.directories.documents}`;
+export const DOWNLOAD_PATH = `${RNFS.ExternalDirectoryPath}`;
 export const windowHeight = Dimensions.get('window').height;
 export const windowWidth = Dimensions.get('window').width;
 

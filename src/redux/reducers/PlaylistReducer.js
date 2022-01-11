@@ -4,6 +4,7 @@ const initialState = {
   downloadQueue: [],
   currentDownloading: [],
   downloadPercent: 0,
+  downloadSize: null,
   loading: true,
 };
 
@@ -95,6 +96,11 @@ export const playlist = (state = initialState, action) => {
       return {
         ...state,
         downloadPercent: action.payload,
+      };
+    case 'SET_DOWNLOAD_SIZE':
+      return {
+        ...state,
+        downloadSize: action.payload,
       };
     case 'LOADING_TRUE':
       return {

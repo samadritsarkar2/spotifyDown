@@ -11,6 +11,12 @@ import {
 import messaging from '@react-native-firebase/messaging';
 import {spotifyGreenButton, spotifyGreenButtonText} from '../common';
 import {IronSource} from '@wowmaking/react-native-iron-source';
+import {LogBox} from 'react-native';
+LogBox.ignoreLogs([
+  'Require cycle:',
+  '`new NativeEventEmitter()` ',
+  'EventEmitter.removeListener',
+]);
 
 const App = ({navigation, route}) => {
   useEffect(() => {

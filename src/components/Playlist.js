@@ -195,7 +195,7 @@ const Playlist = ({navigation, route}) => {
   };
 
   const openFile = (single) => {
-    navigation.navigate('LibraryStack', {screen: 'Downloads'});
+    navigation.navigate('LibraryStack', {screen: 'DownloadStack'});
   };
 
   const onRequestClose = () => null;

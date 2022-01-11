@@ -8,10 +8,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-
+import RNFS from 'react-native-fs';
 import KnowMore from './KnowMore.js';
 import analytics from '@react-native-firebase/analytics';
 import {IronSourceRewardedVideo} from '@wowmaking/react-native-iron-source';
+import {DOWNLOAD_PATH} from '../common/index.js';
 
 const Library = ({navigation}) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -68,7 +69,8 @@ const Library = ({navigation}) => {
         </View>
         <View style={styles.actions}>
           <ScrollView alwaysBounceVertical={true}>
-            <TouchableOpacity onPress={() => navigation.navigate('Downloads')}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('DownloadStack')}>
               <View style={styles.optionWrapper}>
                 <Image
                   source={require('../assets/down.png')}
@@ -96,7 +98,11 @@ const Library = ({navigation}) => {
                 <Text style={styles.buttons}>Know More</Text>
               </View>
             </TouchableOpacity>
-            {/* <TouchableOpacity onPress={() => navigation.navigate('Donations')}>
+            {/* <TouchableOpacity
+              onPress={() => {
+                // console.log(RNFS.ExternalDirectoryPath);
+                console.log(DOWNLOAD_PATH);
+              }}>
               <View style={styles.optionWrapper}>
                 <Image
                   source={require('../assets/red-heart.png')}

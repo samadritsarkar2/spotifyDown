@@ -87,7 +87,7 @@ const New = ({navigation, route}) => {
     }
   };
   useEffect(() => {
-    console.log('hello');
+    // console.log('hello');
     IronSourceBanner.loadBanner('BANNER', {
       position: 'top',
       scaleToFitWidth: true,

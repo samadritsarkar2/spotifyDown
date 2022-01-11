@@ -57,31 +57,37 @@ const BottomNav = () => {
         <Tab.Navigator
           tabBar={(props) => <TabBar {...props} />}
           initialRouteName="Home">
-          <Tab.Screen options={{}} component={Home} name="Home"></Tab.Screen>
+          <Tab.Screen
+            options={{headerShown: false}}
+            component={Home}
+            name="Home"></Tab.Screen>
           <Tab.Screen
             component={NewStack}
             name="NewStack"
-            options={
-              {
-                // unmountOnBlur: true,
-              }
-            }></Tab.Screen>
-          <Tab.Screen component={LibraryStack} name="LibraryStack"></Tab.Screen>
+            options={{
+              headerShown: false,
+
+              // unmountOnBlur: true,
+            }}></Tab.Screen>
+          <Tab.Screen
+            options={{headerShown: false}}
+            component={LibraryStack}
+            name="LibraryStack"></Tab.Screen>
           <Tab.Screen
             component={Playlist}
             name="Playlist"
-            options={
-              {
-                // unmountOnBlur: true,
-              }
-            }></Tab.Screen>
+            options={{
+              headerShown: false,
+              // unmountOnBlur: true,
+            }}></Tab.Screen>
           <Tab.Screen
             component={Error}
             name="Error"
             options={{unmountOnBlur: true}}></Tab.Screen>
         </Tab.Navigator>
-        <MiniPlayer />
         <DownloadingHelper />
+
+        <MiniPlayer />
       </NavigationContainer>
     </StoreProvider>
   );

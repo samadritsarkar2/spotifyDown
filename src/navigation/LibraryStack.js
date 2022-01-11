@@ -10,6 +10,7 @@ import {IronSourceBanner} from '@wowmaking/react-native-iron-source';
 import {useIsFocused} from '@react-navigation/core';
 import DownloadStack from './DownloadStack';
 import {Text, View} from 'react-native';
+import DownloadQueue from '../components/DownloadQueue';
 // import Donations from '../components/Donation';
 
 const Stack = createStackNavigator();
@@ -20,13 +21,13 @@ const LibraryStack = () => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    console.log('hello');
+    // console.log('hello');
     IronSourceBanner.loadBanner('BANNER', {
       position: 'top',
       scaleToFitWidth: true,
     })
       .then((response) => {
-        console.log(`width: ${response.width}, height: ${response.height}`);
+        // console.log(`width: ${response.width}, height: ${response.height}`);
         setHeight(response.height);
       })
       .catch((err) => {
@@ -49,7 +50,10 @@ const LibraryStack = () => {
       // console.log('Banner clicked');
     });
 
-    if (!isFocused) IronSourceBanner.hideBanner();
+    if (!isFocused) {
+      IronSourceBanner.hideBanner();
+      setIsShowing(false);
+    }
 
     return () => {
       // console.log('unmount hide');
@@ -60,15 +64,16 @@ const LibraryStack = () => {
   }, [isFocused]);
   return (
     <>
-      {isShowing ? (
+      {true ? (
         <View style={{height: height}}>
-          <Text style={{alignSelf: 'center', color: 'gray'}}>Banner Ad</Text>
+          <Text style={{alignSelf: 'center', color: 'gray'}}>
+            Banner Ad may load...
+          </Text>
         </View>
       ) : null}
 
       <Stack.Navigator
         initialRouteName="Library"
-        // headerMode={'none'}
         screenOptions={{
           cardOverlayEnabled: true,
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -91,14 +96,21 @@ const LibraryStack = () => {
         />
         <Stack.Screen
           component={DownloadStack}
-          name="Downloads"
+          name="DownloadStack"
           options={{headerShown: false}}
         />
-        {/* <Stack.Screen
-        component={Donations}
-        name="Donations"
-        options={{headerShown: false}}
-      /> */}
+
+        <Stack.Screen
+          component={DownloadQueue}
+          name="DownloadQueue"
+          options={{
+            headerTitle: 'Downloading Queue',
+            headerStyle: {backgroundColor: '#181818', elevation: 0},
+            headerTintColor: 'white',
+            headerTitleStyle: {color: 'white', fontFamily: 'OpenSans-SemiBold'},
+            headerTitleAlign: 'center',
+          }}
+        />
       </Stack.Navigator>
     </>
   );

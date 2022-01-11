@@ -1,123 +1,228 @@
 import React, {useEffect, useState} from 'react';
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import {useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import RNBackgroundDownloader from 'react-native-background-downloader';
 import Snackbar from 'react-native-snackbar';
-import {DOWNLOAD_PATH} from '../common/index';
+import {DOWNLOAD_PATH, windowHeight, windowWidth} from '../common/index';
 import {useDispatch} from 'react-redux';
-import {checkExists, checkPermission, checkData} from '../utils';
-
+import {checkExists, checkPermission, checkData, isExist} from '../utils';
+import RNFS, {downloadFile} from 'react-native-fs';
 import {API, NEW_API} from '@env';
+import Spinner from 'react-native-spinkit';
+import {useNavigation} from '@react-navigation/native';
 
 // import {  } from 'react-native'
 
 const DownloadingHelper = () => {
   const state = useSelector((state) => state.playlist);
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const [isExecutingTask, setIsExecutingTask] = useState(false);
-  const {downloadQueue, currentDownloading, currentPlaylist} = state;
+  const {
+    downloadQueue,
+    currentDownloading,
+    currentPlaylist,
+    downloadPercent,
+  } = state;
+
+  function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return '0 Bytes';
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
 
   const downloadItem = (single, playlistDetails) => {
-    console.log('Trying to download: ', single.title);
+    // console.log('Trying to download: ', single.title);
     return new Promise(async (resolve, reject) => {
       const api = `${NEW_API}/download?`;
       const req = checkPermission();
-      const fileStatus = await checkExists(single);
+      const fileStatus = await isExist(single);
+      // console.log(fileStatus);
       if (req) {
-        if (!fileStatus.path) {
-          let artistsString = single.artist.map((item) => item.name).join();
+        let artistsString = single.artist.map((item) => item.name).join();
 
-          const params = {
-            title: single.title,
-            album: single.album,
-            artistsString,
-          };
+        const params = {
+          title: single.title,
+          album: single.album,
+          artistsString,
+        };
 
-          let query = Object.keys(params)
-            .map(
-              (k) =>
-                encodeURIComponent(k) + '=' + encodeURIComponent(params[k]),
-            )
-            .join('&');
+        let query = Object.keys(params)
+          .map(
+            (k) => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]),
+          )
+          .join('&');
 
-          const response = await fetch(api + query);
+        const response = await fetch(api + query);
 
-          response
-            .json()
-            .then((res) => {
-              let link = res.url;
-              let duration = res.duration;
+        response
+          .json()
+          .then(async (res) => {
+            let link = res.url;
+            let duration = res.duration;
 
-              if (link) {
-                const path = `${DOWNLOAD_PATH}/${single.title}.mp3`;
+            if (link) {
+              const path = `${DOWNLOAD_PATH}/${single.title}.mp3`;
+              let headers = {
+                Accept: 'audio/*',
+                'Content-Type': 'audio/*',
+              };
 
-                let task = RNBackgroundDownloader.download({
-                  id: single.title,
-                  url: `${link}`,
-                  destination: path,
-                })
-                  .begin((expectedBytes) => {
-                    // console.log(`Going to download ${expectedBytes} bytes!`);
-                    // setVisible(true);
-                    // setDownloadPercent(0);
-                    // console.log('Begin reached');
-                  })
-                  .progress((percent) => {
-                    console.log(`Downloaded: ${percent * 100}%`);
-                    // setDownloadPercent(percent);
-                    dispatch({type: 'SET_DOWNLOAD_PERCENT', payload: percent});
-                  })
-                  .done(async () => {
-                    try {
-                      // console.log('try block');
-                      const newDownload = {
-                        id: single.id,
-                        title: single.title,
-                        artist: single.artist[0].name,
-                        album: single.album,
-                        artwork: single.artwork,
-                        url: path,
-                        duration: duration,
-                      };
+              if (fileStatus) {
+                // console.log('Triggered already downloaded');
+                try {
+                  // console.log('try block');
+                  const newDownload = {
+                    id: single.id,
+                    title: single.title,
+                    artist: single.artist[0].name,
+                    album: single.album,
+                    artwork: single.artwork,
+                    url: fileStatus,
+                    duration: duration,
+                  };
 
-                      const storedValue = await AsyncStorage.getItem(
-                        `@playlistView`,
-                      );
+                  const storedValue = await AsyncStorage.getItem(
+                    `@playlistView`,
+                  );
 
-                      const prevList = await JSON.parse(storedValue);
-                      const playlistId = playlistDetails.id;
-                      if (!prevList) {
-                        let playlistView = {
-                          [playlistId]: {
-                            info: {
-                              id: playlistDetails.id,
-                              name: playlistDetails.name,
-                              image: playlistDetails.image,
-                            },
-                            tracks: [newDownload],
+                  const prevList = await JSON.parse(storedValue);
+                  const playlistId = playlistDetails.id;
+                  if (!prevList) {
+                    let playlistView = {
+                      [playlistId]: {
+                        info: {
+                          id: playlistDetails.id,
+                          name: playlistDetails.name,
+                          image: playlistDetails.image,
+                        },
+                        tracks: [newDownload],
+                      },
+                    };
+
+                    await AsyncStorage.setItem(
+                      `@playlistView`,
+                      JSON.stringify(playlistView),
+                    );
+                    // console.log(playlistView);
+                    Snackbar.show({
+                      text: 'First Track added to Downloads',
+                      duration: Snackbar.LENGTH_SHORT,
+                      backgroundColor: 'red',
+                    });
+                  } else {
+                    let newList = {
+                      ...prevList,
+                    };
+
+                    if (playlistId in prevList) {
+                      newList[playlistId].tracks.push(newDownload);
+                    } else {
+                      newList = {
+                        ...newList,
+                        [playlistId]: {
+                          info: {
+                            id: playlistDetails.id,
+                            name: playlistDetails.name,
+                            image: playlistDetails.image,
                           },
+                          tracks: [newDownload],
+                        },
+                      };
+                    }
+                    // console.log(newList);
+                    await AsyncStorage.setItem(
+                      `@playlistView`,
+                      JSON.stringify(newList),
+                    );
+                    Snackbar.show({
+                      text: 'Track added to Downloads',
+                      duration: Snackbar.LENGTH_SHORT,
+                      backgroundColor: 'red',
+                    });
+                  }
+                  dispatch({
+                    type: 'UPDATE_DOWNLOADED',
+                    payload: {track: single, path, duration},
+                  });
+                  dispatch({
+                    type: 'REMOVE_FROM_DOWNLOAD_QUEUE',
+                    payload: single,
+                  });
+                  dispatch({
+                    type: 'REMOVE_CURRENT_DOWNLOADING',
+                    payload: single,
+                  });
+                  resolve();
+                  dispatch({
+                    type: 'SET_DOWNLOAD_PERCENT',
+                    payload: 0,
+                  });
+                } catch (err) {
+                  console.log(err);
+                  reject(err);
+                }
+              } else {
+                downloadFile({
+                  fromUrl: link,
+                  headers: headers,
+                  toFile: path,
+                  progressDivider: 2,
+                  begin: (res) => {
+                    // console.log('Response begin ===\n\n');
+                    // console.log(res);
+                  },
+                  progress: (res) => {
+                    //here you can calculate your progress for file download
+                    let percent = (res.bytesWritten / res.contentLength) * 100; // to calculate in percentage
+                    // console.log(`Downloaded: ${percent}%`);
+                    // setDownloadPercent(percent);
+                    dispatch({
+                      type: 'SET_DOWNLOAD_PERCENT',
+                      payload: percent,
+                    });
+                    let size = formatBytes(res.contentLength);
+                    dispatch({
+                      type: 'SET_DOWNLOAD_SIZE',
+                      payload: size,
+                    });
+                  },
+                })
+                  .promise.then(async (res) => {
+                    if (res && res.statusCode === 200 && res.bytesWritten > 0) {
+                      try {
+                        // console.log('try block');
+                        const newDownload = {
+                          id: single.id,
+                          title: single.title,
+                          artist: single.artist[0].name,
+                          album: single.album,
+                          artwork: single.artwork,
+                          url: path,
+                          duration: duration,
                         };
 
-                        await AsyncStorage.setItem(
+                        const storedValue = await AsyncStorage.getItem(
                           `@playlistView`,
-                          JSON.stringify(playlistView),
                         );
-                        // console.log(playlistView);
-                        Snackbar.show({
-                          text: 'First Track added to Downloads',
-                          duration: Snackbar.LENGTH_SHORT,
-                          backgroundColor: 'red',
-                        });
-                      } else {
-                        let newList = {
-                          ...prevList,
-                        };
 
-                        if (playlistId in prevList) {
-                          newList[playlistId].tracks.push(newDownload);
-                        } else {
-                          newList = {
-                            ...newList,
+                        const prevList = await JSON.parse(storedValue);
+                        const playlistId = playlistDetails.id;
+                        if (!prevList) {
+                          let playlistView = {
                             [playlistId]: {
                               info: {
                                 id: playlistDetails.id,
@@ -127,38 +232,97 @@ const DownloadingHelper = () => {
                               tracks: [newDownload],
                             },
                           };
+
+                          await AsyncStorage.setItem(
+                            `@playlistView`,
+                            JSON.stringify(playlistView),
+                          );
+                          // console.log(playlistView);
+                          Snackbar.show({
+                            text: 'First Track added to Downloads',
+                            duration: Snackbar.LENGTH_SHORT,
+                            backgroundColor: 'red',
+                          });
+                        } else {
+                          let newList = {
+                            ...prevList,
+                          };
+
+                          if (playlistId in prevList) {
+                            newList[playlistId].tracks.push(newDownload);
+                          } else {
+                            newList = {
+                              ...newList,
+                              [playlistId]: {
+                                info: {
+                                  id: playlistDetails.id,
+                                  name: playlistDetails.name,
+                                  image: playlistDetails.image,
+                                },
+                                tracks: [newDownload],
+                              },
+                            };
+                          }
+                          // console.log(newList);
+                          await AsyncStorage.setItem(
+                            `@playlistView`,
+                            JSON.stringify(newList),
+                          );
+                          Snackbar.show({
+                            text: 'Track added to Downloads',
+                            duration: Snackbar.LENGTH_SHORT,
+                            backgroundColor: 'red',
+                          });
                         }
-                        // console.log(newList);
-                        await AsyncStorage.setItem(
-                          `@playlistView`,
-                          JSON.stringify(newList),
-                        );
-                        Snackbar.show({
-                          text: 'Track added to Downloads',
-                          duration: Snackbar.LENGTH_SHORT,
-                          backgroundColor: 'red',
+                        dispatch({
+                          type: 'UPDATE_DOWNLOADED',
+                          payload: {track: single, path, duration},
                         });
+                        dispatch({
+                          type: 'REMOVE_FROM_DOWNLOAD_QUEUE',
+                          payload: single,
+                        });
+                        dispatch({
+                          type: 'REMOVE_CURRENT_DOWNLOADING',
+                          payload: single,
+                        });
+                        resolve();
+                        dispatch({
+                          type: 'SET_DOWNLOAD_PERCENT',
+                          payload: 0,
+                        });
+                      } catch (err) {
+                        console.log(err);
+                        reject(err);
                       }
+                    } else {
+                      // console.log('Else:  ', res);
+
                       dispatch({
-                        type: 'UPDATE_DOWNLOADED',
-                        payload: {track: single, path, duration},
+                        type: 'SET_DOWNLOAD_PERCENT',
+                        payload: 0,
                       });
                       dispatch({
                         type: 'REMOVE_FROM_DOWNLOAD_QUEUE',
                         payload: single,
                       });
+
                       dispatch({
                         type: 'REMOVE_CURRENT_DOWNLOADING',
                         payload: single,
                       });
-                      resolve();
-                    } catch (err) {
-                      console.log(err);
-                      reject(err);
+
+                      Snackbar.show({
+                        text: `Pardon!  Could not download ${single.title} due to Youtube policies`,
+                        duration: Snackbar.LENGTH_SHORT,
+                        backgroundColor: 'red',
+                        fontFamily: 'GothamMedium',
+                      });
+                      reject('Yt error');
                     }
                   })
-                  .error((error) => {
-                    console.log('Download canceled due to error: ', error);
+                  .catch(async (err) => {
+                    // console.log('Download canceled due to error: ', err);
                     dispatch({
                       type: 'SET_DOWNLOAD_PERCENT',
                       payload: 0,
@@ -178,33 +342,10 @@ const DownloadingHelper = () => {
                       duration: Snackbar.LENGTH_SHORT,
                       backgroundColor: 'red',
                     });
-                    reject(error);
+                    reject(err);
                   });
-              } else {
-                dispatch({
-                  type: 'SET_DOWNLOAD_PERCENT',
-                  payload: 0,
-                });
-
-                dispatch({
-                  type: 'REMOVE_FROM_DOWNLOAD_QUEUE',
-                  payload: single,
-                });
-                dispatch({
-                  type: 'REMOVE_CURRENT_DOWNLOADING',
-                  payload: single,
-                });
-
-                Snackbar.show({
-                  text: 'Server Error',
-                  duration: Snackbar.LENGTH_SHORT,
-                  backgroundColor: 'red',
-                });
-                reject('Server Error');
               }
-            })
-            .catch((error) => {
-              console.log('Download canceled due to error: ', error);
+            } else {
               dispatch({
                 type: 'SET_DOWNLOAD_PERCENT',
                 payload: 0,
@@ -220,20 +361,36 @@ const DownloadingHelper = () => {
               });
 
               Snackbar.show({
-                text: `Could not download ${single.title}. Something went wrong with the yt`,
+                text: 'Could not fetch proper link from server',
                 duration: Snackbar.LENGTH_SHORT,
                 backgroundColor: 'red',
               });
-              reject(error);
+              reject('Could not fetch proper link from server');
+            }
+          })
+          .catch((error) => {
+            // console.log('Download canceled due to error: ', error);
+            dispatch({
+              type: 'SET_DOWNLOAD_PERCENT',
+              payload: 0,
             });
-        } else {
-          Snackbar.show({
-            text: `The track ${single.title} is already downloaded`,
-            duration: Snackbar.LENGTH_SHORT,
-            backgroundColor: 'red',
+
+            dispatch({
+              type: 'REMOVE_FROM_DOWNLOAD_QUEUE',
+              payload: single,
+            });
+            dispatch({
+              type: 'REMOVE_CURRENT_DOWNLOADING',
+              payload: single,
+            });
+
+            Snackbar.show({
+              text: `Could not download ${single.title}. Something went wrong with the yt`,
+              duration: Snackbar.LENGTH_SHORT,
+              backgroundColor: 'red',
+            });
+            reject(error);
           });
-          reject('Already Downloaded');
-        }
       } else {
         Alert.alert(
           'Storage Permision Denied',
@@ -247,6 +404,7 @@ const DownloadingHelper = () => {
   };
 
   useEffect(() => {
+    // console.log(downloadQueue);
     const workerFn = async () => {
       if (downloadQueue.length > 0 && !isExecutingTask) {
         setIsExecutingTask(true);
@@ -260,7 +418,42 @@ const DownloadingHelper = () => {
     };
     workerFn();
   }, [downloadQueue, isExecutingTask]);
-  return null;
+
+  return (
+    <View>
+      {downloadQueue.length >= 1 ? (
+        <TouchableOpacity
+          style={{
+            backgroundColor: 'white',
+            height: windowWidth * 0.15,
+
+            width: windowWidth * 0.15,
+            borderRadius: 15,
+            position: 'absolute',
+            bottom: windowHeight * 0.12,
+            left: 20,
+
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          onPress={
+            () =>
+              navigation.navigate('LibraryStack', {
+                screen: 'DownloadQueue',
+                initial: false,
+              })
+            // navigation.navigate('DownloadQueue')
+          }>
+          <Spinner
+            style={{marginBottom: 7, justifyContent: 'center'}}
+            size={20}
+            type={'Circle'}
+            color={'red'}
+          />
+        </TouchableOpacity>
+      ) : null}
+    </View>
+  );
 };
 
 export default DownloadingHelper;
