@@ -10,6 +10,7 @@ import {
   Dimensions,
 } from 'react-native';
 import {windowHeight} from '../common';
+import MiniPlayer from '../components/MiniPlayer';
 
 const TabBar = ({state, descriptors, navigation}) => {
   const focusedOptions = descriptors[state.routes[state.index].key].options;
@@ -79,6 +80,7 @@ const TabBar = ({state, descriptors, navigation}) => {
       {/* <MiniPlayer /> */}
 
       <View style={styles.mainView}>
+        <MiniPlayer />
         {state.routes.map((route, index) => {
           if (
             route.name !== 'Home' &&

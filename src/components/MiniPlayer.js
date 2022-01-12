@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import TrackPlayer, {
   usePlaybackState,
   useTrackPlayerEvents,
@@ -8,17 +15,19 @@ import TrackPlayer, {
   State,
 } from 'react-native-track-player';
 
-import {useDispatch, useSelector} from 'react-redux';
-import allActions from '../redux/actions/index';
+import {useDispatch} from 'react-redux';
+
 import {windowHeight} from '../common';
 import TextTicker from 'react-native-text-ticker';
+import {useNavigation} from '@react-navigation/native';
 
 const MiniPlayer = () => {
   const [isTrackPlayerInit, setIsTrackPlayerInit] = useState(false);
   const [trackTitle, setTrackTitle] = useState('');
   const [trackAlbum, setTrackAlbum] = useState('');
   const [trackArtist, setTrackArtist] = useState('');
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   const playbackState = usePlaybackState();
 
@@ -60,6 +69,7 @@ const MiniPlayer = () => {
     };
 
     startPlayer();
+
     return async () => {
       TrackPlayer.destroy();
     };
@@ -121,7 +131,10 @@ const MiniPlayer = () => {
   };
 
   return (
-    <>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        // navigation.navigate('Player');
+      }}>
       <View style={[styles.box]}>
         <View style={styles.playerView}>
           <View style={styles.trackInfo}>
@@ -185,7 +198,7 @@ const MiniPlayer = () => {
           </View>
         </View>
       </View>
-    </>
+    </TouchableWithoutFeedback>
   );
 };
 

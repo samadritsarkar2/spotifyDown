@@ -66,6 +66,10 @@ const Downloads = ({navigation}) => {
         dispatch({type: 'LOAD_DATA', payload: prevList});
         let playlists = Object.keys(prevList);
 
+        playlists = playlists.filter(
+          (item) => prevList[item].tracks.length !== 0,
+        );
+
         dispatch({type: 'LOAD_PLAYLISTS', payload: playlists});
         setLoading(false);
       } else {

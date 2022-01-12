@@ -8,11 +8,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import RNFS from 'react-native-fs';
+
 import KnowMore from './KnowMore.js';
 import analytics from '@react-native-firebase/analytics';
 import {IronSourceRewardedVideo} from '@wowmaking/react-native-iron-source';
-import {DOWNLOAD_PATH} from '../common/index.js';
 
 const Library = ({navigation}) => {
   const [isModalVisible, setModalVisible] = useState(false);
