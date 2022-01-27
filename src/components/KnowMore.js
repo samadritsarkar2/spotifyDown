@@ -47,42 +47,39 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
               {/* // Changelog  */}
 
               <View style={styles.faqOne}>
-                <Text style={styles.faqQuestion}>Changelog v1.75</Text>
+                <Text style={styles.faqQuestion}>Changelog v1.90</Text>
                 <Text style={styles.faqAnswer}>
-                  {'\u25CF'} Added Shuffle Play
+                  {'\u25CF'} Added Download Queue
                 </Text>
                 <Text style={styles.faqAnswer}>
-                  {'\u25CF'} Added 'Track Delete' feature
+                  {'\u25CF'} Improved the way Downloads are handled
                 </Text>
                 <Text style={styles.faqAnswer}>
-                  {'\u25CF'} Downloads are now categorized according to
+                  {'\u25CF'} Now, same track can be downloaded in multiple
                   playlists
                 </Text>
                 <Text style={styles.faqAnswer}>
-                  {'\u25CF'} Optimized downloading of Tracks
-                </Text>
-
-                <Text style={styles.faqAnswer}>{'\u25CF'} Ads added</Text>
-                <Text style={styles.faqAnswer}>
-                  {'\u25CF'} UI changes and few minor changes too.
+                  {'\u25CF'} UI changes and few bug fixes
                 </Text>
               </View>
               {/* // ISSUES  */}
               <View style={styles.faqOne}>
                 <Text style={styles.faqQuestion}>Issues :(</Text>
                 <Text style={styles.faqAnswer}>
-                  {'\u25CF'} A particular track once downloaded from one
-                  playlist, cannot be downloaded from another playlist.
+                  {'\u25CF'}{' '}
+                  <Text style={{textDecorationLine: 'line-through'}}>
+                    A particular track once downloaded from one playlist, cannot
+                    be downloaded from another playlist
+                  </Text>
+                  {'  '}Added this feature in v1.90
                 </Text>
-                <Text style={styles.faqAnswer}>
-                  {'\u25CF'} Downloads wrong tracks
-                </Text>
+
                 <Text style={styles.faqAnswer}>
                   {'\u25CF'} Due to youtube policies, few songs are not
                   downloadable.
                 </Text>
                 <Text style={styles.faqAnswer}>
-                  {'\u25CF'} Downloads wrong tracks
+                  {'\u25CF'} Sometimes, other versions of the song is downloaded
                 </Text>
                 <Text style={styles.faqAnswer}>
                   {'\u25CF'} If you encounter anything else, feel free to report
