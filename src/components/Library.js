@@ -11,7 +11,10 @@ import {
 
 import KnowMore from './KnowMore.js';
 import analytics from '@react-native-firebase/analytics';
-import {IronSourceRewardedVideo} from '@wowmaking/react-native-iron-source';
+import {
+  Ironsource,
+  IronSourceRewardedVideo,
+} from '@wowmaking/react-native-iron-source';
 
 const Library = ({navigation}) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -100,7 +103,8 @@ const Library = ({navigation}) => {
             {/* <TouchableOpacity
               onPress={() => {
                 // console.log(RNFS.ExternalDirectoryPath);
-                console.log(DOWNLOAD_PATH);
+                // console.log(DOWNLOAD_PATH);
+
               }}>
               <View style={styles.optionWrapper}>
                 <Image

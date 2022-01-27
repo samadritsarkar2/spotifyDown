@@ -136,8 +136,8 @@ android {
         applicationId "com.sam.downify"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
-        versionName "1.80"
+        versionCode 9
+        versionName "1.90"
         multiDexEnabled true
         resValue 'string', "CODE_PUSH_APK_BUILD_TIME", String.format("\"%d\"", System.currentTimeMillis())
 
@@ -220,7 +220,14 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation platform('com.google.firebase:firebase-bom:28.1.0')
     implementation 'com.google.firebase:firebase-analytics'
-    implementation 'com.ironsource.sdk:mediationsdk:7.1.11.1' 
+    implementation 'com.ironsource.sdk:mediationsdk:7.1.14' 
+
+// Add AdColony Network
+    implementation 'com.ironsource.adapters:adcolonyadapter:4.3.10'
+    implementation 'com.adcolony:sdk:4.6.5'
+// Add Facebook Network
+    implementation 'com.ironsource.adapters:facebookadapter:4.3.34'
+    implementation 'com.facebook.android:audience-network-sdk:6.8.0'
     implementation project(':react-native-fs')
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
