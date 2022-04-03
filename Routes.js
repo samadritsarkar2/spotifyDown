@@ -45,13 +45,13 @@ const BottomNav = () => {
         options={{headerShown: false}}
         component={LibraryStack}
         name="LibraryStack"></Tab.Screen>
-      <Tab.Screen
+      {/* <Tab.Screen
         component={Playlist}
         name="Playlist"
         options={{
           headerShown: false,
           // unmountOnBlur: true,
-        }}></Tab.Screen>
+        }}></Tab.Screen> */}
       <Tab.Screen
         component={Error}
         name="Error"

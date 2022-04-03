@@ -5,6 +5,7 @@ const initialState = {
   currentDownloading: [],
   downloadPercent: 0,
   downloadSize: null,
+  customItem: null,
   loading: true,
 };
 
@@ -111,6 +112,11 @@ export const playlist = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
+      };
+    case 'SET_CUSTOM_ITEM':
+      return {
+        ...state,
+        customItem: action.payload,
       };
     // case 'DOWNLOAD_ONE' : {
     //    const newState = state.map((item) => item.id === action.payload.id ? {...item, downloaded : true, path : action.path}  : item  )

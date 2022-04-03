@@ -10,11 +10,11 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
-  PermissionsAndroid,
+  Vibration,
   Linking,
 } from 'react-native';
 import Snackbar from 'react-native-snackbar';
-
+import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-spinkit';
 import TextTicker from 'react-native-text-ticker';
@@ -26,6 +26,7 @@ import {
   addNewPlaylist,
   addToDownloadQueue,
 } from '../redux/actions/playlistActions';
+import CustomDownload from './CustomDownload';
 
 const Playlist = ({navigation, route}) => {
   // const [loading, setLoading] = useState(true);
@@ -33,7 +34,8 @@ const Playlist = ({navigation, route}) => {
   // const [tracks, setTracks] = useState([]);
   // const [responseData, setResponseData] = useState({});
 
-  const [visible, setVisible] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
   const [downloadPercent, setDownloadPercent] = useState(0);
   // const [curentDownloading, setCurentDownloading] = useState(null);
 
@@ -200,6 +202,12 @@ const Playlist = ({navigation, route}) => {
 
   const onRequestClose = () => null;
 
+  const handleCustomDownload = (item) => {
+    setIsVisible(false);
+    navigation.navigate('CustomDownload');
+    dispatch({type: 'SET_CUSTOM_ITEM', payload: selected});
+  };
+
   return (
     <>
       {loading ? (
@@ -306,35 +314,22 @@ const Playlist = ({navigation, route}) => {
               {tracks.map((item, index) => {
                 return (
                   <View key={index} style={styles.list}>
-                    {item.downloaded ? (
-                      <View style={{flex: 0.7}}>
-                        <TouchableOpacity
-                          onPress={() => {
-                            openFile(item);
-                          }}>
-                          <Text style={styles.trackTitle}>{item.title}</Text>
-                          <Text style={styles.trackInfo}>
-                            {item?.artist[0].name} - {item.album}
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
-                    ) : (
-                      <View style={{flex: 0.7}}>
-                        <Text style={styles.trackTitle}>{item.title}</Text>
-                        <Text style={styles.trackInfo}>
-                          {item?.artist[0].name} - {item.album}
-                        </Text>
-                      </View>
-                    )}
+                    <TouchableOpacity style={{flex: 0.7}}>
+                      <Text style={styles.trackTitle}>{item.title}</Text>
+                      <Text style={styles.trackInfo}>
+                        {item?.artist[0].name} - {item.album}
+                      </Text>
+                    </TouchableOpacity>
+
                     {item.downloaded ? (
                       <TouchableOpacity
                         style={{
-                          flex: 0.3,
+                          flex: 0.2,
                           alignItems: 'flex-end',
                           justifyContent: 'center',
                         }}
                         onPress={() => {
-                          openFile(item);
+                          // openFile(item);
                         }}>
                         <Image
                           source={require('../assets/check.png')}
@@ -349,7 +344,7 @@ const Playlist = ({navigation, route}) => {
                     ) : (
                       <TouchableOpacity
                         style={{
-                          flex: 0.3,
+                          flex: 0.2,
                           alignItems: 'flex-end',
                           justifyContent: 'center',
                         }}
@@ -374,6 +369,29 @@ const Playlist = ({navigation, route}) => {
                         )}
                       </TouchableOpacity>
                     )}
+                    <TouchableOpacity
+                      style={{
+                        flex: 0.1,
+                        alignItems: 'flex-end',
+                        justifyContent: 'center',
+                      }}
+                      onPress={() => {
+                        setSelected(item);
+
+                        // console.log('Handle cystom', item);
+                        Vibration.vibrate(50);
+                        setIsVisible(true);
+                      }}>
+                      <Image
+                        source={require('../assets/more.png')}
+                        style={{
+                          height: 20,
+                          width: 20,
+
+                          justifyContent: 'center',
+                        }}
+                      />
+                    </TouchableOpacity>
                   </View>
                 );
               })}
@@ -382,6 +400,44 @@ const Playlist = ({navigation, route}) => {
           </View>
         </>
       )}
+      <Modal
+        isVisible={isVisible}
+        animationIn={'slideInUp'}
+        animationOut={'slideOutDown'}
+        onBackdropPress={() => setIsVisible(false)}
+        onBackButtonPress={() => setIsVisible(false)}
+        swipeDirection={['down']}
+        propagateSwipe={true}
+        useNativeDriver={true}
+        deviceWidth={windowWidth}
+        style={{justifyContent: 'flex-end', margin: 0}}>
+        <View style={styles.customModalOverlay}>
+          <TouchableOpacity
+            style={styles.trackOptionTouchable}
+            onPress={() => {
+              handleCustomDownload();
+            }}>
+            <Image
+              source={require('../assets/down.png')}
+              style={{width: 20, height: 20}}
+            />
+            <Text style={styles.trackOptionText}>
+              Manually choose youtube video
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.trackOptionTouchable}
+            onPress={() => {
+              setIsVisible(false);
+            }}>
+            <Image
+              source={require('../assets/down.png')}
+              style={{width: 20, height: 20}}
+            />
+            <Text style={styles.trackOptionText}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </>
   );
 };
@@ -456,5 +512,23 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     marginVertical: 10,
+  },
+  customModalOverlay: {
+    height: windowHeight * 0.15,
+    width: windowWidth,
+    backgroundColor: '#181818',
+    paddingHorizontal: 10,
+  },
+  trackOptionTouchable: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    height: '40%',
+  },
+  trackOptionText: {
+    fontSize: 17,
+    color: 'white',
+    fontFamily: 'Roboto',
+    marginLeft: 15,
   },
 });
