@@ -5,7 +5,7 @@ const initialState = {
   currentDownloading: [],
   downloadPercent: 0,
   downloadSize: null,
-  customItem: null,
+  customItemData: null,
   loading: true,
 };
 

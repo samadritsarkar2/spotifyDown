@@ -11,11 +11,15 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {windowHeight} from '../common/index';
 import {NEW_API} from '@env';
+import {addToDownloadQueue} from '../redux/actions/playlistActions';
 
 const CustomDownload = () => {
   const api = `${NEW_API}/customdownload?`;
+  const directAPI = `${NEW_API}/getdirectlink?`;
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
+
+  const dispatch = useDispatch();
 
   const single = useSelector((state) => state.playlist).customItem;
 
@@ -38,7 +42,6 @@ const CustomDownload = () => {
         // console.log(data);
         setData(data.results);
         setLoading(false);
-        console.log(data.results.length);
       })
       .catch((err) => {
         setLoading(false);
@@ -50,6 +53,27 @@ const CustomDownload = () => {
     // console.log(single);
     doFetch();
   }, []);
+
+  const handleClick = async (item) => {
+    //
+    // console.log(item);
+    setLoading(true);
+    const query = `link=${item.url}`;
+    const response = await fetch(directAPI + query);
+
+    response
+      .json()
+      .then((data) => {
+        single.customDownloadData = data;
+        // console.log(single);
+        dispatch(addToDownloadQueue(single));
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -74,7 +98,7 @@ const CustomDownload = () => {
               return (
                 <TouchableOpacity
                   onPress={() => {
-                    console.log(item);
+                    handleClick(item);
                   }}>
                   <View
                     style={{
@@ -93,17 +117,21 @@ const CustomDownload = () => {
                         flex: 1,
                         marginRight: 10,
                         height: '95%',
-                        aspectRatio: 1.5 / 1,
+                        aspectRatio: 1 / 1,
                         alignSelf: 'center',
                         borderRadius: 6,
                       }}
                       source={{uri: item.thumbnail}}
                     />
                     <Text style={{...styles.titleText, alignSelf: 'center'}}>
-                      {' '}
                       {item.title}
                     </Text>
-                    <Text style={{...styles.otherText, alignSelf: 'center'}}>
+                    <Text
+                      style={{
+                        ...styles.otherText,
+                        alignSelf: 'center',
+                        marginLeft: 5,
+                      }}>
                       {' '}
                       {item.duration}
                     </Text>

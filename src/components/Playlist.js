@@ -385,8 +385,8 @@ const Playlist = ({navigation, route}) => {
                       <Image
                         source={require('../assets/more.png')}
                         style={{
-                          height: 20,
-                          width: 20,
+                          height: 30,
+                          width: 30,
 
                           justifyContent: 'center',
                         }}
@@ -422,7 +422,7 @@ const Playlist = ({navigation, route}) => {
               style={{width: 20, height: 20}}
             />
             <Text style={styles.trackOptionText}>
-              Manually choose youtube video
+              Manually choose Youtube video
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -431,8 +431,8 @@ const Playlist = ({navigation, route}) => {
               setIsVisible(false);
             }}>
             <Image
-              source={require('../assets/down.png')}
-              style={{width: 20, height: 20}}
+              source={require('../assets/cancel.png')}
+              style={{width: 22, height: 22}}
             />
             <Text style={styles.trackOptionText}>Cancel</Text>
           </TouchableOpacity>

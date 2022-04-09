@@ -152,7 +152,7 @@ const TracksView = () => {
                 onPress={() => handleLongPress(item)}>
                 <Image
                   source={require('../assets/more.png')}
-                  style={{height: 21, width: 21}}
+                  style={{height: 30, width: 30}}
                 />
               </TouchableOpacity>
             </View>
