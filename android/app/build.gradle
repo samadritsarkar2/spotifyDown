@@ -136,9 +136,8 @@ android {
         applicationId "com.sam.downify"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10
-        versionName "1.90"
-      
+        versionCode 11
+        versionName "1.95"
         multiDexEnabled true
         resValue 'string', "CODE_PUSH_APK_BUILD_TIME", String.format("\"%d\"", System.currentTimeMillis())
 
@@ -223,9 +222,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.ironsource.sdk:mediationsdk:7.1.14' 
 
-// Add AdColony Network
-    implementation 'com.ironsource.adapters:adcolonyadapter:4.3.10'
-    implementation 'com.adcolony:sdk:4.6.5'
+
 // Add Facebook Network
     implementation 'com.ironsource.adapters:facebookadapter:4.3.34'
     implementation 'com.facebook.android:audience-network-sdk:6.8.0'

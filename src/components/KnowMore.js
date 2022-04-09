@@ -45,7 +45,16 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
               showsVerticalScrollIndicator={false}
               style={{margin: 10}}>
               {/* // Changelog  */}
-
+              <View style={styles.faqOne}>
+                <Text style={styles.faqQuestion}>Changelog v1.95</Text>
+                <Text style={styles.faqAnswer}>
+                  {'\u25CF'} Added{' '}
+                  <Text style={{fontWeight: 'bold'}}>Custom Downloader</Text> .
+                  Long press or tap the more icon while downloading the tracks,
+                  to manually select the YT Video. This update hopefully fixes a
+                  lot of issues with Downify.
+                </Text>
+              </View>
               <View style={styles.faqOne}>
                 <Text style={styles.faqQuestion}>Changelog v1.90</Text>
                 <Text style={styles.faqAnswer}>
@@ -65,21 +74,19 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
               {/* // ISSUES  */}
               <View style={styles.faqOne}>
                 <Text style={styles.faqQuestion}>Issues :(</Text>
-                <Text style={styles.faqAnswer}>
-                  {'\u25CF'}{' '}
-                  <Text style={{textDecorationLine: 'line-through'}}>
-                    A particular track once downloaded from one playlist, cannot
-                    be downloaded from another playlist
-                  </Text>
-                  {'  '}Added this feature in v1.90
-                </Text>
-
-                <Text style={styles.faqAnswer}>
+                <Text style={{textDecorationLine: 'line-through'}}>
                   {'\u25CF'} Due to youtube policies, few songs are not
                   downloadable.
                 </Text>
-                <Text style={styles.faqAnswer}>
+                <Text style={{textDecorationLine: 'line-through'}}>
                   {'\u25CF'} Sometimes, other versions of the song is downloaded
+                </Text>
+                <Text style={styles.faqAnswer}>
+                  {'\u25CF'} The above issues can be avoided by using the{' '}
+                  <Text style={{fontWeight: 'bold'}}>
+                    NEW Custom Downloader feature
+                  </Text>{' '}
+                  and choosing some other YT video of the same track.
                 </Text>
                 <Text style={styles.faqAnswer}>
                   {'\u25CF'} If you encounter anything else, feel free to report
