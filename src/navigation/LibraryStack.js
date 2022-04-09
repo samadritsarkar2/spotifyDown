@@ -31,6 +31,7 @@ const LibraryStack = () => {
         setHeight(response.height);
       })
       .catch((err) => {
+        console.log(err);
         console.log(err.message);
       });
 

@@ -27,11 +27,12 @@ const App = ({navigation, route}) => {
     IronSource.initializeIronSource('118aa3d25', 'downify', {
       validateIntegration: true,
     })
-      .then(() => {
-        console.log('Init finished');
+      .then((e) => {
+        // console.log('Init finished');
+        // console.log(e);
       })
       .catch(() => {
-        console.warn('error');
+        console.log('error');
       });
 
     return unsubscribe;
