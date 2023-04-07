@@ -14,7 +14,7 @@ import {DOWNLOAD_PATH, windowHeight, windowWidth} from '../common/index';
 import {useDispatch} from 'react-redux';
 import {checkExists, checkPermission, checkData, isExist} from '../utils';
 import RNFS, {downloadFile} from 'react-native-fs';
-import {API, NEW_API} from '@env';
+import {API, NEW_API, NEWER_API} from '@env';
 import Spinner from 'react-native-spinkit';
 import {useNavigation} from '@react-navigation/native';
 
@@ -46,36 +46,47 @@ const DownloadingHelper = () => {
 
   const downloadItem = (single, playlistDetails) => {
     // console.log('Trying to download: ', single.title);
+    console.log(single);
     return new Promise(async (resolve, reject) => {
       const api = `${NEW_API}/download?`;
+      const newApi = `https://us-central1-downify-sam.cloudfunctions.net/getDownloadLink?trackId=`
+
+      
       const req = checkPermission();
       const fileStatus = await isExist(single);
       // console.log(fileStatus);
       if (req) {
         let data;
         if (!single.customDownloadData) {
-          let artistsString = single.artist.map((item) => item.name).join();
+          // let artistsString = single.artist.map((item) => item.name).join();
 
-          const params = {
-            title: single.title,
-            album: single.album,
-            artistsString,
-          };
+          // const params = {
+          //   title: single.title,
+          //   album: single.album,
+          //   artistsString,
+          // };
 
-          let query = Object.keys(params)
-            .map(
-              (k) =>
-                encodeURIComponent(k) + '=' + encodeURIComponent(params[k]),
-            )
-            .join('&');
+          // let query = Object.keys(params)
+          //   .map(
+          //     (k) =>
+          //       encodeURIComponent(k) + '=' + encodeURIComponent(params[k]),
+          //   )
+          //   .join('&');
 
-          const response = await fetch(api + query);
-          data = await response.json();
+
+
+          // const response = await fetch(api + query);
+          
+          const newResponse = await fetch(newApi + single.id);
+
+          data = await newResponse.json();
+          console.log("Data::", data)
         } else {
           data = single.customDownloadData;
         }
-
-        let link = data.url;
+      
+        // let link = data.url;
+        let link = `${NEWER_API}/directStream?videoId=` + data.videoId;
         let duration = data.duration;
 
         if (link) {
@@ -184,7 +195,7 @@ const DownloadingHelper = () => {
               fromUrl: link,
               headers: headers,
               toFile: path,
-              progressDivider: 2,
+              progressDivider: 4,
               begin: (res) => {
                 // console.log('Response begin ===\n\n');
                 // console.log(res);
@@ -192,7 +203,7 @@ const DownloadingHelper = () => {
               progress: (res) => {
                 //here you can calculate your progress for file download
                 let percent = (res.bytesWritten / res.contentLength) * 100; // to calculate in percentage
-                // console.log(`Downloaded: ${percent}%`);
+                console.log(`Downloaded: ${percent}%`);
                 // setDownloadPercent(percent);
                 dispatch({
                   type: 'SET_DOWNLOAD_PERCENT',
