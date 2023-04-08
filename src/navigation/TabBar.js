@@ -25,15 +25,35 @@ const TabBar = ({state, descriptors, navigation}) => {
         return (
           <View>
             {isFocused ? (
-              <Image
-                style={styles.icons}
-                source={require('../assets/homeFill.png')}
-              />
+              <View
+                style={{
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  style={styles.icons}
+                  source={require('../assets/homeFill.png')}
+                />
+                <Text
+                  style={styles.labelTextFocused}>
+                  Home
+                </Text>
+              </View>
             ) : (
-              <Image
-                style={styles.icons}
-                source={require('../assets/home.png')}
-              />
+              <View
+                style={{
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  style={styles.icons}
+                  source={require('../assets/home.png')}
+                />
+                <Text
+                  style={styles.labelText}>
+                  Home
+                </Text>
+              </View>
             )}
           </View>
         );
@@ -41,15 +61,30 @@ const TabBar = ({state, descriptors, navigation}) => {
         return (
           <View>
             {isFocused ? (
-              <Image
-                style={styles.icons}
-                source={require('../assets/plusFill.png')}
-              />
+              <View
+                style={{
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  style={styles.icons}
+                  source={require('../assets/searchFill.png')}
+                />
+                <Text style={styles.labelTextFocused} >Search/Add</Text>
+              </View>
             ) : (
-              <Image
-                style={styles.icons}
-                source={require('../assets/plus.png')}
-              />
+              <View
+                style={{
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  style={styles.icons}
+                  source={require('../assets/search.png')}
+                />
+                <Text style={styles.labelText} >Search/Add</Text>
+
+              </View>
             )}
           </View>
         );
@@ -57,15 +92,28 @@ const TabBar = ({state, descriptors, navigation}) => {
         return (
           <View>
             {isFocused ? (
-              <Image
-                style={styles.icons}
-                source={require('../assets/squareFIll.png')}
-              />
+              <View
+                style={{
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  style={styles.icons}
+                  source={require('../assets/squareFIll.png')}
+                />
+                
+              </View>
             ) : (
-              <Image
-                style={styles.icons}
-                source={require('../assets/square.png')}
-              />
+              <View
+                style={{
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  style={styles.icons}
+                  source={require('../assets/square.png')}
+                />
+              </View>
             )}
           </View>
         );
@@ -80,7 +128,7 @@ const TabBar = ({state, descriptors, navigation}) => {
       {/* <MiniPlayer /> */}
 
       <View style={styles.mainView}>
-        <MiniPlayer />
+        {/* <MiniPlayer /> */}
         {state.routes.map((route, index) => {
           if (
             route.name !== 'Home' &&
@@ -147,7 +195,7 @@ const styles = StyleSheet.create({
   mainView: {
     backgroundColor: '#212326',
     flexDirection: 'row',
-    height: windowHeight * 0.05,
+    height: windowHeight * 0.06,
     paddingVertical: windowHeight * 0.005,
     alignItems: 'center',
   },
@@ -157,11 +205,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   icons: {
-    height: 25,
-    width: 25,
+    height: 23,
+    width: 23,
   },
   iconsFocused: {
     height: 25,
     width: 25,
   },
+  labelText : {
+    color: 'gray',
+    fontSize: 13,
+  }, 
+  labelTextFocused : {
+    color: 'white',
+    fontSize: 13,
+  }
 });

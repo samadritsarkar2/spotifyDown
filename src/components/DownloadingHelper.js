@@ -46,7 +46,7 @@ const DownloadingHelper = () => {
 
   const downloadItem = (single, playlistDetails) => {
     // console.log('Trying to download: ', single.title);
-    console.log(single);
+    // console.log(single);
     return new Promise(async (resolve, reject) => {
       const api = `${NEW_API}/download?`;
       const newApi = `https://us-central1-downify-sam.cloudfunctions.net/getDownloadLink?trackId=`
@@ -58,29 +58,33 @@ const DownloadingHelper = () => {
       if (req) {
         let data;
         if (!single.customDownloadData) {
-          // let artistsString = single.artist.map((item) => item.name).join();
-
-          // const params = {
-          //   title: single.title,
-          //   album: single.album,
-          //   artistsString,
-          // };
-
-          // let query = Object.keys(params)
-          //   .map(
-          //     (k) =>
-          //       encodeURIComponent(k) + '=' + encodeURIComponent(params[k]),
-          //   )
-          //   .join('&');
-
-
-
-          // const response = await fetch(api + query);
           
           const newResponse = await fetch(newApi + single.id);
+          if(newResponse.status != 200){
+            dispatch({
+              type: 'SET_DOWNLOAD_PERCENT',
+              payload: 0,
+            });
+            dispatch({
+              type: 'REMOVE_FROM_DOWNLOAD_QUEUE',
+              payload: single,
+            });
 
+            dispatch({
+              type: 'REMOVE_CURRENT_DOWNLOADING',
+              payload: single,
+            });
+
+            Snackbar.show({
+              text: `Pardon!  Unable to scrap from YT Music`,
+              duration: Snackbar.LENGTH_SHORT,
+              backgroundColor: 'red',
+            });
+            reject();
+            return;
+          }
           data = await newResponse.json();
-          console.log("Data::", data)
+          // console.log("Data::", data);
         } else {
           data = single.customDownloadData;
         }
@@ -195,7 +199,8 @@ const DownloadingHelper = () => {
               fromUrl: link,
               headers: headers,
               toFile: path,
-              progressDivider: 4,
+              progressDivider: 2,
+              progressInterval : 100,
               begin: (res) => {
                 // console.log('Response begin ===\n\n');
                 // console.log(res);
@@ -203,7 +208,7 @@ const DownloadingHelper = () => {
               progress: (res) => {
                 //here you can calculate your progress for file download
                 let percent = (res.bytesWritten / res.contentLength) * 100; // to calculate in percentage
-                console.log(`Downloaded: ${percent}%`);
+                // console.log(`Downloaded: ${percent}%`);
                 // setDownloadPercent(percent);
                 dispatch({
                   type: 'SET_DOWNLOAD_PERCENT',

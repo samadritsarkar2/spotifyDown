@@ -59,7 +59,7 @@ module.exports = async function () {
 
   TrackPlayer.addEventListener(Event.RemoteSeek, (e) => {
    
-   try{ console.log(e);
+   try{ 
     TrackPlayer.seekTo(e.position);
    } catch (_) {}
   });

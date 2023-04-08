@@ -65,7 +65,7 @@ const MiniPlayer = () => {
     const startPlayer = async () => {
       let isInit = await trackPlayerInit();
       setIsTrackPlayerInit(isInit);
-      //console.log(playbackState )
+
     };
 
     startPlayer();
@@ -83,13 +83,13 @@ const MiniPlayer = () => {
         event.nextTrack !== undefined
       ) {
         const track = await TrackPlayer.getTrack(event.nextTrack);
-        const {title, artist, album} = track || {};
+        const {title, artist, album, duration} = track || {};
         // {
         //   title: 'Play something 🎶',
         //   artist: 'Go to Library->',
         //   album: 'Downloads-> Play a track 🎵',
         // };
-
+        console.log("Duration: ", duration);
         setTrackTitle(title);
         setTrackArtist(artist);
         setTrackAlbum(album);
@@ -132,8 +132,9 @@ const MiniPlayer = () => {
 
   return (
     <TouchableWithoutFeedback
-      onPress={() => {
-        // navigation.navigate('Player');
+      onPress={async () => {
+        // navigation.navigate('Player');'
+     
       }}>
       <View style={[styles.box]}>
         <View style={styles.playerView}>
@@ -153,17 +154,17 @@ const MiniPlayer = () => {
               repeatSpacer={150}
               marqueeDelay={100}>
               {trackTitle === '' ? (
-                <Text>
+                <Text style={{...styles.trackInfoText, color : 'white'}} >
                   Play something 🎶{' '}
-                  <Text style={{color: 'gray', fontSize: 12}}>
+                  <Text style={styles.trackInfoText}>
                     {'\u25CF'} Go to Library{'->'} {'\u25CF'} Downloads{'->'}{' '}
                     Select a Playlist 🔖{'->'} Play a track 🎵
                   </Text>
                 </Text>
               ) : (
-                <Text>
+                <Text style={{...styles.trackInfoText, color : 'white'}}>
                   {trackTitle}{' '}
-                  <Text style={{color: 'gray', fontSize: 12}}>
+                  <Text style={styles.trackInfoText}>
                     {'\u25CF'} {trackArtist} {'\u25CF'} {trackAlbum}
                   </Text>
                 </Text>
@@ -172,24 +173,24 @@ const MiniPlayer = () => {
           </View>
 
           <View style={styles.playerControls}>
-            <TouchableOpacity onPress={skipToPrevious}>
+            <TouchableOpacity onPress={skipToPrevious} style={styles.playerIconsTouchable}>
               <Image
                 source={require('../assets/previous.png')}
                 style={styles.playerIcons}
               />
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={togglePlayback}>
+            <TouchableOpacity onPress={togglePlayback} style={styles.playerIconsTouchable}>
               <Image
                 source={
                   playbackState === State.Playing
                     ? require('../assets/pause.png')
-                    : require('../assets/play-button.png')
+                    : require('../assets/play.png')
                 }
                 style={[styles.playerIcons]}
               />
             </TouchableOpacity>
-            <TouchableOpacity onPress={skipToNext}>
+            <TouchableOpacity onPress={skipToNext} style={styles.playerIconsTouchable} >
               <Image
                 source={require('../assets/next.png')}
                 style={styles.playerIcons}
@@ -220,18 +221,27 @@ const styles = StyleSheet.create({
   playerView: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end'
   },
   trackInfo: {
     flex: 1,
     marginStart: 10,
     alignSelf: 'center',
   },
+  trackInfoText : {color: 'gray', fontSize: 14},
   playerControls: {
-    flex: 0.45,
+
+    flex: 0.5,
     flexDirection: 'row',
-    marginEnd: 20,
+    marginEnd: 5,
+    alignItems : 'flex-end',
     alignSelf: 'center',
   },
-  playerIcons: {width: 27, height: 27, marginHorizontal: 7},
+  playerIconsTouchable : {
+    flex : 1,
+    marginHorizontal : 2
+  },
+  playerIcons: {
+
+    width: 28, height: 28, marginHorizontal: 3},
 });
