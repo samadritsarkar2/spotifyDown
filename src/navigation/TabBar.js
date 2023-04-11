@@ -26,10 +26,7 @@ const TabBar = ({state, descriptors, navigation}) => {
           <View>
             {isFocused ? (
               <View
-                style={{
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}>
+                style={styles.iconAndLable}>
                 <Image
                   style={styles.icons}
                   source={require('../assets/homeFill.png')}
@@ -41,10 +38,7 @@ const TabBar = ({state, descriptors, navigation}) => {
               </View>
             ) : (
               <View
-                style={{
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}>
+              style={styles.iconAndLable}>
                 <Image
                   style={styles.icons}
                   source={require('../assets/home.png')}
@@ -62,27 +56,21 @@ const TabBar = ({state, descriptors, navigation}) => {
           <View>
             {isFocused ? (
               <View
-                style={{
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}>
+              style={styles.iconAndLable}>
                 <Image
                   style={styles.icons}
                   source={require('../assets/searchFill.png')}
                 />
-                <Text style={styles.labelTextFocused} >Search/Add</Text>
+                <Text style={styles.labelTextFocused} >Search</Text>
               </View>
             ) : (
               <View
-                style={{
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}>
+              style={styles.iconAndLable}>
                 <Image
                   style={styles.icons}
                   source={require('../assets/search.png')}
                 />
-                <Text style={styles.labelText} >Search/Add</Text>
+                <Text style={styles.labelText} >Search</Text>
 
               </View>
             )}
@@ -93,26 +81,23 @@ const TabBar = ({state, descriptors, navigation}) => {
           <View>
             {isFocused ? (
               <View
-                style={{
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}>
+              style={styles.iconAndLable}>
                 <Image
                   style={styles.icons}
-                  source={require('../assets/squareFIll.png')}
+                  source={require('../assets/libraryFill.png')}
                 />
+                <Text style={styles.labelTextFocused}>Library</Text>
                 
               </View>
             ) : (
               <View
-                style={{
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}>
+              style={styles.iconAndLable}>
                 <Image
                   style={styles.icons}
-                  source={require('../assets/square.png')}
+                  source={require('../assets/library.png')}
                 />
+                <Text style={styles.labelText}>Library</Text>
+
               </View>
             )}
           </View>
@@ -126,7 +111,7 @@ const TabBar = ({state, descriptors, navigation}) => {
   return (
     <>
       {/* <MiniPlayer /> */}
-
+      
       <View style={styles.mainView}>
         {/* <MiniPlayer /> */}
         {state.routes.map((route, index) => {
@@ -204,20 +189,34 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  iconAndLable : {
+    flex : 0.95,
+    flexDirection: 'column',
+    alignItems: 'center',
+    alignContent : 'center',
+   
+    
+  },
   icons: {
-    height: 23,
-    width: 23,
+   flex : 1,
+   aspectRatio : 4/4
   },
   iconsFocused: {
+    // Not used
+    color : 'black',
     height: 25,
     width: 25,
+    
   },
   labelText : {
     color: 'gray',
     fontSize: 13,
+    display : 'flex'
+    
   }, 
   labelTextFocused : {
     color: 'white',
     fontSize: 13,
+    display : 'flex'
   }
 });

@@ -4,7 +4,7 @@ import {
   CardStyleInterpolators,
 } from '@react-navigation/stack';
 import Downloads from '../components/Downloads';
-import TracksView from '../components/TracksView';
+import TracksView from '../components/DownloadedTracksView';
 
 const Stack = createStackNavigator();
 

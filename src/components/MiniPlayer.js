@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   TouchableWithoutFeedback,
+  BackHandler,
 } from 'react-native';
 import TrackPlayer, {
   usePlaybackState,
@@ -19,13 +20,17 @@ import {useDispatch} from 'react-redux';
 
 import {windowHeight} from '../common';
 import TextTicker from 'react-native-text-ticker';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import Player from './Player';
 
 const MiniPlayer = () => {
   const [isTrackPlayerInit, setIsTrackPlayerInit] = useState(false);
   const [trackTitle, setTrackTitle] = useState('');
   const [trackAlbum, setTrackAlbum] = useState('');
   const [trackArtist, setTrackArtist] = useState('');
+
+  const [isPlayerActive, setIsPlayerActive] = useState(false);
+
   // const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -75,6 +80,23 @@ const MiniPlayer = () => {
     };
   }, []);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        if (isPlayerActive) {
+          setIsPlayerActive(false);
+          return true;
+        } else {
+          return false;
+        }
+      };
+
+      const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () => subscription.remove();
+    }, [isPlayerActive])
+  );
+
   useTrackPlayerEvents(
     [Event.PlaybackTrackChanged, Event.PlaybackState],
     async (event) => {
@@ -89,7 +111,7 @@ const MiniPlayer = () => {
         //   artist: 'Go to Library->',
         //   album: 'Downloads-> Play a track 🎵',
         // };
-        console.log("Duration: ", duration);
+    
         setTrackTitle(title);
         setTrackArtist(artist);
         setTrackAlbum(album);
@@ -131,10 +153,15 @@ const MiniPlayer = () => {
   };
 
   return (
-    <TouchableWithoutFeedback
+
+    <>
+        {isPlayerActive ? 
+        <Player/>
+        :   
+        <TouchableWithoutFeedback
       onPress={async () => {
         // navigation.navigate('Player');'
-     
+        setIsPlayerActive(!isPlayerActive);
       }}>
       <View style={[styles.box]}>
         <View style={styles.playerView}>
@@ -199,7 +226,10 @@ const MiniPlayer = () => {
           </View>
         </View>
       </View>
-    </TouchableWithoutFeedback>
+    </TouchableWithoutFeedback> }
+    </>
+
+  
   );
 };
 
@@ -209,9 +239,9 @@ const styles = StyleSheet.create({
   box: {
     position: 'absolute',
     width: '100%',
-    height: windowHeight * 0.065,
+    height: windowHeight * 0.055,
     justifyContent: 'center',
-    bottom: windowHeight * 0.05,
+    bottom: windowHeight * 0.06,
     paddingVertical: windowHeight * 0.01,
     backgroundColor: '#212326',
     borderTopColor: 'white',
@@ -228,7 +258,7 @@ const styles = StyleSheet.create({
     marginStart: 10,
     alignSelf: 'center',
   },
-  trackInfoText : {color: 'gray', fontSize: 14},
+  trackInfoText : {color: 'gray', fontSize: 13},
   playerControls: {
 
     flex: 0.5,
@@ -239,9 +269,14 @@ const styles = StyleSheet.create({
   },
   playerIconsTouchable : {
     flex : 1,
-    marginHorizontal : 2
+    marginHorizontal : 2,
+    marginVertical : 3,
+    // backgroundColor : 'red'
   },
   playerIcons: {
-
-    width: 28, height: 28, marginHorizontal: 3},
+    //TODO: Flex
+    width : '100%',
+    height : '100%',
+    aspectRatio : 1/1
+  },
 });

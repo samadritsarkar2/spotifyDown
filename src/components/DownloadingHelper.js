@@ -46,7 +46,7 @@ const DownloadingHelper = () => {
 
   const downloadItem = (single, playlistDetails) => {
     // console.log('Trying to download: ', single.title);
-    // console.log(single);
+    console.log(single);
     return new Promise(async (resolve, reject) => {
       const api = `${NEW_API}/download?`;
       const newApi = `https://us-central1-downify-sam.cloudfunctions.net/getDownloadLink?trackId=`

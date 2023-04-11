@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   buttons: {
     fontSize: 20,
     color: 'white',
-    fontFamily: 'GothamMedium',
+    fontFamily: 'GothamRoundedMedium',
   },
   smallText: {
     fontSize: 12,

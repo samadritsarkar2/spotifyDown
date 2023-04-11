@@ -221,14 +221,15 @@ const styles = StyleSheet.create({
   },
   trackTitle: {
     color: 'white',
-    fontSize: 16.9,
+    fontSize: 18,
     justifyContent: 'flex-start',
-    fontFamily: 'GothamMedium',
+    fontFamily: 'GothamRoundedBook',
+    
   },
   trackInfo: {
     color: '#6C7A89',
     fontSize: 12,
-    fontFamily: 'GothamMedium',
+    fontFamily: 'GothamRoundedMedium',
   },
   trackArtwork: {
     flex: 1,

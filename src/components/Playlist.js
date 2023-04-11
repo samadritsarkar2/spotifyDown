@@ -20,7 +20,7 @@ import Spinner from 'react-native-spinkit';
 import TextTicker from 'react-native-text-ticker';
 
 import {NEW_API} from '@env';
-import {windowWidth, windowHeight} from '../common';
+import {windowWidth, windowHeight, bottomGap} from '../common';
 
 import {
   addNewPlaylist,
@@ -116,7 +116,7 @@ const Playlist = ({navigation, route}) => {
         // console.log(item);
         setTimeout(() => {
           handleDownload(item);
-        }, 2000);
+        }, 1000);
       }
     });
   };
@@ -267,11 +267,12 @@ const Playlist = ({navigation, route}) => {
               </View>
               <View
                 style={{
-                  flex: 0.1,
+                  flex: 0.3,
                   marginTop: 50,
                   flexDirection: 'row',
                   justifyContent: 'space-evenly',
                   alignItems: 'center',
+               
                 }}>
                 <TouchableOpacity
                   style={styles.downloadAllButton}
@@ -287,7 +288,7 @@ const Playlist = ({navigation, route}) => {
                     }}
                     onLongPress={() => {
                       Snackbar.show({
-                        text: 'Save  this playlist in Library',
+                        text: 'Save this playlist in Library',
                         duration: Snackbar.LENGTH_LONG,
                         backgroundColor: 'red',
                       });
@@ -485,17 +486,18 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: '#1DB954',
     marginVertical: 20,
-    height: windowHeight * 0.07,
+    height: windowHeight * 0.05,
     width: windowWidth * 0.3,
     alignSelf: 'center',
   },
   downloadAllButtonText: {
     color: 'white',
     alignSelf: 'center',
-    fontFamily: 'GothamMedium',
+    fontFamily: 'GothamRoundedMedium',
+    fontSize : 16.9
   },
   playlistHeader: {
-    flex: 0.6,
+    flex: 0.5,
     marginVertical: 15,
     marginTop: 25,
     justifyContent: 'space-evenly',

@@ -102,7 +102,7 @@ const RootStack = () => {
 
         <DownloadingHelper />
 
-        {/* <MiniPlayer /> */}
+        <MiniPlayer />
       </NavigationContainer>
     </StoreProvider>
   );
