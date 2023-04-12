@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,6 +14,8 @@ import TrackPlayer, {
   Capability,
   Event,
   State,
+  AppKilledPlaybackBehavior,
+  useProgress
 } from 'react-native-track-player';
 
 import {useDispatch} from 'react-redux';
@@ -28,6 +30,10 @@ const MiniPlayer = () => {
   const [trackTitle, setTrackTitle] = useState('');
   const [trackAlbum, setTrackAlbum] = useState('');
   const [trackArtist, setTrackArtist] = useState('');
+  const [trackDuration, setTrackDuration] = useState(0);
+  const [trackArtwork, setTrackArtwork] = useState('');
+  const [positionString, setPositionString] = useState('');
+  const [durationString, setDurationString] = useState('');
 
   const [isPlayerActive, setIsPlayerActive] = useState(false);
 
@@ -35,11 +41,17 @@ const MiniPlayer = () => {
   const navigation = useNavigation();
 
   const playbackState = usePlaybackState();
+  const { position, buffered, duration } = useProgress(10);
+ 
 
   const trackPlayerInit = async () => {
+  
+  try {
     await TrackPlayer.setupPlayer({});
     await TrackPlayer.updateOptions({
-      stopWithApp: true,
+      android : {
+appKilledPlaybackBehavior : AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotification
+      },
       alwaysPauseOnInterruption: false,
       capabilities: [
         Capability.Play,
@@ -49,10 +61,18 @@ const MiniPlayer = () => {
         Capability.SkipToPrevious,
         Capability.Stop,
         Capability.SeekTo,
+      
+      ],
+      notificationCapabilities : [
+        Capability.Play,
+        Capability.Stop,
+        Capability.Pause,
+        Capability.SkipToNext,
+        Capability.SkipToPrevious,
       ],
       compactCapabilities: [
         Capability.Play,
-        Capability.Play,
+        Capability.Stop,
         Capability.Pause,
         Capability.SkipToNext,
         Capability.SkipToPrevious,
@@ -63,6 +83,10 @@ const MiniPlayer = () => {
     // await TrackPlayer.add(queue);
 
     return true;
+  } catch (error) {
+    
+  }
+  
   };
 
   //initialize the TrackPlayer when the App component is mounted
@@ -75,21 +99,24 @@ const MiniPlayer = () => {
 
     startPlayer();
 
-    return async () => {
-      TrackPlayer.destroy();
+    return () => {
+      try { TrackPlayer.reset() } catch(_){};
     };
   }, []);
 
+
+  const onBackPress = () => {
+    if (isPlayerActive) {
+      setIsPlayerActive(false);
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   useFocusEffect(
     React.useCallback(() => {
-      const onBackPress = () => {
-        if (isPlayerActive) {
-          setIsPlayerActive(false);
-          return true;
-        } else {
-          return false;
-        }
-      };
+ 
 
       const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
@@ -105,7 +132,7 @@ const MiniPlayer = () => {
         event.nextTrack !== undefined
       ) {
         const track = await TrackPlayer.getTrack(event.nextTrack);
-        const {title, artist, album, duration} = track || {};
+        const {title, artist, album, duration, artwork} = track || {};
         // {
         //   title: 'Play something 🎶',
         //   artist: 'Go to Library->',
@@ -115,16 +142,25 @@ const MiniPlayer = () => {
         setTrackTitle(title);
         setTrackArtist(artist);
         setTrackAlbum(album);
+        setTrackDuration(duration);
+        setTrackArtwork(artwork);
       }
       if (event.type === Event.PlaybackState && event.state === State.Stopped) {
+        onBackPress();
         setTrackTitle('');
         setTrackArtist('');
         setTrackAlbum('');
+        setTrackDuration(0);
+        setTrackArtwork('');
+        
       }
     },
   );
 
   const togglePlayback = async () => {
+   
+   try {
+
     const currentTrack = await TrackPlayer.getCurrentTrack();
 
     // console.log(await TrackPlayer.getQueue());
@@ -132,12 +168,17 @@ const MiniPlayer = () => {
       // await TrackPlayer.reset();
       // await TrackPlayer.play();
     } else {
-      if (playbackState === State.Paused) {
+      if (playbackState === State.Paused || playbackState === State.Ready) {
         await TrackPlayer.play();
       } else {
         await TrackPlayer.pause();
       }
     }
+    
+   } catch (_) {
+    
+   }
+   
   };
 
   const skipToPrevious = async () => {
@@ -152,17 +193,75 @@ const MiniPlayer = () => {
     } catch (_) {}
   };
 
+  const seekTo = async (pos) => {
+    try {
+        await TrackPlayer.seekTo(pos);
+        console.log(playbackState);
+    } catch (_) {
+      
+    }
+  }
+
+    const activatePlayer = () => {
+      if(trackTitle && trackAlbum)
+      setIsPlayerActive(!isPlayerActive);
+    }
+
+   
+    const calculateDurationString = (time) => {
+
+      let minutes = Math.floor(time / 60);
+      
+      let seconds = Math.floor(time - minutes * 60);
+
+     if(minutes < 10)
+          minutes = '0' + minutes;
+      
+      if(seconds < 10)
+          seconds = '0' + seconds;
+      let s = new String(minutes);
+      s += ":";
+      s += seconds.toString();
+      return s;
+      // return [time / 60, time % 60].map(Math.floor).join(':');
+
+      
+      // setPositionString(finalTime);
+    }
+
+  useMemo(() => {
+      // console.log(trackState);
+   
+      setPositionString(calculateDurationString(position));
+    
+  }, [position])
+
+  useEffect(() => {
+    setDurationString(calculateDurationString(duration));
+
+  }, [duration]);
+
+
+  
+
+
   return (
 
     <>
         {isPlayerActive ? 
-        <Player/>
+        <Player 
+            trackState={{trackTitle, trackAlbum, trackArtist, trackDuration,
+               trackArtwork, position, duration, positionString, durationString }}
+            playbackState={playbackState}
+            onBackPress={onBackPress} 
+            togglePlayback={togglePlayback} 
+            skipToNext={skipToNext} 
+            skipToPrevious={skipToPrevious}
+            seekTo={seekTo}
+            />
         :   
         <TouchableWithoutFeedback
-      onPress={async () => {
-        // navigation.navigate('Player');'
-        setIsPlayerActive(!isPlayerActive);
-      }}>
+      onPress={() => activatePlayer()}>
       <View style={[styles.box]}>
         <View style={styles.playerView}>
           <View style={styles.trackInfo}>

@@ -4,8 +4,9 @@ buildscript {
     ext {
         buildToolsVersion = "30.0.2"
         minSdkVersion = 21
-        compileSdkVersion = 30
-        targetSdkVersion = 30
+        compileSdkVersion = 33
+        targetSdkVersion = 33
+        kotlin_version = "1.7.10"
     }
     repositories {
         google()
@@ -14,6 +15,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.0'
         classpath 'com.google.gms:google-services:4.3.5'
+         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version" 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -21,6 +23,16 @@ buildscript {
 
 allprojects {
     repositories {
+        exclusiveContent {
+           filter {
+               includeGroup "com.facebook.react"
+           }
+           forRepository {
+               maven {
+                   url "$rootDir/../node_modules/react-native/android"
+               }
+           }
+       }
         mavenLocal()
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
