@@ -24,6 +24,7 @@ import {windowHeight} from '../common';
 import TextTicker from 'react-native-text-ticker';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import Player from './Player';
+import Slider from '@react-native-community/slider';
 
 const MiniPlayer = () => {
   const [isTrackPlayerInit, setIsTrackPlayerInit] = useState(false);
@@ -263,7 +264,10 @@ appKilledPlaybackBehavior : AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotif
         <TouchableWithoutFeedback
       onPress={() => activatePlayer()}>
       <View style={[styles.box]}>
+     
+      
         <View style={styles.playerView}>
+          
           <View style={styles.trackInfo}>
             {/* <Text style={{color: 'white'}}>
               {trackTitle} {'\u25CF'} {trackArtist}
@@ -350,7 +354,7 @@ const styles = StyleSheet.create({
   playerView: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   trackInfo: {
     flex: 1,

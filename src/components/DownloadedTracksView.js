@@ -23,6 +23,7 @@ import {
 import allActions from '../redux/actions';
 import {shufflePlay} from '../redux/actions/playerActions';
 import {isExist} from '../utils';
+import TextTicker from 'react-native-text-ticker';
 
 const TracksView = () => {
   const navigation = useNavigation();
@@ -137,7 +138,7 @@ const TracksView = () => {
                     source={{uri: `${item.artwork}`}}
                   />
                   <View style={styles.trackDetails}>
-                    <Text style={styles.trackTitle}>{item.title}</Text>
+                    <TextTicker style={styles.trackTitle}>{item.title}</TextTicker>
                     <Text style={styles.trackInfo}>
                       {item.artist} - {item.album}
                     </Text>
