@@ -6,6 +6,7 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 import Slider from "@react-native-community/slider";
 import { windowHeight, windowWidth } from '../common';
+import TextTicker from 'react-native-text-ticker';
 
 const Player = ( {onBackPress, trackState, playbackState, togglePlayback, skipToNext, skipToPrevious, seekTo}) => {
 
@@ -20,7 +21,7 @@ const Player = ( {onBackPress, trackState, playbackState, togglePlayback, skipTo
         <ImageBackground
           source={{uri : trackState.trackArtwork}}
           style={{flex: 1}}
-          blurRadius={30}
+          blurRadius={35}
           >
             <View 
             style={styles.tintContainer}
@@ -35,7 +36,8 @@ const Player = ( {onBackPress, trackState, playbackState, togglePlayback, skipTo
               <View style={{
                 flex : 1,
                     // height : windowHeight * 0.1,
-                   justifyContent : 'flex-start',
+                   justifyContent : 'space-between',
+                   flexDirection : 'row',
                    
             
                  }}>
@@ -52,6 +54,15 @@ const Player = ( {onBackPress, trackState, playbackState, togglePlayback, skipTo
                     }}
                     />
                     </TouchableOpacity>
+                    <Image
+                    source={require("../assets/notification_icon.png")}
+                    style={{
+                      width : 25,
+                      height : 25,
+                      marginTop : 20,
+                      marginRight : 8
+                    }}
+                    />
             </View>
 
             <View style={{
@@ -77,8 +88,11 @@ const Player = ( {onBackPress, trackState, playbackState, togglePlayback, skipTo
                   alignItems : 'center',
                 }}
             >
-                   <Text style={styles.songTitleText} >{trackState.trackTitle}</Text>
-                   <Text style={styles.songAlbumText} >{trackState.trackAlbum}</Text>
+                   <Text style={styles.songTitleText}>{trackState.trackTitle}</Text>
+                   <TextTicker 
+                   style={styles.songAlbumText} 
+                  
+                   >{trackState.trackAlbum}</TextTicker>
 
             </View>
 
@@ -86,25 +100,38 @@ const Player = ( {onBackPress, trackState, playbackState, togglePlayback, skipTo
             style={{
               flex : 1,
               width : '100%',
-              flexDirection : 'row'
+              flexDirection : 'column',
+              justifyContent : "flex-end",
+              paddingHorizontal : 5
             }}
             >
-              <Text style={styles.songAlbumText}>{trackState.positionString}</Text>
-          <Slider
-                  style={styles.seekBar}
-                  minimumValue={0}
-                  value={trackState.position}
-                  maximumValue={trackState.duration}
-                  minimumTrackTintColor="white"
-                  maximumTrackTintColor="gray"
-                  thumbTintColor="white"
-                  onSlidingComplete={ e => seekTo(e) }
-                />
+              <View style={{ marginLeft: -15, marginRight: -15 }}>
 
-          <Text
-            style={styles.songAlbumText}
-          >{trackState.durationString}</Text>
+               <Slider
 
+                        style={styles.seekBar}
+                        minimumValue={0}
+                        value={trackState.position}
+                        maximumValue={trackState.duration}
+                        minimumTrackTintColor="white"
+                        maximumTrackTintColor="gray"
+                        thumbTintColor="white"
+                        onSlidingComplete={ e => seekTo(e) }
+                      />
+                      
+              </View>
+              <View
+              style={{
+                flexDirection : 'row',
+                justifyContent : 'space-between'
+                
+              }}
+              >
+                    <Text style={styles.durationText}>{trackState.positionString}</Text>
+                   
+
+                     <Text style={styles.durationText}>{trackState.durationString}</Text>
+                </View>
             </View>
 
             <View style={{
@@ -125,11 +152,14 @@ const Player = ( {onBackPress, trackState, playbackState, togglePlayback, skipTo
 
         <TouchableOpacity style={[styles.controlButton, styles.playButton]} onPress={togglePlayback}>
               <Image
-                style={styles.controlIcon}
+                style={{...styles.controlIcon, 
+                  width : 65,
+                  height : 65
+                }}
                 source={ 
                   isPlaying
-                  ? require('../assets/pause.png')
-                  : require('../assets/play.png')
+                  ? require('../assets/pause-button.png')
+                  : require('../assets/play-button.png')
                   }
               />
         </TouchableOpacity>
@@ -140,6 +170,8 @@ const Player = ( {onBackPress, trackState, playbackState, togglePlayback, skipTo
             source={require('../assets/next.png')}
           />
         </TouchableOpacity>
+
+        
             </View>
         </View>
     
@@ -173,7 +205,7 @@ const styles = StyleSheet.create({
   },
  tintContainer : {
   flex: 1,
-        backgroundColor: 'rgba(0,0,0, 0.40)'
+        backgroundColor: 'rgba(0,0,0, 0.50)'
  },
   songDetailsContainer: {
     flex: 1,
@@ -183,7 +215,7 @@ const styles = StyleSheet.create({
   },
   songTitleText: {
     color: '#FFFFFF',
-    fontSize: 20,
+    fontSize: 18,
    fontFamily : 'GothamRoundedMedium',
     textAlign: 'center',
 
@@ -191,15 +223,24 @@ const styles = StyleSheet.create({
   },
   songAlbumText: {
     color: '#d3d3d3',
-    fontSize: 18,
+    fontSize: 16,
     fontFamily : 'GothamMedium',
+    
    
   },
+  durationText : {
+    color: '#d3d3d3',
+    fontSize : 14,
+    fontFamily : 'OpenSans-SemiBold',
+    alignSelf : 'baseline'
+  },
   seekBar: {
-    flex : 1,
+    
     width: '100%',
     height: 30,
-    marginTop: 10,
+    // marginTop: 10,
+    // alignSelf : 'baseline',
+    // backgroundColor : 'red'
   },
   controlsContainer: {
     flex: 2,
@@ -217,8 +258,8 @@ const styles = StyleSheet.create({
    
   },
   controlIcon: {
-    width : 35,
-    height : 35,
+    width : 30,
+    height : 30,
    
     resizeMode : 'cover',
   

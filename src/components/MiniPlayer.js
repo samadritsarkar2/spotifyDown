@@ -196,7 +196,7 @@ appKilledPlaybackBehavior : AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotif
   const seekTo = async (pos) => {
     try {
         await TrackPlayer.seekTo(pos);
-        console.log(playbackState);
+     
     } catch (_) {
       
     }
