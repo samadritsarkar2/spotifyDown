@@ -63,17 +63,11 @@ const Playlist = ({navigation, route}) => {
             dispatch(addNewPlaylist(res));
           })
           .catch((err) => {
-            console.log(err);
+            // console.log(err);
             // setLoading(false);
             setError(true);
-            //navigation.goBack();
-            Alert.alert(
-              'Server Error',
-              'Server Error',
-              [{text: 'OK', onPress: () => {}}],
-              {cancelable: true},
-            );
-          });
+   
+            navigation.navigate('Error', {error: error});          });
       } else {
         setLoading(false);
         setError(true);
@@ -104,6 +98,7 @@ const Playlist = ({navigation, route}) => {
     //   const [tracks, setTracks] = useState([]);
     //   const [responseData, setResponseData] = useState({});
     // };
+
   }, [isFocused]);
 
   const handleDownload = (item) => {

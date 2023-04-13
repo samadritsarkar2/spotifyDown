@@ -102,7 +102,7 @@ const Player = ( {onBackPress, trackState, playbackState, togglePlayback, skipTo
               width : '100%',
               flexDirection : 'column',
               justifyContent : "flex-end",
-              paddingHorizontal : 5
+              paddingHorizontal : 12
             }}
             >
               <View style={{ marginLeft: -15, marginRight: -15 }}>
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   durationText : {
     color: '#d3d3d3',
     fontSize : 14,
-    fontFamily : 'OpenSans-SemiBold',
+    fontFamily : 'GothamRoundedMedium',
     alignSelf : 'baseline'
   },
   seekBar: {
