@@ -70,6 +70,7 @@ appKilledPlaybackBehavior : AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotif
         Capability.Pause,
         Capability.SkipToNext,
         Capability.SkipToPrevious,
+        Capability.SeekTo,
       ],
       compactCapabilities: [
         Capability.Play,

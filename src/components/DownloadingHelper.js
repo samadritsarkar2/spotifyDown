@@ -14,7 +14,7 @@ import {DOWNLOAD_PATH, windowHeight, windowWidth} from '../common/index';
 import {useDispatch} from 'react-redux';
 import {checkExists, checkPermission, checkData, isExist} from '../utils';
 import RNFS, {downloadFile} from 'react-native-fs';
-import {API, NEW_API, NEWER_API} from '@env';
+import {API, NEW_API, NEWER_API, NEWER_API_US} from '@env';
 import Spinner from 'react-native-spinkit';
 import {useNavigation} from '@react-navigation/native';
 
@@ -46,10 +46,10 @@ const DownloadingHelper = () => {
 
   const downloadItem = (single, playlistDetails) => {
     // console.log('Trying to download: ', single.title);
-    console.log(single);
+
     return new Promise(async (resolve, reject) => {
-      const api = `${NEW_API}/download?`;
-      const newApi = `https://us-central1-downify-sam.cloudfunctions.net/getDownloadLink?trackId=`
+      // const api = `${NEW_API}/download?`;
+      const newApi = `${NEWER_API_US}/getDownloadLink?trackId=`
 
       
       const req = checkPermission();
@@ -87,6 +87,7 @@ const DownloadingHelper = () => {
           // console.log("Data::", data);
         } else {
           data = single.customDownloadData;
+          // console.log(data);
         }
       
         // let link = data.url;
@@ -313,7 +314,7 @@ const DownloadingHelper = () => {
                       payload: 0,
                     });
                   } catch (err) {
-                    console.log(err);
+                    // console.log(err);
                     reject(err);
                   }
                 } else {
@@ -343,7 +344,7 @@ const DownloadingHelper = () => {
                 }
               })
               .catch(async (err) => {
-                // console.log('Download canceled due to error: ', err);
+                console.log('Download canceled due to error: ', err);
                 dispatch({
                   type: 'SET_DOWNLOAD_PERCENT',
                   payload: 0,
@@ -359,7 +360,7 @@ const DownloadingHelper = () => {
                 });
 
                 Snackbar.show({
-                  text: `Pardon!  Could not download ${single.title} file due to Youtube policies. Try the Custom Downloader.`,
+                  text: `Pardon! `,
                   duration: Snackbar.LENGTH_SHORT,
                   backgroundColor: 'red',
                 });

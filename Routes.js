@@ -97,7 +97,7 @@ const RootStack = () => {
           }}
           initialRouteName="BottomNav">
           <Stack.Screen name="BottomNav" component={BottomNav} />
-          <Stack.Screen name={'Player'} component={Player} />
+          {/* <Stack.Screen name={'Player'} component={Player} /> */}
         </Stack.Navigator>
 
         <DownloadingHelper />

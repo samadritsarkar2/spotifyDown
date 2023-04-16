@@ -134,6 +134,11 @@ const Downloads = ({navigation}) => {
 
               navigation.navigate('TracksView');
             }}
+            onLongPress={() => {
+              dispatch(allActions.addNew(item));
+              Vibration.vibrate(300);
+              navigation.navigate("Playlist")
+            }}
             style={{
               marginVertical: 10,
             }}>
