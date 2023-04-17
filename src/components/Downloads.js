@@ -141,6 +141,12 @@ const Downloads = ({navigation}) => {
             }}
             style={{
               marginVertical: 10,
+              paddingVertical : 5,
+              paddingHorizontal: 5,
+              flexDirection: 'row',
+              alignItems: 'center',
+              backgroundColor: '#111111',
+              borderRadius: 10,
             }}>
             <View style={styles.itemWrapper}>
               <Image
@@ -156,10 +162,12 @@ const Downloads = ({navigation}) => {
               <View
                 style={{
                   flex: 9,
-                  flexDirection: 'column',
-                  justifyContent: 'center',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems : 'center'
                 }}>
                 <Text style={styles.playlistId}>{data[item].info.name}</Text>
+                <Text style={styles.playlistTrackCount}> {data[item].tracks.length} </Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -310,13 +318,20 @@ const styles = StyleSheet.create({
   },
   playlistId: {
     color: 'white',
-    fontSize: 17,
+    fontSize: 16,
     justifyContent: 'flex-start',
-    fontFamily: 'GothamMedium',
-    fontWeight: 'bold',
+    fontFamily: 'GothamRoundedMedium',
+    // fontWeight: 'bold',
+  },
+  playlistTrackCount : {
+    color: '#d3d3d3',
+    fontSize: 14,
+    justifyContent: 'flex-start',
+    fontFamily: 'GothamRoundedMedium',
+    paddingRight : 7
   },
   playlistImg: {
-    flex: 1.5,
+    flex: 1.3,
     marginLeft: 7,
     marginRight: 12,
     height: '100%',

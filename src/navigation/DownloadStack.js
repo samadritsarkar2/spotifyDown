@@ -20,7 +20,9 @@ const DownloadStack = () => {
         headerTitleStyle: {color: 'white', fontFamily: 'OpenSans-SemiBold'},
         headerTintColor: 'white',
       }}>
-      <Stack.Screen component={Downloads} name="Downloads" />
+      <Stack.Screen component={Downloads} name="Downloads" options={{
+        headerTitle : "Downloaded Playlists"
+      }}/>
       <Stack.Screen component={TracksView} name="TracksView" />
     </Stack.Navigator>
   );

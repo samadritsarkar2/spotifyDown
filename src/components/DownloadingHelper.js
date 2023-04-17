@@ -108,7 +108,7 @@ const DownloadingHelper = () => {
               const newDownload = {
                 id: single.id,
                 title: single.title,
-                artist: single.artist[0].name,
+                artist: single.artist.map(i => i.name).join(","),
                 album: single.album,
                 artwork: single.artwork,
                 url: fileStatus,
@@ -227,11 +227,11 @@ const DownloadingHelper = () => {
                 if (res && res.statusCode === 200 && res.bytesWritten > 0) {
                   try {
                     // console.log('try block');
-                    console.log("Just before saving ::",single);
+                 
                     const newDownload = {
                       id: single.id,
                       title: single.title,
-                      artist: single.artist[0].name,
+                      artist: single.artist.map(i => i.name).join(", "),
                       album: single.album,
                       artwork: single.artwork,
                       url: path,

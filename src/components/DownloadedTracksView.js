@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     height: '90%',
     aspectRatio: 1 / 1,
     alignSelf: 'center',
-    borderRadius: 6,
+    
     padding: 6,
   },
   trackOption: {
