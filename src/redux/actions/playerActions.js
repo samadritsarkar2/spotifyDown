@@ -30,7 +30,7 @@ export const playOne = (track) => {
       }
     }
 
-    dispatch(addToPlayer(track));
+    // dispatch(addToPlayer(track));
   };
 };
 
@@ -83,3 +83,15 @@ export const shufflePlay = (currentPlaylist) => {
     }
   };
 };
+
+export const setPlayerActive = () => {
+  return {
+    type : 'SET_PLAYER_ACTIVE'
+  }
+}
+
+export const setPlayerClosed = () => {
+  return {
+    type : 'SET_PLAYER_CLOSED'
+  }
+}

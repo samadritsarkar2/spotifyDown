@@ -1,17 +1,153 @@
-import React, {useEffect, useState} from 'react';
-import {Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {BackHandler, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import TrackPlayer, {
   State,
-  useProgress
+  usePlaybackState,
+  useProgress,
+  useTrackPlayerEvents,Event
 } from 'react-native-track-player';
 import Slider from "@react-native-community/slider";
 import { windowHeight, windowWidth } from '../common';
 import TextTicker from 'react-native-text-ticker';
+import { useDispatch, useSelector } from 'react-redux';
+import { useMemo } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { setPlayerClosed } from '../redux/actions/playerActions';
 
-const Player = ( {onBackPress, trackState, playbackState, togglePlayback, skipToNext, skipToPrevious, seekTo}) => {
+const Player = ({route, navigation}) => {
 
-  const isPlaying = playbackState === State.Playing;
+  const [positionString, setPositionString] = useState('');
+  const [durationString, setDurationString] = useState('');
   
+  const dispatch = useDispatch();
+
+  
+  const playbackState = usePlaybackState();
+  const { position, buffered, duration } = useProgress(10);
+  
+  const store = useSelector(state => state).player;
+  const { trackInfo : {title, artist, album, artwork}, isPlayerActive} = store;
+  
+  const isPlaying = playbackState === State.Playing;
+
+
+  const onBackPress = () => {
+    if (isPlayerActive) {
+        
+        navigation.goBack();
+        setTimeout(()=>{
+          dispatch(setPlayerClosed());
+
+        }, 100)
+        return true;
+    } else {
+      return false;
+    }
+  };
+
+
+
+  useFocusEffect(
+    useCallback(() => {
+      
+
+
+      const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () => subscription.remove();
+    }, [isPlayerActive])
+  );
+
+    useFocusEffect(useCallback(() => {
+
+      if(!title || !artwork )
+      {
+        onBackPress();
+      }
+
+    }, [artwork, title]))
+
+ 
+  const togglePlayback = async () => {
+   
+   try {
+
+    const currentTrack = await TrackPlayer.getCurrentTrack();
+
+    // console.log(await TrackPlayer.getQueue());
+    if (currentTrack == null) {
+      // await TrackPlayer.reset();
+      // await TrackPlayer.play();
+    } else {
+      if (playbackState === State.Paused || playbackState === State.Ready) {
+        await TrackPlayer.play();
+      } else {
+        await TrackPlayer.pause();
+      }
+    }
+    
+   } catch (_) {
+    
+   }
+   
+  };
+
+  const skipToPrevious = async () => {
+    try {
+      await TrackPlayer.skipToPrevious();
+    } catch (_) {}
+  };
+
+  const skipToNext = async () => {
+    try {
+      await TrackPlayer.skipToNext();
+    } catch (_) {}
+  };
+
+  const seekTo = async (pos) => {
+    try {
+        await TrackPlayer.seekTo(pos);
+     
+    } catch (_) {
+      
+    }
+  }
+  const calculateDurationString = (time) => {
+
+    let minutes = Math.floor(time / 60);
+    
+    let seconds = Math.floor(time - minutes * 60);
+
+   if(minutes < 10)
+        minutes = '0' + minutes;
+    
+    if(seconds < 10)
+        seconds = '0' + seconds;
+    let s = new String(minutes);
+    s += ":";
+    s += seconds.toString();
+    return s;
+    // return [time / 60, time % 60].map(Math.floor).join(':');
+
+    
+    // setPositionString(finalTime);
+  }
+
+useMemo(() => {
+    // console.log(trackState);
+ 
+    setPositionString(calculateDurationString(position));
+    // dispatch({
+    //   type : 'SET_POSITION_STRING',
+    //   payload : {positionString : calculateDurationString(position)}
+    // })
+}, [position])
+
+useEffect(() => {
+  setDurationString(calculateDurationString(duration));
+
+}, [duration]);
+
 
   return (
     <View style={{
@@ -19,7 +155,7 @@ const Player = ( {onBackPress, trackState, playbackState, togglePlayback, skipTo
         backgroundColor : '#212326'
       }}>
         <ImageBackground
-          source={{uri : trackState.trackArtwork}}
+          source={ artwork ? {uri : artwork} : null}
           style={{flex: 1}}
           blurRadius={35}
           >
@@ -70,7 +206,8 @@ const Player = ( {onBackPress, trackState, playbackState, togglePlayback, skipTo
                     
                  }}>
                  <Image 
-                  source={{uri : trackState.trackArtwork}}
+                         source={ artwork ? {uri : artwork} : null}
+
                   style={{
                     flex: 1,
                     width: undefined,
@@ -88,11 +225,11 @@ const Player = ( {onBackPress, trackState, playbackState, togglePlayback, skipTo
                   alignItems : 'center',
                 }}
             >
-                   <Text style={styles.songTitleText}>{trackState.trackTitle}</Text>
+                   <Text style={styles.songTitleText}>{title}</Text>
                    <TextTicker 
                    style={styles.songAlbumText} 
                   
-                   >{trackState.trackAlbum}</TextTicker>
+                   >{album}</TextTicker>
 
             </View>
 
@@ -111,8 +248,8 @@ const Player = ( {onBackPress, trackState, playbackState, togglePlayback, skipTo
 
                         style={styles.seekBar}
                         minimumValue={0}
-                        value={trackState.position}
-                        maximumValue={trackState.duration}
+                        value={position}
+                        maximumValue={duration}
                         minimumTrackTintColor="white"
                         maximumTrackTintColor="gray"
                         thumbTintColor="white"
@@ -127,10 +264,10 @@ const Player = ( {onBackPress, trackState, playbackState, togglePlayback, skipTo
                 
               }}
               >
-                    <Text style={styles.durationText}>{trackState.positionString}</Text>
+                    <Text style={styles.durationText}>{positionString}</Text>
                    
 
-                     <Text style={styles.durationText}>{trackState.durationString}</Text>
+                     <Text style={styles.durationText}>{durationString}</Text>
                 </View>
             </View>
 

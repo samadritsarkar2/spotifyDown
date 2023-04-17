@@ -18,13 +18,14 @@ import TrackPlayer, {
   useProgress
 } from 'react-native-track-player';
 
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {windowHeight} from '../common';
 import TextTicker from 'react-native-text-ticker';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import Player from './Player';
 import Slider from '@react-native-community/slider';
+import { setPlayerActive, setPlayerClosed } from '../redux/actions/playerActions';
 
 const MiniPlayer = () => {
   const [isTrackPlayerInit, setIsTrackPlayerInit] = useState(false);
@@ -36,14 +37,18 @@ const MiniPlayer = () => {
   const [positionString, setPositionString] = useState('');
   const [durationString, setDurationString] = useState('');
 
-  const [isPlayerActive, setIsPlayerActive] = useState(false);
+  // const [isPlayerActive, setIsPlayerActive] = useState(false);
 
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
+
   const navigation = useNavigation();
 
   const playbackState = usePlaybackState();
   const { position, buffered, duration } = useProgress(10);
  
+
+  const store = useSelector(state => state).player;
+  const { trackInfo : {title, artist, album, artwork}, isPlayerActive} = store;
 
   const trackPlayerInit = async () => {
   
@@ -102,29 +107,17 @@ appKilledPlaybackBehavior : AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotif
     startPlayer();
 
     return () => {
-      try { TrackPlayer.reset() } catch(_){};
+      try { TrackPlayer.reset(); 
+          dispatch(setPlayerClosed());  
+          dispatch({
+            type : "CLEAR_TRACK_INFO",
+          })
+      } catch(_){};
     };
   }, []);
 
 
-  const onBackPress = () => {
-    if (isPlayerActive) {
-      setIsPlayerActive(false);
-      return true;
-    } else {
-      return false;
-    }
-  };
 
-  useFocusEffect(
-    React.useCallback(() => {
- 
-
-      const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
-
-      return () => subscription.remove();
-    }, [isPlayerActive])
-  );
 
   useTrackPlayerEvents(
     [Event.PlaybackTrackChanged, Event.PlaybackState],
@@ -140,20 +133,31 @@ appKilledPlaybackBehavior : AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotif
         //   artist: 'Go to Library->',
         //   album: 'Downloads-> Play a track 🎵',
         // };
-    
-        setTrackTitle(title);
-        setTrackArtist(artist);
-        setTrackAlbum(album);
-        setTrackDuration(duration);
-        setTrackArtwork(artwork);
+      
+
+        dispatch({
+          type : 'SET_TRACK_INFO',
+          payload : {
+            trackInfo : {
+              ...track
+            }
+          }
+        })
+
       }
       if (event.type === Event.PlaybackState && event.state === State.Stopped) {
-        onBackPress();
-        setTrackTitle('');
-        setTrackArtist('');
-        setTrackAlbum('');
-        setTrackDuration(0);
-        setTrackArtwork('');
+        
+        // setTrackTitle('');
+        // setTrackArtist('');
+        // setTrackAlbum('');
+        // setTrackDuration(0);
+        // setTrackArtwork('');
+        // console.log(navigation.getState());
+
+        // dispatch(setPlayerClosed());
+        dispatch({
+          type : "CLEAR_TRACK_INFO",
+        })
         
       }
     },
@@ -205,43 +209,23 @@ appKilledPlaybackBehavior : AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotif
   }
 
     const activatePlayer = () => {
-      if(trackTitle && trackAlbum)
-      setIsPlayerActive(!isPlayerActive);
+      if(title && album)
+      {
+
+        dispatch(setPlayerActive());
+  
+        navigation.navigate({
+          name : 'Player'
+        });
+      }
+
     }
 
+
+ 
+
    
-    const calculateDurationString = (time) => {
-
-      let minutes = Math.floor(time / 60);
-      
-      let seconds = Math.floor(time - minutes * 60);
-
-     if(minutes < 10)
-          minutes = '0' + minutes;
-      
-      if(seconds < 10)
-          seconds = '0' + seconds;
-      let s = new String(minutes);
-      s += ":";
-      s += seconds.toString();
-      return s;
-      // return [time / 60, time % 60].map(Math.floor).join(':');
-
-      
-      // setPositionString(finalTime);
-    }
-
-  useMemo(() => {
-      // console.log(trackState);
-   
-      setPositionString(calculateDurationString(position));
-    
-  }, [position])
-
-  useEffect(() => {
-    setDurationString(calculateDurationString(duration));
-
-  }, [duration]);
+ 
 
 
   
@@ -250,18 +234,7 @@ appKilledPlaybackBehavior : AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotif
   return (
 
     <>
-        {isPlayerActive ? 
-        <Player 
-            trackState={{trackTitle, trackAlbum, trackArtist, trackDuration,
-               trackArtwork, position, duration, positionString, durationString }}
-            playbackState={playbackState}
-            onBackPress={onBackPress} 
-            togglePlayback={togglePlayback} 
-            skipToNext={skipToNext} 
-            skipToPrevious={skipToPrevious}
-            seekTo={seekTo}
-            />
-        :   
+        {!store.isPlayerActive ?  
         <TouchableWithoutFeedback
       onPress={() => activatePlayer()}>
       <View style={[styles.box]}>
@@ -274,19 +247,41 @@ appKilledPlaybackBehavior : AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotif
               {trackTitle} {'\u25CF'} {trackArtist}
             </Text> */}
 
+{/* <TextTicker
+              style={{
+                color: 'white',
+                fontFamily: 'GothamMedium',
+                fontWeight: 'bold'
+              }}
+          
+              // duration={8000}
+              // scroll={false}
+              // // scrollSpeed={300}
+              // repeatSpacer={150}
+              // bounce={false}
+      
+              >
+Play something 🎶{' '} {'\u25CF'} 
+        <Text>Go to Library{'->'} {'\u25CF'} Downloads{'->'}{' '}
+                    Select a Playlist 🔖{'->'} Play a track 🎵</Text>
+                </TextTicker> */}
+
             <TextTicker
               style={{
                 color: 'white',
                 fontFamily: 'GothamMedium',
-                fontWeight: 'bold',
+                fontWeight: 'bold'
               }}
+          
               duration={8000}
               scroll={false}
               repeatSpacer={150}
-              marqueeDelay={100}>
-              {trackTitle === '' ? (
+              marqueeDelay={100}
+      
+              >
+              {title === '' ? (
                 <Text style={{...styles.trackInfoText, color : 'white'}} >
-                  Play something 🎶{' '}
+                  Play something 🎶{' '} 
                   <Text style={styles.trackInfoText}>
                     {'\u25CF'} Go to Library{'->'} {'\u25CF'} Downloads{'->'}{' '}
                     Select a Playlist 🔖{'->'} Play a track 🎵
@@ -294,9 +289,9 @@ appKilledPlaybackBehavior : AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotif
                 </Text>
               ) : (
                 <Text style={{...styles.trackInfoText, color : 'white'}}>
-                  {trackTitle}{' '}
+                  {title}{' '}
                   <Text style={styles.trackInfoText}>
-                    {'\u25CF'} {trackArtist} {'\u25CF'} {trackAlbum}
+                    {'\u25CF'} {artist} {'\u25CF'} {album}
                   </Text>
                 </Text>
               )}
@@ -330,7 +325,7 @@ appKilledPlaybackBehavior : AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotif
           </View>
         </View>
       </View>
-    </TouchableWithoutFeedback> }
+    </TouchableWithoutFeedback> : null}
     </>
 
   

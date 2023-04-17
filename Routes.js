@@ -1,6 +1,6 @@
 import analytics from '@react-native-firebase/analytics';
 // import { createStackNavigator, TransitionSpecs } from '@react-navigation/stack';
-import {createStackNavigator} from '@react-navigation/stack';
+import {CardStyleInterpolators, createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import React, {useRef} from 'react';
@@ -97,7 +97,11 @@ const RootStack = () => {
           }}
           initialRouteName="BottomNav">
           <Stack.Screen name="BottomNav" component={BottomNav} />
-          {/* <Stack.Screen name={'Player'} component={Player} /> */}
+          <Stack.Screen name={'Player'} component={Player} options={{
+          // presentation: 'modal',
+          cardOverlayEnabled: true,
+          cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
+        }}/>
         </Stack.Navigator>
 
         <DownloadingHelper />
