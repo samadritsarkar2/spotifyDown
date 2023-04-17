@@ -19,7 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-spinkit';
 import TextTicker from 'react-native-text-ticker';
 
-import {NEW_API} from '@env';
+import {NEWER_API} from '@env';
 import {windowWidth, windowHeight, bottomGap} from '../common';
 
 import {
@@ -29,7 +29,7 @@ import {
 import CustomDownload from './CustomDownload';
 
 const Playlist = ({navigation, route}) => {
-  // const [loading, setLoading] = useState(true);
+
   const [error, setError] = useState(false);
   // const [tracks, setTracks] = useState([]);
   // const [responseData, setResponseData] = useState({});
@@ -49,14 +49,14 @@ const Playlist = ({navigation, route}) => {
 
   const fetchData = async () => {
     try {
-      let api = `${NEW_API}/redirect?id=${URlID}`;
+      let api = `${NEWER_API}/redirect?id=${URlID}`;
       const response = await fetch(api, {
         method: 'GET',
         headers: {},
       });
       // const text = await response.text();
       // console.log('Error', response.status);
-      if (response) {
+      if (response.status === 200) {
         response
           .json()
           .then((res) => {
@@ -67,9 +67,10 @@ const Playlist = ({navigation, route}) => {
             // setLoading(false);
             setError(true);
    
-            navigation.navigate('Error', {error: error});          });
+            navigation.navigate('Error', {error: error});
+           });
+           
       } else {
-        setLoading(false);
         setError(true);
         navigation.navigate('Error', {error: error});
       }
@@ -86,18 +87,12 @@ const Playlist = ({navigation, route}) => {
   };
 
   useEffect(() => {
-    // setLoading(true);
-    // console.log(state);
+   
     dispatch({type: 'LOADING_TRUE'});
 
     fetchData();
 
-    // return () => {
-    //   const [loading, setLoading] = useState(true);
-    //   const [error, setError] = useState(false);
-    //   const [tracks, setTracks] = useState([]);
-    //   const [responseData, setResponseData] = useState({});
-    // };
+    
 
   }, [isFocused]);
 
@@ -111,23 +106,17 @@ const Playlist = ({navigation, route}) => {
         // console.log(item);
         setTimeout(() => {
           handleDownload(item);
-        }, 1000);
+        }, 500);
       }
     });
   };
 
   const handleDownloadAll = async () => {
     try {
-      if (true) {
+      
         let downloaded = await downloadAll();
         savePlaylist();
-      } else {
-        Snackbar.show({
-          text: 'Playlist already exists in Download Library',
-          duration: Snackbar.LENGTH_LONG,
-          backgroundColor: 'red',
-        });
-      }
+      
     } catch (error) {
       console.error(error);
     }
@@ -191,10 +180,7 @@ const Playlist = ({navigation, route}) => {
     }
   };
 
-  const openFile = (single) => {
-    navigation.navigate('LibraryStack', {screen: 'DownloadStack'});
-  };
-
+  
   const onRequestClose = () => null;
 
   const handleCustomDownload = (item) => {

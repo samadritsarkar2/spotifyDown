@@ -137,7 +137,7 @@ const Downloads = ({navigation}) => {
             onLongPress={() => {
               dispatch(allActions.addNew(item));
               Vibration.vibrate(300);
-              navigation.navigate("Playlist")
+              navigation.navigate('NewStack', {screen: 'Playlist'});
             }}
             style={{
               marginVertical: 10,

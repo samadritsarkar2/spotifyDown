@@ -245,7 +245,7 @@ useEffect(() => {
               <View style={{ marginLeft: -15, marginRight: -15 }}>
 
                <Slider
-
+    
                         style={styles.seekBar}
                         minimumValue={0}
                         value={position}

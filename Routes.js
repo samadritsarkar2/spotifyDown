@@ -101,6 +101,9 @@ const RootStack = () => {
           // presentation: 'modal',
           cardOverlayEnabled: true,
           cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
+          gestureEnabled : false,
+    
+          
         }}/>
         </Stack.Navigator>
 

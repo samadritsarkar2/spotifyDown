@@ -97,7 +97,7 @@ const Library = ({navigation}) => {
                   source={require('../assets/info.png')}
                   style={styles.optionIcon}
                 />
-                <Text style={styles.buttons}>Know More</Text>
+                <Text style={styles.buttons}>Latest Changes</Text>
               </View>
             </TouchableOpacity>
             {/* <TouchableOpacity

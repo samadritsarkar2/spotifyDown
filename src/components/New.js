@@ -101,6 +101,9 @@ const New = ({navigation, route}) => {
           />
         </View>
         <View style={styles.inputBox}>
+          <View 
+            
+          >
           <TextInput
             style={styles.input}
             value={url}
@@ -110,6 +113,7 @@ const New = ({navigation, route}) => {
             placeholder={'Enter Spotify Album/Playlist Link'}
             placeholderTextColor={'#B3B3b3'}
           />
+          </View>
           <TouchableOpacity style={spotifyGreenButton} onPress={fetchApi}>
             <Text style={spotifyGreenButtonText}>Submit</Text>
           </TouchableOpacity>
@@ -139,12 +143,13 @@ const styles = StyleSheet.create({
   },
   inputBox: {
     flex: 0.6,
+    
   },
   input: {
     color: 'white',
     marginHorizontal: 20,
 
-    width: '70%',
+    width: '80%',
     borderBottomColor: 'white',
     borderBottomWidth: 1,
     alignSelf: 'center',

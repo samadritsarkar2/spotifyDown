@@ -46,16 +46,32 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
               style={{margin: 10}}>
               {/* // Changelog  */}
               <View style={styles.faqOne}>
-                <Text style={styles.faqQuestion}>Changelog v1.95</Text>
+                <Text style={styles.faqQuestion}>Changelog v1.98</Text>
+                <Text style={styles.faqAnswer}>
+                  {'\u25CF'} Completely changed the{' '}
+                  <Text style={{fontWeight: 'bold'}}>Backend</Text>.
+                  Changed how the tracks were downloaded and sourced. Significatnly decreasing errors.
+                </Text>
                 <Text style={styles.faqAnswer}>
                   {'\u25CF'} Added{' '}
-                  <Text style={{fontWeight: 'bold'}}>Custom Downloader</Text> .
-                  Long press or tap the more icon while downloading the tracks,
-                  to manually select the YT Video. This update hopefully fixes a
-                  lot of issues with Downify.
+                  <Text style={{fontWeight: 'bold'}}>Player</Text>.
+                  Tap on the mini-player while a track is playing to reveal the sleek-clean Player screen, that is inspired from Spotify's design.
+                  With this, <Text style={{fontWeight: 'bold'}}>seek feature</Text> is unlocked.
+                </Text>
+                <Text style={styles.faqAnswer}>
+                  {'\u25CF'} Added{' '}
+                  <Text style={{fontWeight: 'bold'}}>Player</Text>.
+                  Tap on the mini-player while a track is playing to reveal the sleek-clean Player screen, that is inspired from Spotify's design.
+                  With this, <Text style={{fontWeight: 'bold'}}>seek feature</Text> is unlocked.
+                </Text>
+                <Text style={styles.faqAnswer}>
+                  {'\u25CF'} Added{' '}
+                  <Text style={{fontWeight: 'bold'}}>Player</Text>.
+                  Tap on the mini-player while a track is playing to reveal the sleek-clean Player screen, that is inspired from Spotify's design.
+                  With this, <Text style={{fontWeight: 'bold'}}>seek feature</Text> is unlocked.
                 </Text>
               </View>
-              <View style={styles.faqOne}>
+              {/* <View style={styles.faqOne}>
                 <Text style={styles.faqQuestion}>Changelog v1.90</Text>
                 <Text style={styles.faqAnswer}>
                   {'\u25CF'} Added Download Queue
@@ -70,7 +86,7 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
                 <Text style={styles.faqAnswer}>
                   {'\u25CF'} UI changes and few bug fixes
                 </Text>
-              </View>
+              </View> */}
               {/* // ISSUES  */}
               <View style={styles.faqOne}>
                 <Text style={styles.faqQuestion}>Issues :(</Text>

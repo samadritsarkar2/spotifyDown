@@ -18,6 +18,7 @@ const Stack = createStackNavigator();
 const LibraryStack = () => {
   const [height, setHeight] = useState(0);
   const [isShowing, setIsShowing] = useState(false);
+  
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -62,7 +63,7 @@ const LibraryStack = () => {
       IronSourceBanner.hideBanner();
       setIsShowing(false);
     };
-  }, [isFocused]);
+  }, [isFocused, isShowing]);
   return (
     <>
       {true ? (

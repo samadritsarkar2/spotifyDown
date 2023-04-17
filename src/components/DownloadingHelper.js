@@ -14,7 +14,7 @@ import {DOWNLOAD_PATH, windowHeight, windowWidth} from '../common/index';
 import {useDispatch} from 'react-redux';
 import {checkExists, checkPermission, checkData, isExist} from '../utils';
 import RNFS, {downloadFile} from 'react-native-fs';
-import {API, NEW_API, NEWER_API, NEWER_API_US} from '@env';
+import { NEWER_API, NEWER_API_US} from '@env';
 import Spinner from 'react-native-spinkit';
 import {useNavigation} from '@react-navigation/native';
 
@@ -48,8 +48,8 @@ const DownloadingHelper = () => {
     // console.log('Trying to download: ', single.title);
 
     return new Promise(async (resolve, reject) => {
-      // const api = `${NEW_API}/download?`;
-      const newApi = `${NEWER_API_US}/getDownloadLink?trackId=`
+
+      const api = `${NEWER_API}/getDownloadLink?trackId=`
 
       
       const req = checkPermission();
@@ -59,7 +59,7 @@ const DownloadingHelper = () => {
         let data;
         if (!single.customDownloadData) {
           
-          const newResponse = await fetch(newApi + single.id);
+          const newResponse = await fetch(api + single.id);
           if(newResponse.status != 200){
             dispatch({
               type: 'SET_DOWNLOAD_PERCENT',
@@ -91,10 +91,10 @@ const DownloadingHelper = () => {
         }
       
         // let link = data.url;
-        let link = `${NEWER_API}/directStream?videoId=` + data.videoId;
+        let link = `${NEWER_API}/directStream?videoId=` + data?.videoId;
         let duration = data.duration;
 
-        if (link) {
+        if (link && data.videoId) {
           const path = `${DOWNLOAD_PATH}/${single.title}.mp3`;
           let headers = {
             Accept: 'audio/*',

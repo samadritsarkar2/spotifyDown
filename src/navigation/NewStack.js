@@ -15,7 +15,7 @@ const NewStack = () => {
       initialRouteName="New"
       screenOptions={{
         headerShown: false,
-        detachPreviousScreen: true,
+        // detachPreviousScreen: true,
 
         cardOverlayEnabled: true,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,

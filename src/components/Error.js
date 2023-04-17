@@ -13,7 +13,7 @@ const Error = ({navigation}) => {
           <Text style={styles.heading}>Something went wrong!</Text>
 
           <Text style={{color: 'white'}}>
-            Please, check the link and Make sure the playlist is public and accessible,
+            Please, make sure the playlist is public and accessible,
           </Text>
           <Text style={{color: 'white'}}>or, Server issue,</Text>
           <Text style={{color: 'white'}}>

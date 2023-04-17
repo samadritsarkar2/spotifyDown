@@ -57,14 +57,14 @@ const App = ({navigation, route}) => {
             onPress={() => {
               navigation.navigate('NewStack', {screen: 'New'});
             }}>
-            <Text style={spotifyGreenButtonText}>Add New </Text>
+            <Text style={spotifyGreenButtonText}>Search</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={spotifyGreenButton}
             onPress={() => {
               navigation.navigate('LibraryStack', {screen: 'Library'});
             }}>
-            <Text style={spotifyGreenButtonText}>Library</Text>
+            <Text style={spotifyGreenButtonText}>Your Library</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     marginTop: '7%',
   },
   logoWrapper: {
-    flex: 0.5,
+    flex: 0.4,
     marginBottom: 0,
   },
   logo: {
@@ -92,10 +92,10 @@ const styles = StyleSheet.create({
     flex: 0.4,
     marginTop: 15,
     fontSize: 33,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     textAlign: 'center',
     color: 'white',
-    fontFamily: 'Montserrat',
+    fontFamily: 'GothamRoundedMedium',
   },
   inputBox: {
     flex: 0.5,
