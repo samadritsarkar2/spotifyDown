@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     color: '#1DB954',
-    fontFamily: 'GothamMedium',
+    fontFamily: 'GothamRoundedMedium',
     fontSize: 50,
     alignSelf: 'center',
   },

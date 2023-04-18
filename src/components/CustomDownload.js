@@ -84,9 +84,10 @@ const CustomDownload = () => {
         </Text>
       </View>
       {!loading ? (
-        <View style={{flex: 1}}>
+        <View style={{flex: 1, marginHorizontal : 7}}>
           <FlatList
             data={data}
+            showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
               return (
                 <TouchableOpacity
@@ -160,20 +161,20 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: 'white',
     fontSize: 17,
-    fontFamily: 'GothamMedium',
+    fontFamily: 'GothamRoundedMedium',
   },
   titleText: {
     flex: 4,
     color: 'white',
     fontSize: 15,
-    fontFamily: 'Roboto',
+    fontFamily: 'GothamRoundedBook',
     marginHorizontal: 2,
   },
   otherText: {
     flex: 1,
     color: 'white',
     fontSize: 15,
-    fontFamily: 'GothamMedium',
-    justifyContent: 'center',
+    fontFamily: 'GothamRoundedMedium',
+    alignSelf: 'center',
   },
 });

@@ -102,8 +102,27 @@ const New = ({navigation, route}) => {
         </View>
         <View style={styles.inputBox}>
           <View 
-            
+            style={{
+              backgroundColor : 'white',
+              marginHorizontal: 20,
+
+              width: '81%',
+           
+              alignSelf: 'center',
+              alignItems : 'center',
+              flexDirection : 'row',
+              borderRadius : 4,
+
+            }}
           >
+            <Image 
+          source={require("../assets/magnifying-glass.png")} 
+          style={{
+            height : 30,
+            width : 30,
+            marginHorizontal : 5
+          }}
+          />
           <TextInput
             style={styles.input}
             value={url}
@@ -111,8 +130,20 @@ const New = ({navigation, route}) => {
               setUrl(value);
             }}
             placeholder={'Enter Spotify Album/Playlist Link'}
-            placeholderTextColor={'#B3B3b3'}
+            placeholderTextColor={'black'}
           />
+          {url ? <TouchableOpacity 
+              onPress={() => setUrl('')}
+          > 
+          <Image 
+          source={require("../assets/close.png")} 
+          style={{
+            height : 25,
+            width : 25,
+            marginHorizontal : 7
+          }}
+          />
+          </TouchableOpacity> : null}
           </View>
           <TouchableOpacity style={spotifyGreenButton} onPress={fetchApi}>
             <Text style={spotifyGreenButtonText}>Submit</Text>
@@ -131,7 +162,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   logo: {
-    height: '100%',
+    height: '85%',
     aspectRatio: 1 / 1,
     alignSelf: 'center',
   },
@@ -143,16 +174,12 @@ const styles = StyleSheet.create({
   },
   inputBox: {
     flex: 0.6,
-    
+    marginTop : 2
   },
   input: {
-    color: 'white',
-    marginHorizontal: 20,
-
-    width: '80%',
-    borderBottomColor: 'white',
-    borderBottomWidth: 1,
-    alignSelf: 'center',
+    flex : 5 ,
+    color: 'black',
+   fontFamily : "GothamRoundedMedium"
   },
   submit: {
     justifyContent: 'center',
