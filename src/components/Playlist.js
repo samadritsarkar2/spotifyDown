@@ -377,7 +377,7 @@ const Playlist = ({navigation, route}) => {
                   </View>
                 );
               })}
-              <View style={{height: windowHeight * 0.06}} />
+              <View style={{height: windowHeight * 0.062}} />
             </ScrollView>
           </View>
         </>
@@ -449,18 +449,18 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
     fontSize: 25,
-    fontFamily: 'Montserrat-Regular',
-    fontWeight: 'bold',
+    fontFamily: 'GothamRoundedMedium',
+ 
   },
   trackTitle: {
     color: 'white',
     fontSize: 17,
-    fontFamily: 'GothamMedium',
+    fontFamily: 'GothamRoundedBook',
   },
   trackInfo: {
     color: '#6C7A89',
     fontSize: 12,
-    fontFamily: 'GothamMedium',
+    fontFamily: 'GothamRoundedMedium',
   },
   downloadAllButton: {
     justifyContent: 'center',
@@ -485,9 +485,9 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   scroller: {
-    flex: 0.54,
+    flex: 0.7,
     margin: 10,
-    width: '95%',
+    width: '96%',
 
     marginBottom: 0,
   },
@@ -495,6 +495,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     marginVertical: 10,
+    // backgroundColor : 'red'
   },
   customModalOverlay: {
     height: windowHeight * 0.15,
@@ -511,7 +512,7 @@ const styles = StyleSheet.create({
   trackOptionText: {
     fontSize: 17,
     color: 'white',
-    fontFamily: 'Roboto',
+    fontFamily: 'GothamRoundedMedium',
     marginLeft: 15,
   },
 });

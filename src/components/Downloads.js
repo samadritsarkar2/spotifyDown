@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '500',
     fontSize: 17,
-    fontFamily: 'Gotham',
+    fontFamily: 'GothamRoundedMedium',
     textTransform: 'uppercase',
   },
   playlistId: {

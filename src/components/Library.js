@@ -78,7 +78,7 @@ const Library = ({navigation}) => {
                   source={require('../assets/down.png')}
                   style={styles.optionIcon}
                 />
-                <Text style={styles.buttons}>Downloads </Text>
+                <Text style={styles.buttons}>Downloads</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity
@@ -97,7 +97,7 @@ const Library = ({navigation}) => {
                   source={require('../assets/info.png')}
                   style={styles.optionIcon}
                 />
-                <Text style={styles.buttons}>Latest Changes</Text>
+                <Text style={styles.buttons}>Latest Updates</Text>
               </View>
             </TouchableOpacity>
             {/* <TouchableOpacity
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
   smallText: {
     fontSize: 12,
     color: 'gray',
-    fontFamily: 'Gotham',
+    fontFamily: 'GothamRoundedBook',
   },
   optionWrapper: {
     flex: 1,

@@ -392,12 +392,12 @@ const DownloadingHelper = () => {
         }
       } else {
         Alert.alert(
-          'Storage Permision Denied',
+          'Storage Permission Denied',
           'Unable to save',
           [{text: 'OK', onPress: () => {}}],
           {cancelable: false},
         );
-        reject('Storage Permision Denied');
+        reject('Storage Permission Denied');
       }
     });
   };

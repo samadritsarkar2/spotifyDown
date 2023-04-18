@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
   trackOptionText: {
     fontSize: 17,
     color: 'white',
-    fontFamily: 'Roboto',
+    fontFamily: 'GothamRoundedMedium',
     marginLeft: 15,
   },
 });

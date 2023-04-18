@@ -36,7 +36,7 @@ const New = ({navigation, route}) => {
   const fetchApi = async () => {
     setLoading(true);
 
-    // Santiation of the input URL
+    // Sanitation of the input URL
 
     let URL = parse(url);
     let pathArr = URL.pathname.split('/');
@@ -182,14 +182,5 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     marginVertical: 10,
-  },
-  text: {
-    color: 'white',
-    alignContent: 'center',
-    textAlign: 'center',
-    fontWeight: '500',
-    fontSize: 17,
-    fontFamily: 'Gotham',
-    textTransform: 'uppercase',
-  },
+  }
 });

@@ -85,6 +85,10 @@ appKilledPlaybackBehavior : AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotif
         Capability.SkipToPrevious,
       ],
       icon: require('../assets/notification_icon.png'),
+      playIcon : require("../assets/play.png"),
+      pauseIcon : require("../assets/pause.png"),
+      nextIcon :require("../assets/next.png"),
+      previousIcon : require("../assets/previous.png"),
     });
 
     // await TrackPlayer.add(queue);
@@ -222,15 +226,6 @@ appKilledPlaybackBehavior : AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotif
     }
 
 
- 
-
-   
- 
-
-
-  
-
-
   return (
 
     <>
@@ -281,7 +276,7 @@ Play something 🎶{' '} {'\u25CF'}
               >
               {title === '' ? (
                 <Text style={{...styles.trackInfoText, color : 'white'}} >
-                  Play something 🎶{' '} 
+                  Tap here to open NEW Player 🎶{' '} 
                   <Text style={styles.trackInfoText}>
                     {'\u25CF'} Go to Library{'->'} {'\u25CF'} Downloads{'->'}{' '}
                     Select a Playlist 🔖{'->'} Play a track 🎵

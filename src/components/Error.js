@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     width: 300,
   },
   heading: {
-    fontFamily: 'Gotham',
+    fontFamily: 'GothamRoundMedium',
     fontSize: 35,
     color: 'white',
   },
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '500',
     fontSize: 20,
-    fontFamily: 'Gotham',
+    fontFamily: 'GothamRoundedBook',
     textTransform: 'uppercase',
   },
 });

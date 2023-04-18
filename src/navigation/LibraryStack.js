@@ -63,7 +63,7 @@ const LibraryStack = () => {
       IronSourceBanner.hideBanner();
       setIsShowing(false);
     };
-  }, [isFocused, isShowing]);
+  }, [isFocused]);
   return (
     <>
       {true ? (
