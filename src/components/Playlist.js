@@ -78,7 +78,7 @@ const Playlist = ({navigation, route}) => {
       setTimeout(() => {
         navigation.goBack();
         Snackbar.show({
-          text: 'Internt connection is required to fetch playlist',
+          text: 'Internet connection is required to fetch playlist',
           duration: Snackbar.LENGTH_LONG,
           backgroundColor: 'red',
         });

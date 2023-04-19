@@ -84,11 +84,7 @@ appKilledPlaybackBehavior : AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotif
         Capability.SkipToNext,
         Capability.SkipToPrevious,
       ],
-      icon: require('../assets/notification_icon.png'),
-      playIcon : require("../assets/play.png"),
-      pauseIcon : require("../assets/pause.png"),
-      nextIcon :require("../assets/next.png"),
-      previousIcon : require("../assets/previous.png"),
+      icon: require('../assets/notification_icon.png')
     });
 
     // await TrackPlayer.add(queue);

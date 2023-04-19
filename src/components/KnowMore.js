@@ -84,7 +84,7 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
                     playlist as the track of current playlist.
                 </Text>
                 <Text style={styles.faqAnswer}>
-                {'\u25CF'} Since, YT music is the new source for downloads, few tracks are not found properly there. So, it may not 
+                {'\u25CF'} Since, YT music is the new source for downloads, few tracks are not found properly there. So, it may
                 give error as "Unable to Scrap from YT music". Try the custom downloader.
                 </Text>
                 <Text style={styles.faqAnswer}>

@@ -49,7 +49,7 @@ const App = ({navigation, route}) => {
               source={require('../assets/homeLogo.png')}
               style={styles.logo}></Image>
           </View>
-          <Text style={styles.header}>Downify</Text>
+          <Text style={styles.header}>Downify<Text style={{fontSize : 15}} >v1.98</Text></Text>
         </View>
         <View style={styles.inputBox}>
           <TouchableOpacity

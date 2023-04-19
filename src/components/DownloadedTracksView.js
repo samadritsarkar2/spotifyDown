@@ -138,7 +138,7 @@ const TracksView = () => {
                     source={{uri: `${item.artwork}`}}
                   />
                   <View style={styles.trackDetails}>
-                    <TextTicker style={styles.trackTitle}>{item.title}</TextTicker>
+                    <TextTicker duration={8000} style={styles.trackTitle}>{item.title}</TextTicker>
                     <Text style={styles.trackInfo}>
                       {item.artist} - {item.album}
                     </Text>
