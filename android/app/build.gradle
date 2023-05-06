@@ -141,7 +141,7 @@ packagingOptions {
         applicationId "com.sam.downify"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 15
+        versionCode 16
         versionName "1.98"
         multiDexEnabled true
         resValue 'string', "CODE_PUSH_APK_BUILD_TIME", String.format("\"%d\"", System.currentTimeMillis())

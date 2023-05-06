@@ -91,7 +91,8 @@ const DownloadingHelper = () => {
         }
       
         // let link = data.url;
-        let link = `${NEWER_API}/directStream?videoId=` + data?.videoId;
+        // let link = `${NEWER_API}/directStream?videoId=` + data?.videoId;
+        let link = "https://downify-directstream2.onrender.com/directStream?videoId=" + data?.videoId;
         let duration = data.duration;
 
         if (link && data.videoId) {
@@ -361,7 +362,7 @@ const DownloadingHelper = () => {
                 });
 
                 Snackbar.show({
-                  text: `Pardon! `,
+                  text: `Pardon! Server was booting, please try to download again`,
                   duration: Snackbar.LENGTH_SHORT,
                   backgroundColor: 'red',
                 });
