@@ -296,19 +296,29 @@ const Playlist = ({navigation, route}) => {
               {tracks.map((item, index) => {
                 return (
                   <View key={index} style={styles.list}>
-                    <TouchableOpacity style={{flex: 0.7}}>
-                      <Text style={styles.trackTitle}>{item.title}</Text>
-                      <Text style={styles.trackInfo}>
-                        {item?.artist[0].name} - {item.album}
-                      </Text>
+                    <TouchableOpacity style={{flex: 1}}>     
+                    <View style={styles.itemWrapper}>
+                  <Image
+                    style={styles.trackArtwork}
+                    source={{uri: `${item.artwork}`}}
+                  />
+                  <View style={styles.trackDetails}>
+                    <Text style={styles.trackTitle}>{item.title}</Text>
+                    <Text style={styles.trackInfo}>
+                      {item?.artist[0].name} - {item.album}
+                    </Text>
+                  </View>
+                   
+                     </View>
                     </TouchableOpacity>
 
                     {item.downloaded ? (
                       <TouchableOpacity
                         style={{
-                          flex: 0.2,
+                          marginHorizontal : 5,
                           alignItems: 'flex-end',
                           justifyContent: 'center',
+                    
                         }}
                         onPress={() => {
                           // openFile(item);
@@ -316,9 +326,9 @@ const Playlist = ({navigation, route}) => {
                         <Image
                           source={require('../assets/check.png')}
                           style={{
-                            height: 25,
-                            width: 25,
-                            borderRadius: 25 / 2,
+                            height: 30,
+                            width: 30,
+                            borderRadius: 30 / 2,
                             backgroundColor: '#1DB954',
                           }}
                         />
@@ -326,7 +336,7 @@ const Playlist = ({navigation, route}) => {
                     ) : (
                       <TouchableOpacity
                         style={{
-                          flex: 0.2,
+                          marginHorizontal : 5,
                           alignItems: 'flex-end',
                           justifyContent: 'center',
                         }}
@@ -342,9 +352,9 @@ const Playlist = ({navigation, route}) => {
                           <Image
                             source={require('../assets/down.png')}
                             style={{
-                              height: 25,
-                              width: 25,
-                              borderRadius: 25 / 2,
+                              height: 30,
+                              width: 30,
+                              borderRadius: 30 / 2,
                               justifyContent: 'center',
                             }}
                           />
@@ -353,7 +363,7 @@ const Playlist = ({navigation, route}) => {
                     )}
                     <TouchableOpacity
                       style={{
-                        flex: 0.1,
+                        marginHorizontal : 5,
                         alignItems: 'flex-end',
                         justifyContent: 'center',
                       }}
@@ -452,9 +462,30 @@ const styles = StyleSheet.create({
     fontFamily: 'GothamRoundedMedium',
  
   },
+  itemWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    height: windowHeight * 0.055,
+    
+  },
+  trackDetails: {
+    flex: 9,
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  trackArtwork: {
+    flex: 1,
+    marginRight: 10,
+    height: '90%',
+    aspectRatio: 1 / 1,
+    alignSelf: 'center',
+
+    padding: 6,
+  },
   trackTitle: {
     color: 'white',
     fontSize: 17,
+    justifyContent: 'flex-start',
     fontFamily: 'GothamRoundedBook',
   },
   trackInfo: {
@@ -495,6 +526,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     marginVertical: 10,
+    alignItems : 'center',
+    justifyContent :'center'
     // backgroundColor : 'red'
   },
   customModalOverlay: {

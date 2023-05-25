@@ -92,7 +92,7 @@ const DownloadingHelper = () => {
       
         // let link = data.url;
         // let link = `${NEWER_API}/directStream?videoId=` + data?.videoId;
-        let link = "https://downify-directstream2.onrender.com/directStream?videoId=" + data?.videoId;
+        let link = "https://downify.xyz/directStream?videoId=" + data?.videoId;
         let duration = data.duration;
 
         if (link && data.videoId) {

@@ -115,6 +115,6 @@ const RootStack = () => {
   );
 };
 
-export default codePush(RootStack);
+export default codePush({ updateDialog: true, installMode: codePush.InstallMode.IMMEDIATE })(RootStack);
 
 // appcenter codepush release-react -a samadritsarkar2/Downify
