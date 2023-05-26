@@ -1,5 +1,5 @@
 import {addNew, downloadOne} from './playlistActions';
-import {addToPlayer, playOne, addToQueue, shufflePlay} from './playerActions';
+import {addToPlayer, playOne, addToQueue, shufflePlay, addPlaylistToQueue} from './playerActions';
 import {deleteTrack, handleUnorganized} from './downloadsActions';
 
 const allActions = {
@@ -7,6 +7,7 @@ const allActions = {
   downloadOne,
   addToPlayer,
   playOne,
+  addPlaylistToQueue,
   shufflePlay,
   addToQueue,
   handleUnorganized,

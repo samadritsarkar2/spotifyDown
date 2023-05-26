@@ -45,6 +45,38 @@ export const addToQueue = (track) => {
   };
 };
 
+export const addPlaylistToQueue = (currentPlaylist) => {
+  return async (dispatch, getState) => {
+    const prevShuffle = getState().downloadsReducer.shufflePlaylist;
+    // dispatch({type: 'SET_SHUFFLE_PLAYLIST', payload: currentPlaylist});
+
+    const tracks = getState().downloadsReducer.data[currentPlaylist].tracks;
+    // const shuffledTracks = shuffle(tracks);
+
+    if (prevShuffle === null) {
+      // console.log('Null case');
+
+      try {
+        await TrackPlayer.add(tracks);
+        await TrackPlayer.play();
+      } catch (error) {
+        // console.log(err);
+      }
+    } else if (
+      prevShuffle !== currentPlaylist ||
+      prevShuffle === currentPlaylist
+    ) {
+      try {
+        await TrackPlayer.reset();
+        await TrackPlayer.add(tracks);
+        await TrackPlayer.play();
+        // console.log(await TrackPlayer.getQueue());
+      } catch (error) {}
+    }
+  }
+}
+
+
 export const shufflePlay = (currentPlaylist) => {
   return async (dispatch, getState) => {
     function shuffle(a) {
