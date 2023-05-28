@@ -15,7 +15,7 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
       Linking.openURL(link);
     } catch (error) {
       Snackbar.show({
-        text: 'Something  Went Wrong',
+        text: 'Something went Wrong',
         duration: Snackbar.LENGTH_SHORT,
         backgroundColor: 'red',
       });

@@ -20,7 +20,7 @@ import Spinner from 'react-native-spinkit';
 import TextTicker from 'react-native-text-ticker';
 
 import {NEWER_API} from '@env';
-import {windowWidth, windowHeight, bottomGap} from '../common';
+import {windowWidth, windowHeight, bottomGap, GothamRoundedBook, GothamRoundedMedium} from '../common';
 
 import {
   addNewPlaylist,
@@ -143,7 +143,7 @@ const Playlist = ({navigation, route}) => {
           Snackbar.show({
             text: 'First Playlist added to Library',
             duration: Snackbar.LENGTH_LONG,
-            backgroundColor: 'red',
+            backgroundColor: '#1DB954',
           });
           setResponseData((item) =>
             !item.saved ? {...item, saved: true} : item,
@@ -161,7 +161,9 @@ const Playlist = ({navigation, route}) => {
             Snackbar.show({
               text: 'Playlist added to Library',
               duration: Snackbar.LENGTH_LONG,
-              backgroundColor: 'red',
+              backgroundColor: '#1DB954',
+        fontFamily : GothamRoundedMedium
+
             });
             dispatch({type: 'SAVE_PLAYLIST'});
           } else {
@@ -169,6 +171,7 @@ const Playlist = ({navigation, route}) => {
               text: 'Playlist already exists in Library',
               duration: Snackbar.LENGTH_LONG,
               backgroundColor: 'red',
+              fontFamily : GothamRoundedBook
             });
             dispatch({type: 'SAVE_PLAYLIST'});
           }

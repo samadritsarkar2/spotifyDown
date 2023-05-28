@@ -7,6 +7,7 @@ import {
   StatusBar,
   Alert,
   TouchableOpacity,
+  PermissionsAndroid,
 } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import {spotifyGreenButton, spotifyGreenButtonText} from '../common';
@@ -19,10 +20,26 @@ LogBox.ignoreLogs([
 ]);
 
 const App = ({navigation, route}) => {
+
+
+  const requestNotificationPermission = async () => {
+    try {
+      // await PermissionsAndroid.request(
+      //   PermissionsAndroid.PERMISSIONS
+      // )
+
+    } catch (err) {
+      // if (_DEV_) console.warn('requestNotificationPermission error: ', err)
+     }
+    }
+
   useEffect(() => {
-    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
+    // const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+    //   Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    // });
+    
+    // requestNotificationPermission();
+
 
     IronSource.initializeIronSource('118aa3d25', 'downify', {
       validateIntegration: true,
@@ -35,7 +52,7 @@ const App = ({navigation, route}) => {
         console.log('error');
       });
 
-    return unsubscribe;
+    // return unsubscribe;
   }, []);
 
   return (

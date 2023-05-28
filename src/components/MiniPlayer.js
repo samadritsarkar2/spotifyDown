@@ -7,6 +7,7 @@ import {
   Image,
   TouchableWithoutFeedback,
   BackHandler,
+  Vibration,
 } from 'react-native';
 import TrackPlayer, {
   usePlaybackState,
@@ -15,17 +16,18 @@ import TrackPlayer, {
   Event,
   State,
   AppKilledPlaybackBehavior,
-  useProgress
+  useProgress,
 } from 'react-native-track-player';
 
 import {useDispatch, useSelector} from 'react-redux';
 
-import {windowHeight} from '../common';
+import {GothamRoundedBook, GothamRoundedMedium, windowHeight} from '../common';
 import TextTicker from 'react-native-text-ticker';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import Player from './Player';
 import Slider from '@react-native-community/slider';
-import { setPlayerActive, setPlayerClosed } from '../redux/actions/playerActions';
+import {setPlayerActive, setPlayerClosed} from '../redux/actions/playerActions';
+import Snackbar from 'react-native-snackbar';
 
 const MiniPlayer = () => {
   const [isTrackPlayerInit, setIsTrackPlayerInit] = useState(false);
@@ -44,56 +46,54 @@ const MiniPlayer = () => {
   const navigation = useNavigation();
 
   const playbackState = usePlaybackState();
-  const { position, buffered, duration } = useProgress(10);
- 
+  const {position, buffered, duration} = useProgress(10);
 
-  const store = useSelector(state => state).player;
-  const { trackInfo : {title, artist, album, artwork}, isPlayerActive} = store;
+  const store = useSelector((state) => state).player;
+  const {
+    trackInfo: {title, artist, album, artwork},
+    isPlayerActive,
+  } = store;
 
   const trackPlayerInit = async () => {
-  
-  try {
-    await TrackPlayer.setupPlayer({});
-    await TrackPlayer.updateOptions({
-      android : {
-appKilledPlaybackBehavior : AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotification
-      },
-      alwaysPauseOnInterruption: false,
-      capabilities: [
-        Capability.Play,
-        Capability.Play,
-        Capability.Pause,
-        Capability.SkipToNext,
-        Capability.SkipToPrevious,
-        Capability.Stop,
-        Capability.SeekTo,
-      
-      ],
-      notificationCapabilities : [
-        Capability.Play,
-        Capability.Stop,
-        Capability.Pause,
-        Capability.SkipToNext,
-        Capability.SkipToPrevious,
-        Capability.SeekTo,
-      ],
-      compactCapabilities: [
-        Capability.Play,
-        Capability.Stop,
-        Capability.Pause,
-        Capability.SkipToNext,
-        Capability.SkipToPrevious,
-      ],
-      icon: require('../assets/notification_icon.png')
-    });
+    try {
+      await TrackPlayer.setupPlayer({});
+      await TrackPlayer.updateOptions({
+        android: {
+          appKilledPlaybackBehavior:
+            AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotification,
+        },
+        alwaysPauseOnInterruption: false,
+        capabilities: [
+          Capability.Play,
+          Capability.Play,
+          Capability.Pause,
+          Capability.SkipToNext,
+          Capability.SkipToPrevious,
+          Capability.Stop,
+          Capability.SeekTo,
+        ],
+        notificationCapabilities: [
+          Capability.Play,
+          Capability.Stop,
+          Capability.Pause,
+          Capability.SkipToNext,
+          Capability.SkipToPrevious,
+          Capability.SeekTo,
+        ],
+        compactCapabilities: [
+          Capability.Play,
+          Capability.Stop,
+          Capability.Pause,
+          Capability.SkipToNext,
+          Capability.SkipToPrevious,
+        ],
+        icon: require('../assets/notification_icon.png'),
+      });
 
-    // await TrackPlayer.add(queue);
+      // await TrackPlayer.add(queue);
 
-    return true;
-  } catch (error) {
-    
-  }
-  
+      return true;
+    } catch (error) {}
   };
 
   //initialize the TrackPlayer when the App component is mounted
@@ -101,23 +101,20 @@ appKilledPlaybackBehavior : AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotif
     const startPlayer = async () => {
       let isInit = await trackPlayerInit();
       setIsTrackPlayerInit(isInit);
-
     };
 
     startPlayer();
 
     return () => {
-      try { TrackPlayer.reset(); 
-          dispatch(setPlayerClosed());  
-          dispatch({
-            type : "CLEAR_TRACK_INFO",
-          })
-      } catch(_){};
+      try {
+        TrackPlayer.reset();
+        dispatch(setPlayerClosed());
+        dispatch({
+          type: 'CLEAR_TRACK_INFO',
+        });
+      } catch (_) {}
     };
   }, []);
-
-
-
 
   useTrackPlayerEvents(
     [Event.PlaybackTrackChanged, Event.PlaybackState],
@@ -133,20 +130,17 @@ appKilledPlaybackBehavior : AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotif
         //   artist: 'Go to Library->',
         //   album: 'Downloads-> Play a track 🎵',
         // };
-      
 
         dispatch({
-          type : 'SET_TRACK_INFO',
-          payload : {
-            trackInfo : {
-              ...track
-            }
-          }
-        })
-
+          type: 'SET_TRACK_INFO',
+          payload: {
+            trackInfo: {
+              ...track,
+            },
+          },
+        });
       }
       if (event.type === Event.PlaybackState && event.state === State.Stopped) {
-        
         // setTrackTitle('');
         // setTrackArtist('');
         // setTrackAlbum('');
@@ -156,35 +150,28 @@ appKilledPlaybackBehavior : AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotif
 
         // dispatch(setPlayerClosed());
         dispatch({
-          type : "CLEAR_TRACK_INFO",
-        })
-        
+          type: 'CLEAR_TRACK_INFO',
+        });
       }
     },
   );
 
   const togglePlayback = async () => {
-   
-   try {
+    try {
+      const currentTrack = await TrackPlayer.getCurrentTrack();
 
-    const currentTrack = await TrackPlayer.getCurrentTrack();
-
-    // console.log(await TrackPlayer.getQueue());
-    if (currentTrack == null) {
-      // await TrackPlayer.reset();
-      // await TrackPlayer.play();
-    } else {
-      if (playbackState === State.Paused || playbackState === State.Ready) {
-        await TrackPlayer.play();
+      // console.log(await TrackPlayer.getQueue());
+      if (currentTrack == null) {
+        // await TrackPlayer.reset();
+        // await TrackPlayer.play();
       } else {
-        await TrackPlayer.pause();
+        if (playbackState === State.Paused || playbackState === State.Ready) {
+          await TrackPlayer.play();
+        } else {
+          await TrackPlayer.pause();
+        }
       }
-    }
-    
-   } catch (_) {
-    
-   }
-   
+    } catch (_) {}
   };
 
   const skipToPrevious = async () => {
@@ -201,44 +188,40 @@ appKilledPlaybackBehavior : AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotif
 
   const seekTo = async (pos) => {
     try {
-        await TrackPlayer.seekTo(pos);
-     
-    } catch (_) {
-      
+      await TrackPlayer.seekTo(pos);
+    } catch (_) {}
+  };
+
+  const activatePlayer = () => {
+    if (title && album) {
+      dispatch(setPlayerActive());
+
+      navigation.navigate({
+        name: 'Player',
+      });
+    } else {
+      Vibration.vibrate(100);
+      Snackbar.show({
+        text: 'Play a track and tap here to reveal the Player',
+        backgroundColor: '#1DB954',
+        duration: Snackbar.LENGTH_SHORT,
+        fontFamily : GothamRoundedMedium
+      });
     }
-  }
-
-    const activatePlayer = () => {
-      if(title && album)
-      {
-
-        dispatch(setPlayerActive());
-  
-        navigation.navigate({
-          name : 'Player'
-        });
-      }
-
-    }
-
+  };
 
   return (
-
     <>
-        {!store.isPlayerActive ?  
-        <TouchableWithoutFeedback
-      onPress={() => activatePlayer()}>
-      <View style={[styles.box]}>
-     
-      
-        <View style={styles.playerView}>
-          
-          <View style={styles.trackInfo}>
-            {/* <Text style={{color: 'white'}}>
+      {!store.isPlayerActive ? (
+        <TouchableWithoutFeedback onPress={() => activatePlayer()}>
+          <View style={[styles.box]}>
+            <View style={styles.playerView}>
+              <View style={styles.trackInfo}>
+                {/* <Text style={{color: 'white'}}>
               {trackTitle} {'\u25CF'} {trackArtist}
             </Text> */}
 
-{/* <TextTicker
+                {/* <TextTicker
               style={{
                 color: 'white',
                 fontFamily: 'GothamMedium',
@@ -257,69 +240,71 @@ Play something 🎶{' '} {'\u25CF'}
                     Select a Playlist 🔖{'->'} Play a track 🎵</Text>
                 </TextTicker> */}
 
-            <TextTicker
-              style={{
-                color: 'white',
-                fontFamily: 'GothamMedium',
-                fontWeight: 'bold'
-              }}
-          
-              duration={8000}
-              scroll={false}
-              repeatSpacer={150}
-              marqueeDelay={100}
-      
-              >
-              {title === '' ? (
-                <Text style={{...styles.trackInfoText, color : 'white'}} >
-                  Tap here to open NEW Player 🎶{' '} 
-                  <Text style={styles.trackInfoText}>
-                    {'\u25CF'} Go to Library{'->'} {'\u25CF'} Downloads{'->'}{' '}
-                    Select a Playlist 🔖{'->'} Play a track 🎵
-                  </Text>
-                </Text>
-              ) : (
-                <Text style={{...styles.trackInfoText, color : 'white'}}>
-                  {title}{' '}
-                  <Text style={styles.trackInfoText}>
-                    {'\u25CF'} {artist} {'\u25CF'} {album}
-                  </Text>
-                </Text>
-              )}
-            </TextTicker>
-          </View>
+                <TextTicker
+                  style={{
+                    color: 'white',
+                    fontFamily: 'GothamMedium',
+                    fontWeight: 'bold',
+                  }}
+                  duration={8000}
+                  scroll={false}
+                  repeatSpacer={150}
+                  marqueeDelay={100}>
+                  {title === '' ? (
+                    <Text style={{...styles.trackInfoText, color: 'white'}}>
+                      Tap here to open NEW Player 🎶{' '}
+                      <Text style={styles.trackInfoText}>
+                        {'\u25CF'} Go to Library{'->'} {'\u25CF'} Downloads
+                        {'->'} Select a Playlist 🔖{'->'} Play a track 🎵
+                      </Text>
+                    </Text>
+                  ) : (
+                    <Text style={{...styles.trackInfoText, color: 'white'}}>
+                      {title}{' '}
+                      <Text style={styles.trackInfoText}>
+                        {'\u25CF'} {artist} {'\u25CF'} {album}
+                      </Text>
+                    </Text>
+                  )}
+                </TextTicker>
+              </View>
 
-          <View style={styles.playerControls}>
-            <TouchableOpacity onPress={skipToPrevious} style={styles.playerIconsTouchable}>
-              <Image
-                source={require('../assets/previous.png')}
-                style={styles.playerIcons}
-              />
-            </TouchableOpacity>
+              <View style={styles.playerControls}>
+                <TouchableOpacity
+                  onPress={skipToPrevious}
+                  style={styles.playerIconsTouchable}>
+                  <Image
+                    source={require('../assets/previous.png')}
+                    style={styles.playerIcons}
+                  />
+                </TouchableOpacity>
 
-            <TouchableOpacity onPress={togglePlayback} style={styles.playerIconsTouchable}>
-              <Image
-                source={
-                  playbackState === State.Playing
-                    ? require('../assets/pause.png')
-                    : require('../assets/play.png')
-                }
-                style={[styles.playerIcons]}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={skipToNext} style={styles.playerIconsTouchable} >
-              <Image
-                source={require('../assets/next.png')}
-                style={styles.playerIcons}
-              />
-            </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={togglePlayback}
+                  style={styles.playerIconsTouchable}>
+                  <Image
+                    source={
+                      playbackState === State.Playing
+                        ? require('../assets/pause.png')
+                        : require('../assets/play.png')
+                    }
+                    style={[styles.playerIcons]}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={skipToNext}
+                  style={styles.playerIconsTouchable}>
+                  <Image
+                    source={require('../assets/next.png')}
+                    style={styles.playerIcons}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
-        </View>
-      </View>
-    </TouchableWithoutFeedback> : null}
+        </TouchableWithoutFeedback>
+      ) : null}
     </>
-
-  
   );
 };
 
@@ -348,25 +333,24 @@ const styles = StyleSheet.create({
     marginStart: 10,
     alignSelf: 'center',
   },
-  trackInfoText : {color: 'gray', fontSize: 13},
+  trackInfoText: {color: 'gray', fontSize: 13},
   playerControls: {
-
     flex: 0.5,
     flexDirection: 'row',
     marginEnd: 5,
-    alignItems : 'flex-end',
+    alignItems: 'flex-end',
     alignSelf: 'center',
   },
-  playerIconsTouchable : {
-    flex : 1,
-    marginHorizontal : 2,
-    marginVertical : 3,
+  playerIconsTouchable: {
+    flex: 1,
+    marginHorizontal: 2,
+    marginVertical: 3,
     // backgroundColor : 'red'
   },
   playerIcons: {
     //TODO: Flex
-    width : '100%',
-    height : '100%',
-    aspectRatio : 1/1
+    width: '100%',
+    height: '100%',
+    aspectRatio: 1 / 1,
   },
 });

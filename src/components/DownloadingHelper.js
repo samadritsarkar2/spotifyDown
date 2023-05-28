@@ -10,7 +10,7 @@ import {
 import {useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Snackbar from 'react-native-snackbar';
-import {DOWNLOAD_PATH, windowHeight, windowWidth} from '../common/index';
+import {DOWNLOAD_PATH, GothamRoundedBook, GothamRoundedMedium, windowHeight, windowWidth} from '../common/index';
 import {useDispatch} from 'react-redux';
 import {checkExists, checkPermission, checkData, isExist} from '../utils';
 import RNFS, {downloadFile} from 'react-native-fs';
@@ -140,7 +140,8 @@ const DownloadingHelper = () => {
                 Snackbar.show({
                   text: 'First Track added to Downloads',
                   duration: Snackbar.LENGTH_SHORT,
-                  backgroundColor: 'red',
+                  backgroundColor: '#1DB954',
+                  fontFamily : GothamRoundedMedium
                 });
               } else {
                 let newList = {
@@ -170,7 +171,8 @@ const DownloadingHelper = () => {
                 Snackbar.show({
                   text: 'Track added to Downloads',
                   duration: Snackbar.LENGTH_SHORT,
-                  backgroundColor: 'red',
+                  backgroundColor: '#1DB954',
+                  fontFamily : GothamRoundedMedium
                 });
               }
               dispatch({
@@ -265,7 +267,8 @@ const DownloadingHelper = () => {
                       Snackbar.show({
                         text: 'First Track added to Downloads',
                         duration: Snackbar.LENGTH_SHORT,
-                        backgroundColor: 'red',
+                        backgroundColor: '#1DB954',
+                        fontFamily : GothamRoundedMedium
                       });
                     } else {
                       let newList = {
@@ -295,7 +298,9 @@ const DownloadingHelper = () => {
                       Snackbar.show({
                         text: 'Track added to Downloads',
                         duration: Snackbar.LENGTH_SHORT,
-                        backgroundColor: 'red',
+                        backgroundColor: '#1DB954',
+                        fontFamily : GothamRoundedMedium
+
                       });
                     }
                     dispatch({
@@ -340,7 +345,7 @@ const DownloadingHelper = () => {
                     text: `Pardon!  Could not download ${single.title} due to Youtube policies. Try the Custom Downloader.`,
                     duration: Snackbar.LENGTH_SHORT,
                     backgroundColor: 'red',
-                    fontFamily: 'GothamMedium',
+                    fontFamily: GothamRoundedBook,
                   });
                   reject('Yt error');
                 }

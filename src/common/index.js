@@ -31,3 +31,8 @@ const config = {
   tagForChildDirectedTreatment: false,
   tagForUnderAgeConsent: false,
 };
+
+
+        export const GothamRoundedBook = "GothamRoundedBook";
+        export const GothamRoundedMedium = "GothamRoundedMedium";
+        
