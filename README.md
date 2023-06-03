@@ -16,7 +16,7 @@ Get it on Playstore
 # 🎯 Goal
 
 <h3>
-Downify wants to make sure that, no one is deprived of music on that long road trip or airplane when there is no Internet Connection.
+Downify lets you download your Spotify playlists easily and listen to the track even when you are offline. 
 You can download your Spotify playlists/albums in advance and enjoy music everywhere. And that too without annoying ads.
 </h3>
 
@@ -28,10 +28,22 @@ You can download your Spotify playlists/albums in advance and enjoy music everyw
     <img src="screenshots/3.png" width="200" />
     <img src="screenshots/4.png" width="200" />
     <img src="screenshots/5.png" width="200" />
+    <img src="screenshots/6.png" width="200" />
+
 </div>
 <br>
 
 # Changelog
+
+- [**1.98**](https://github.com/samadritsarkar2/spotifyDown/tree/1.985)
+  - Download speed increased (Although it is a server side improvement)
+  - Added a in-app Music Player
+    - Design inspired from Spotify
+    - Can control playback, next, pause and previous.
+    - Displays the thumbnail, with a blurred backdrop image of the same
+  - Searches from music.youtube.com instead of YouTube, so that downloaded tracks are more accurate.
+  - Play button (alongside Shuffle play), to let users listen playlist in the same order.
+  - UI changes and other minor changes in Changelog
 
 - [**1.80**](https://github.com/samadritsarkar2/spotifyDown/tree/version1.80)
 
@@ -84,17 +96,17 @@ I improved the code a little bit and the overall code structure. Will work on it
 - With the latest update, a song can be downloaded only once and hence it can be present in only one playlist. This will be solved in the upcoming version as we go into more complicated database system.
 - ~~While a track(/s) is getting downloaded from a particular playlist, if user exists the screen or another playlist is loaded, then the download gets cancelled.~~
 - Few playlist may give error unexpectedly.
-- Due to youtube policies, few songs are not downloadable. This is because some videos are regionally restriced or so. [See these limitations](https://github.com/fent/node-ytdl-core#limitations)
+- Due to youtube policies, few songs are not downloadable. This is because some videos are regionally restricted or so. [See these limitations](https://github.com/fent/node-ytdl-core#limitations)
 - Youtube server gives `429 error`.
-- Downloads wrong tracks
-- If you encounter anything else, feel free to report an issue or DM me. I will definetly work on it.
+- ~~Downloads wrong tracks~~ Using Youtube Music now in the backend to have better and accurate results. However, you can use "Custom Downloader" to select the correct track.
+- If you encounter anything else, feel free to report an issue or DM me. I will definitely work on it.
 
 # Upcoming Features
 
 - [x] In-app Music Player
 - [x] Support for Spotify Albums. ([#2](https://github.com/samadritsarkar2/spotifyDown/issues/2))
-- [ ] In-app music controller such as, queue, seek bar etc.
-- [ ] Optimized Download functionality
+- [x] In-app music controller such as, queue, seek bar etc.
+- [x] Optimized Download functionality
 - [ ] Spotify Login to fetch playlists
 - [x] Suggestions are always welcome.
 
