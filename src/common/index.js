@@ -4,7 +4,7 @@ import RNFS from 'react-native-fs';
 export const DOWNLOAD_PATH = `${RNFS.ExternalDirectoryPath}`;
 export const windowHeight = Dimensions.get('window').height;
 export const windowWidth = Dimensions.get('window').width;
-
+export const bottomGap = 0.115;
 export const spotifyGreenButton = {
   justifyContent: 'center',
   height: 50,
@@ -20,9 +20,9 @@ export const spotifyGreenButtonText = {
   color: 'white',
   textAlign: 'center',
   fontWeight: '500',
-  fontSize: 17,
-  fontFamily: 'GothamMedium',
-  fontWeight: '700',
+  fontSize: 18,
+  fontFamily: 'GothamRoundedMedium',
+  
   textTransform: 'uppercase',
 };
 
@@ -31,3 +31,8 @@ const config = {
   tagForChildDirectedTreatment: false,
   tagForUnderAgeConsent: false,
 };
+
+
+        export const GothamRoundedBook = "GothamRoundedBook";
+        export const GothamRoundedMedium = "GothamRoundedMedium";
+        

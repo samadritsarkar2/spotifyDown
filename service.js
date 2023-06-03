@@ -35,6 +35,7 @@ module.exports = async function () {
   TrackPlayer.addEventListener(Event.RemotePause, async () => {
     try {
       await TrackPlayer.pause();
+  
     } catch (_) {}
   });
 
@@ -58,6 +59,12 @@ module.exports = async function () {
   });
 
   TrackPlayer.addEventListener(Event.RemoteSeek, (e) => {
+   
+   try{ 
+    
+    console.log("Remote seeked")
     TrackPlayer.seekTo(e.position);
+
+   } catch (_) {}
   });
 };

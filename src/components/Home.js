@@ -7,6 +7,7 @@ import {
   StatusBar,
   Alert,
   TouchableOpacity,
+  PermissionsAndroid,
 } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import {spotifyGreenButton, spotifyGreenButtonText} from '../common';
@@ -19,10 +20,26 @@ LogBox.ignoreLogs([
 ]);
 
 const App = ({navigation, route}) => {
+
+
+  const requestNotificationPermission = async () => {
+    try {
+      // await PermissionsAndroid.request(
+      //   PermissionsAndroid.PERMISSIONS
+      // )
+
+    } catch (err) {
+      // if (_DEV_) console.warn('requestNotificationPermission error: ', err)
+     }
+    }
+
   useEffect(() => {
-    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
+    // const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+    //   Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    // });
+    
+    // requestNotificationPermission();
+
 
     IronSource.initializeIronSource('118aa3d25', 'downify', {
       validateIntegration: true,
@@ -35,7 +52,7 @@ const App = ({navigation, route}) => {
         console.log('error');
       });
 
-    return unsubscribe;
+    // return unsubscribe;
   }, []);
 
   return (
@@ -49,7 +66,7 @@ const App = ({navigation, route}) => {
               source={require('../assets/homeLogo.png')}
               style={styles.logo}></Image>
           </View>
-          <Text style={styles.header}>Downify</Text>
+          <Text style={styles.header}>Downify<Text style={{fontSize : 15}} >v1.98</Text></Text>
         </View>
         <View style={styles.inputBox}>
           <TouchableOpacity
@@ -57,14 +74,14 @@ const App = ({navigation, route}) => {
             onPress={() => {
               navigation.navigate('NewStack', {screen: 'New'});
             }}>
-            <Text style={spotifyGreenButtonText}>Add New </Text>
+            <Text style={spotifyGreenButtonText}>Search</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={spotifyGreenButton}
             onPress={() => {
               navigation.navigate('LibraryStack', {screen: 'Library'});
             }}>
-            <Text style={spotifyGreenButtonText}>Library</Text>
+            <Text style={spotifyGreenButtonText}>Your Library</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -80,7 +97,7 @@ const styles = StyleSheet.create({
     marginTop: '7%',
   },
   logoWrapper: {
-    flex: 0.5,
+    flex: 0.4,
     marginBottom: 0,
   },
   logo: {
@@ -92,10 +109,10 @@ const styles = StyleSheet.create({
     flex: 0.4,
     marginTop: 15,
     fontSize: 33,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     textAlign: 'center',
     color: 'white',
-    fontFamily: 'Montserrat',
+    fontFamily: 'GothamRoundedMedium',
   },
   inputBox: {
     flex: 0.5,

@@ -19,8 +19,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-spinkit';
 import TextTicker from 'react-native-text-ticker';
 
-import {NEW_API} from '@env';
-import {windowWidth, windowHeight} from '../common';
+import {NEWER_API} from '@env';
+import {windowWidth, windowHeight, bottomGap, GothamRoundedBook, GothamRoundedMedium} from '../common';
 
 import {
   addNewPlaylist,
@@ -29,7 +29,7 @@ import {
 import CustomDownload from './CustomDownload';
 
 const Playlist = ({navigation, route}) => {
-  // const [loading, setLoading] = useState(true);
+
   const [error, setError] = useState(false);
   // const [tracks, setTracks] = useState([]);
   // const [responseData, setResponseData] = useState({});
@@ -49,33 +49,28 @@ const Playlist = ({navigation, route}) => {
 
   const fetchData = async () => {
     try {
-      let api = `${NEW_API}/redirect?id=${URlID}`;
+      let api = `${NEWER_API}/redirect?id=${URlID}`;
       const response = await fetch(api, {
         method: 'GET',
         headers: {},
       });
       // const text = await response.text();
       // console.log('Error', response.status);
-      if (response) {
+      if (response.status === 200) {
         response
           .json()
           .then((res) => {
             dispatch(addNewPlaylist(res));
           })
           .catch((err) => {
-            console.log(err);
+            // console.log(err);
             // setLoading(false);
             setError(true);
-            //navigation.goBack();
-            Alert.alert(
-              'Server Error',
-              'Server Error',
-              [{text: 'OK', onPress: () => {}}],
-              {cancelable: true},
-            );
-          });
+   
+            navigation.navigate('Error', {error: error});
+           });
+           
       } else {
-        setLoading(false);
         setError(true);
         navigation.navigate('Error', {error: error});
       }
@@ -83,7 +78,7 @@ const Playlist = ({navigation, route}) => {
       setTimeout(() => {
         navigation.goBack();
         Snackbar.show({
-          text: 'Internt connection is required to fetch playlist',
+          text: 'Internet connection is required to fetch playlist',
           duration: Snackbar.LENGTH_LONG,
           backgroundColor: 'red',
         });
@@ -92,18 +87,13 @@ const Playlist = ({navigation, route}) => {
   };
 
   useEffect(() => {
-    // setLoading(true);
-    // console.log(state);
+   
     dispatch({type: 'LOADING_TRUE'});
 
     fetchData();
 
-    // return () => {
-    //   const [loading, setLoading] = useState(true);
-    //   const [error, setError] = useState(false);
-    //   const [tracks, setTracks] = useState([]);
-    //   const [responseData, setResponseData] = useState({});
-    // };
+    
+
   }, [isFocused]);
 
   const handleDownload = (item) => {
@@ -116,23 +106,17 @@ const Playlist = ({navigation, route}) => {
         // console.log(item);
         setTimeout(() => {
           handleDownload(item);
-        }, 2000);
+        }, 500);
       }
     });
   };
 
   const handleDownloadAll = async () => {
     try {
-      if (true) {
+      
         let downloaded = await downloadAll();
         savePlaylist();
-      } else {
-        Snackbar.show({
-          text: 'Playlist already exists in Download Library',
-          duration: Snackbar.LENGTH_LONG,
-          backgroundColor: 'red',
-        });
-      }
+      
     } catch (error) {
       console.error(error);
     }
@@ -159,7 +143,7 @@ const Playlist = ({navigation, route}) => {
           Snackbar.show({
             text: 'First Playlist added to Library',
             duration: Snackbar.LENGTH_LONG,
-            backgroundColor: 'red',
+            backgroundColor: '#1DB954',
           });
           setResponseData((item) =>
             !item.saved ? {...item, saved: true} : item,
@@ -177,7 +161,9 @@ const Playlist = ({navigation, route}) => {
             Snackbar.show({
               text: 'Playlist added to Library',
               duration: Snackbar.LENGTH_LONG,
-              backgroundColor: 'red',
+              backgroundColor: '#1DB954',
+        fontFamily : GothamRoundedMedium
+
             });
             dispatch({type: 'SAVE_PLAYLIST'});
           } else {
@@ -185,6 +171,7 @@ const Playlist = ({navigation, route}) => {
               text: 'Playlist already exists in Library',
               duration: Snackbar.LENGTH_LONG,
               backgroundColor: 'red',
+              fontFamily : GothamRoundedBook
             });
             dispatch({type: 'SAVE_PLAYLIST'});
           }
@@ -196,10 +183,7 @@ const Playlist = ({navigation, route}) => {
     }
   };
 
-  const openFile = (single) => {
-    navigation.navigate('LibraryStack', {screen: 'DownloadStack'});
-  };
-
+  
   const onRequestClose = () => null;
 
   const handleCustomDownload = (item) => {
@@ -267,11 +251,12 @@ const Playlist = ({navigation, route}) => {
               </View>
               <View
                 style={{
-                  flex: 0.1,
+                  flex: 0.3,
                   marginTop: 50,
                   flexDirection: 'row',
                   justifyContent: 'space-evenly',
                   alignItems: 'center',
+               
                 }}>
                 <TouchableOpacity
                   style={styles.downloadAllButton}
@@ -287,7 +272,7 @@ const Playlist = ({navigation, route}) => {
                     }}
                     onLongPress={() => {
                       Snackbar.show({
-                        text: 'Save  this playlist in Library',
+                        text: 'Save this playlist in Library',
                         duration: Snackbar.LENGTH_LONG,
                         backgroundColor: 'red',
                       });
@@ -314,19 +299,29 @@ const Playlist = ({navigation, route}) => {
               {tracks.map((item, index) => {
                 return (
                   <View key={index} style={styles.list}>
-                    <TouchableOpacity style={{flex: 0.7}}>
-                      <Text style={styles.trackTitle}>{item.title}</Text>
-                      <Text style={styles.trackInfo}>
-                        {item?.artist[0].name} - {item.album}
-                      </Text>
+                    <TouchableOpacity style={{flex: 1}}>     
+                    <View style={styles.itemWrapper}>
+                  <Image
+                    style={styles.trackArtwork}
+                    source={{uri: `${item.artwork}`}}
+                  />
+                  <View style={styles.trackDetails}>
+                    <Text style={styles.trackTitle}>{item.title}</Text>
+                    <Text style={styles.trackInfo}>
+                      {item?.artist[0].name} - {item.album}
+                    </Text>
+                  </View>
+                   
+                     </View>
                     </TouchableOpacity>
 
                     {item.downloaded ? (
                       <TouchableOpacity
                         style={{
-                          flex: 0.2,
+                          marginHorizontal : 5,
                           alignItems: 'flex-end',
                           justifyContent: 'center',
+                    
                         }}
                         onPress={() => {
                           // openFile(item);
@@ -334,9 +329,9 @@ const Playlist = ({navigation, route}) => {
                         <Image
                           source={require('../assets/check.png')}
                           style={{
-                            height: 25,
-                            width: 25,
-                            borderRadius: 25 / 2,
+                            height: 30,
+                            width: 30,
+                            borderRadius: 30 / 2,
                             backgroundColor: '#1DB954',
                           }}
                         />
@@ -344,7 +339,7 @@ const Playlist = ({navigation, route}) => {
                     ) : (
                       <TouchableOpacity
                         style={{
-                          flex: 0.2,
+                          marginHorizontal : 5,
                           alignItems: 'flex-end',
                           justifyContent: 'center',
                         }}
@@ -360,9 +355,9 @@ const Playlist = ({navigation, route}) => {
                           <Image
                             source={require('../assets/down.png')}
                             style={{
-                              height: 25,
-                              width: 25,
-                              borderRadius: 25 / 2,
+                              height: 30,
+                              width: 30,
+                              borderRadius: 30 / 2,
                               justifyContent: 'center',
                             }}
                           />
@@ -371,7 +366,7 @@ const Playlist = ({navigation, route}) => {
                     )}
                     <TouchableOpacity
                       style={{
-                        flex: 0.1,
+                        marginHorizontal : 5,
                         alignItems: 'flex-end',
                         justifyContent: 'center',
                       }}
@@ -395,7 +390,7 @@ const Playlist = ({navigation, route}) => {
                   </View>
                 );
               })}
-              <View style={{height: windowHeight * 0.06}} />
+              <View style={{height: windowHeight * 0.062}} />
             </ScrollView>
           </View>
         </>
@@ -467,44 +462,66 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
     fontSize: 25,
-    fontFamily: 'Montserrat-Regular',
-    fontWeight: 'bold',
+    fontFamily: 'GothamRoundedMedium',
+ 
+  },
+  itemWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    height: windowHeight * 0.055,
+    
+  },
+  trackDetails: {
+    flex: 9,
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  trackArtwork: {
+    flex: 1,
+    marginRight: 10,
+    height: '90%',
+    aspectRatio: 1 / 1,
+    alignSelf: 'center',
+
+    padding: 6,
   },
   trackTitle: {
     color: 'white',
     fontSize: 17,
-    fontFamily: 'GothamMedium',
+    justifyContent: 'flex-start',
+    fontFamily: 'GothamRoundedBook',
   },
   trackInfo: {
     color: '#6C7A89',
     fontSize: 12,
-    fontFamily: 'GothamMedium',
+    fontFamily: 'GothamRoundedMedium',
   },
   downloadAllButton: {
     justifyContent: 'center',
     borderRadius: 30,
     backgroundColor: '#1DB954',
     marginVertical: 20,
-    height: windowHeight * 0.07,
+    height: windowHeight * 0.05,
     width: windowWidth * 0.3,
     alignSelf: 'center',
   },
   downloadAllButtonText: {
     color: 'white',
     alignSelf: 'center',
-    fontFamily: 'GothamMedium',
+    fontFamily: 'GothamRoundedMedium',
+    fontSize : 16.9
   },
   playlistHeader: {
-    flex: 0.6,
+    flex: 0.5,
     marginVertical: 15,
     marginTop: 25,
     justifyContent: 'space-evenly',
     width: '90%',
   },
   scroller: {
-    flex: 0.54,
+    flex: 0.7,
     margin: 10,
-    width: '95%',
+    width: '96%',
 
     marginBottom: 0,
   },
@@ -512,6 +529,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     marginVertical: 10,
+    alignItems : 'center',
+    justifyContent :'center'
+    // backgroundColor : 'red'
   },
   customModalOverlay: {
     height: windowHeight * 0.15,
@@ -528,7 +548,7 @@ const styles = StyleSheet.create({
   trackOptionText: {
     fontSize: 17,
     color: 'white',
-    fontFamily: 'Roboto',
+    fontFamily: 'GothamRoundedMedium',
     marginLeft: 15,
   },
 });

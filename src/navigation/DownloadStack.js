@@ -4,7 +4,7 @@ import {
   CardStyleInterpolators,
 } from '@react-navigation/stack';
 import Downloads from '../components/Downloads';
-import TracksView from '../components/TracksView';
+import TracksView from '../components/DownloadedTracksView';
 
 const Stack = createStackNavigator();
 
@@ -20,7 +20,9 @@ const DownloadStack = () => {
         headerTitleStyle: {color: 'white', fontFamily: 'OpenSans-SemiBold'},
         headerTintColor: 'white',
       }}>
-      <Stack.Screen component={Downloads} name="Downloads" />
+      <Stack.Screen component={Downloads} name="Downloads" options={{
+        headerTitle : "Downloaded Playlists"
+      }}/>
       <Stack.Screen component={TracksView} name="TracksView" />
     </Stack.Navigator>
   );

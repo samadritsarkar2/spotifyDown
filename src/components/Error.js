@@ -13,7 +13,7 @@ const Error = ({navigation}) => {
           <Text style={styles.heading}>Something went wrong!</Text>
 
           <Text style={{color: 'white'}}>
-            Please, check the link and try again,
+            Please, make sure the playlist is public and accessible,
           </Text>
           <Text style={{color: 'white'}}>or, Server issue,</Text>
           <Text style={{color: 'white'}}>
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     width: 300,
   },
   heading: {
-    fontFamily: 'Gotham',
+    fontFamily: 'GothamRoundMedium',
     fontSize: 35,
     color: 'white',
   },
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '500',
     fontSize: 20,
-    fontFamily: 'Gotham',
+    fontFamily: 'GothamRoundedBook',
     textTransform: 'uppercase',
   },
 });

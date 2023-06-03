@@ -10,12 +10,12 @@ import {
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {windowHeight} from '../common/index';
-import {NEW_API} from '@env';
+import {NEW_API, NEWER_API} from '@env';
 import {addToDownloadQueue} from '../redux/actions/playlistActions';
 
 const CustomDownload = () => {
-  const api = `${NEW_API}/customdownload?`;
-  const directAPI = `${NEW_API}/getdirectlink?`;
+  const api = `${NEWER_API}/getCustomDownload?trackId=`;
+  // const directAPI = `${NEW_API}/getdirectlink?`;
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
 
@@ -24,18 +24,18 @@ const CustomDownload = () => {
   const single = useSelector((state) => state.playlist).customItem;
 
   const doFetch = async () => {
-    let artistsString = single.artist.map((item) => item.name).join();
+    // let artistsString = single.artist.map((item) => item.name).join();
 
-    const params = {
-      title: single.title,
-      album: single.album,
-      artistsString,
-    };
-    let query = Object.keys(params)
-      .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
-      .join('&');
+    // const params = {
+    //   title: single.title,
+    //   album: single.album,
+    //   artistsString,
+    // };
+    // let query = Object.keys(params)
+    //   .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+    //   .join('&');
 
-    const response = await fetch(api + query);
+    const response = await fetch(api + single.id);
     response
       .json()
       .then((data) => {
@@ -44,7 +44,9 @@ const CustomDownload = () => {
         setLoading(false);
       })
       .catch((err) => {
+        //TODO: Show error to user
         setLoading(false);
+        console.log(err)
       });
   };
 
@@ -56,23 +58,14 @@ const CustomDownload = () => {
 
   const handleClick = async (item) => {
     //
-    // console.log(item);
+    // console.log("Clicked: ", item);
     setLoading(true);
-    const query = `link=${item.url}`;
-    const response = await fetch(directAPI + query);
+        // single.title = "cold\/mess";
+        single.customDownloadData = item;
 
-    response
-      .json()
-      .then((data) => {
-        single.customDownloadData = data;
-        // console.log(single);
         dispatch(addToDownloadQueue(single));
         setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
+  
   };
 
   return (
@@ -87,13 +80,14 @@ const CustomDownload = () => {
             justifyContent: 'center',
             alignSelf: 'center',
           }}>
-          The first video is downloaded in default mode
+          The videos are sorted in descending order of views
         </Text>
       </View>
       {!loading ? (
-        <View style={{flex: 1}}>
+        <View style={{flex: 1, marginHorizontal : 7}}>
           <FlatList
             data={data}
+            showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
               return (
                 <TouchableOpacity
@@ -133,7 +127,7 @@ const CustomDownload = () => {
                         marginLeft: 5,
                       }}>
                       {' '}
-                      {item.duration}
+                      {item.duration_string}
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -167,20 +161,20 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: 'white',
     fontSize: 17,
-    fontFamily: 'GothamMedium',
+    fontFamily: 'GothamRoundedMedium',
   },
   titleText: {
     flex: 4,
     color: 'white',
     fontSize: 15,
-    fontFamily: 'Roboto',
+    fontFamily: 'GothamRoundedBook',
     marginHorizontal: 2,
   },
   otherText: {
     flex: 1,
     color: 'white',
     fontSize: 15,
-    fontFamily: 'GothamMedium',
-    justifyContent: 'center',
+    fontFamily: 'GothamRoundedMedium',
+    alignSelf: 'center',
   },
 });

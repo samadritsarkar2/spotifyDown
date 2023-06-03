@@ -117,6 +117,7 @@ const DownloadQueue = () => {
               </View>
             );
           })}
+            <View style={{height: windowHeight * 0.06}} />
         </ScrollView>
       )}
     </View>

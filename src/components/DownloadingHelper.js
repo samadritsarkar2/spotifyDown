@@ -10,11 +10,11 @@ import {
 import {useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Snackbar from 'react-native-snackbar';
-import {DOWNLOAD_PATH, windowHeight, windowWidth} from '../common/index';
+import {DOWNLOAD_PATH, GothamRoundedBook, GothamRoundedMedium, windowHeight, windowWidth} from '../common/index';
 import {useDispatch} from 'react-redux';
 import {checkExists, checkPermission, checkData, isExist} from '../utils';
 import RNFS, {downloadFile} from 'react-native-fs';
-import {API, NEW_API} from '@env';
+import { NEWER_API, NEWER_API_US} from '@env';
 import Spinner from 'react-native-spinkit';
 import {useNavigation} from '@react-navigation/native';
 
@@ -46,39 +46,56 @@ const DownloadingHelper = () => {
 
   const downloadItem = (single, playlistDetails) => {
     // console.log('Trying to download: ', single.title);
+
     return new Promise(async (resolve, reject) => {
-      const api = `${NEW_API}/download?`;
+
+      const api = `${NEWER_API}/getDownloadLink?trackId=`
+
+      
       const req = checkPermission();
       const fileStatus = await isExist(single);
       // console.log(fileStatus);
       if (req) {
         let data;
         if (!single.customDownloadData) {
-          let artistsString = single.artist.map((item) => item.name).join();
+          
+          const newResponse = await fetch(api + single.id);
+          if(newResponse.status != 200){
+            dispatch({
+              type: 'SET_DOWNLOAD_PERCENT',
+              payload: 0,
+            });
+            dispatch({
+              type: 'REMOVE_FROM_DOWNLOAD_QUEUE',
+              payload: single,
+            });
 
-          const params = {
-            title: single.title,
-            album: single.album,
-            artistsString,
-          };
+            dispatch({
+              type: 'REMOVE_CURRENT_DOWNLOADING',
+              payload: single,
+            });
 
-          let query = Object.keys(params)
-            .map(
-              (k) =>
-                encodeURIComponent(k) + '=' + encodeURIComponent(params[k]),
-            )
-            .join('&');
-
-          const response = await fetch(api + query);
-          data = await response.json();
+            Snackbar.show({
+              text: `Pardon!  Unable to scrap from YT Music`,
+              duration: Snackbar.LENGTH_SHORT,
+              backgroundColor: 'red',
+            });
+            reject();
+            return;
+          }
+          data = await newResponse.json();
+          // console.log("Data::", data);
         } else {
           data = single.customDownloadData;
+          // console.log(data);
         }
-
-        let link = data.url;
+      
+        // let link = data.url;
+        // let link = `${NEWER_API}/directStream?videoId=` + data?.videoId;
+        let link = "https://downify.xyz/directStream?videoId=" + data?.videoId;
         let duration = data.duration;
 
-        if (link) {
+        if (link && data.videoId) {
           const path = `${DOWNLOAD_PATH}/${single.title}.mp3`;
           let headers = {
             Accept: 'audio/*',
@@ -92,7 +109,7 @@ const DownloadingHelper = () => {
               const newDownload = {
                 id: single.id,
                 title: single.title,
-                artist: single.artist[0].name,
+                artist: single.artist.map(i => i.name).join(","),
                 album: single.album,
                 artwork: single.artwork,
                 url: fileStatus,
@@ -123,7 +140,8 @@ const DownloadingHelper = () => {
                 Snackbar.show({
                   text: 'First Track added to Downloads',
                   duration: Snackbar.LENGTH_SHORT,
-                  backgroundColor: 'red',
+                  backgroundColor: '#1DB954',
+                  fontFamily : GothamRoundedMedium
                 });
               } else {
                 let newList = {
@@ -153,7 +171,8 @@ const DownloadingHelper = () => {
                 Snackbar.show({
                   text: 'Track added to Downloads',
                   duration: Snackbar.LENGTH_SHORT,
-                  backgroundColor: 'red',
+                  backgroundColor: '#1DB954',
+                  fontFamily : GothamRoundedMedium
                 });
               }
               dispatch({
@@ -185,6 +204,7 @@ const DownloadingHelper = () => {
               headers: headers,
               toFile: path,
               progressDivider: 2,
+              progressInterval : 100,
               begin: (res) => {
                 // console.log('Response begin ===\n\n');
                 // console.log(res);
@@ -210,10 +230,11 @@ const DownloadingHelper = () => {
                 if (res && res.statusCode === 200 && res.bytesWritten > 0) {
                   try {
                     // console.log('try block');
+                 
                     const newDownload = {
                       id: single.id,
                       title: single.title,
-                      artist: single.artist[0].name,
+                      artist: single.artist.map(i => i.name).join(", "),
                       album: single.album,
                       artwork: single.artwork,
                       url: path,
@@ -246,7 +267,8 @@ const DownloadingHelper = () => {
                       Snackbar.show({
                         text: 'First Track added to Downloads',
                         duration: Snackbar.LENGTH_SHORT,
-                        backgroundColor: 'red',
+                        backgroundColor: '#1DB954',
+                        fontFamily : GothamRoundedMedium
                       });
                     } else {
                       let newList = {
@@ -276,7 +298,9 @@ const DownloadingHelper = () => {
                       Snackbar.show({
                         text: 'Track added to Downloads',
                         duration: Snackbar.LENGTH_SHORT,
-                        backgroundColor: 'red',
+                        backgroundColor: '#1DB954',
+                        fontFamily : GothamRoundedMedium
+
                       });
                     }
                     dispatch({
@@ -297,7 +321,7 @@ const DownloadingHelper = () => {
                       payload: 0,
                     });
                   } catch (err) {
-                    console.log(err);
+                    // console.log(err);
                     reject(err);
                   }
                 } else {
@@ -321,13 +345,13 @@ const DownloadingHelper = () => {
                     text: `Pardon!  Could not download ${single.title} due to Youtube policies. Try the Custom Downloader.`,
                     duration: Snackbar.LENGTH_SHORT,
                     backgroundColor: 'red',
-                    fontFamily: 'GothamMedium',
+                    fontFamily: GothamRoundedBook,
                   });
                   reject('Yt error');
                 }
               })
               .catch(async (err) => {
-                // console.log('Download canceled due to error: ', err);
+                console.log('Download canceled due to error: ', err);
                 dispatch({
                   type: 'SET_DOWNLOAD_PERCENT',
                   payload: 0,
@@ -343,7 +367,7 @@ const DownloadingHelper = () => {
                 });
 
                 Snackbar.show({
-                  text: `Pardon!  Could not download ${single.title} file due to Youtube policies. Try the Custom Downloader.`,
+                  text: `Pardon! Server was booting, please try to download again`,
                   duration: Snackbar.LENGTH_SHORT,
                   backgroundColor: 'red',
                 });
@@ -374,12 +398,12 @@ const DownloadingHelper = () => {
         }
       } else {
         Alert.alert(
-          'Storage Permision Denied',
+          'Storage Permission Denied',
           'Unable to save',
           [{text: 'OK', onPress: () => {}}],
           {cancelable: false},
         );
-        reject('Storage Permision Denied');
+        reject('Storage Permission Denied');
       }
     });
   };

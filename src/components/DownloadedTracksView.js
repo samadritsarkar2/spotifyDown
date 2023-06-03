@@ -23,6 +23,7 @@ import {
 import allActions from '../redux/actions';
 import {shufflePlay} from '../redux/actions/playerActions';
 import {isExist} from '../utils';
+import TextTicker from 'react-native-text-ticker';
 
 const TracksView = () => {
   const navigation = useNavigation();
@@ -64,6 +65,8 @@ const TracksView = () => {
     // console.log(Object.keys(data));
   }, [data]);
 
+
+
   const handleLongPress = (item) => {
     Vibration.vibrate(100);
     setIsVisible(true);
@@ -94,26 +97,39 @@ const TracksView = () => {
       >
         <View
           style={{
+            flex :1 ,
             marginBottom: 10,
+            flexDirection : 'row',
+            justifyContent : 'space-evenly',
           }}>
-          <TouchableOpacity
-            style={{
-              ...spotifyGreenButton,
-              flexDirection: 'row',
-              width: '50%',
-              justifyContent: 'space-evenly',
-              alignItems: 'center',
+            <TouchableOpacity
+            style={styles.playButtonTouchable}
+            onPress={() => {
+              dispatch(allActions.addPlaylistToQueue(activePlaylist));
             }}
+            delayLongPress={100}>
+            <Image
+              source={require('../assets/play.png')}
+              style={styles.playButtonImg}
+            />
+            <Text
+              style={styles.playButtonText}>
+              {' '}
+              Play
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.playButtonTouchable}
             onPress={() => {
               dispatch(allActions.shufflePlay(activePlaylist));
             }}
             delayLongPress={100}>
             <Image
               source={require('../assets/shuffle.png')}
-              style={{height: 30, width: 30}}
+              style={styles.playButtonImg}
             />
             <Text
-              style={{...spotifyGreenButtonText, textTransform: 'capitalize'}}>
+              style={styles.playButtonText}>
               {' '}
               Shuffle Play
             </Text>
@@ -137,7 +153,7 @@ const TracksView = () => {
                     source={{uri: `${item.artwork}`}}
                   />
                   <View style={styles.trackDetails}>
-                    <Text style={styles.trackTitle}>{item.title}</Text>
+                    <TextTicker duration={8000} style={styles.trackTitle}>{item.title}</TextTicker>
                     <Text style={styles.trackInfo}>
                       {item.artist} - {item.album}
                     </Text>
@@ -208,11 +224,21 @@ const TracksView = () => {
 export default TracksView;
 
 const styles = StyleSheet.create({
+  playButtonTouchable : {
+    ...spotifyGreenButton,
+    flexDirection: 'row',
+    width: '44%',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+  },
+  playButtonImg : {height: 25, width: 25},
+  playButtonText : {...spotifyGreenButtonText, fontSize :17, textTransform: 'capitalize'},
   itemClickWrapper: {flex: 1, marginBottom: 10},
   itemWrapper: {
     flex: 1,
     flexDirection: 'row',
     height: windowHeight * 0.07,
+  
   },
   trackDetails: {
     flex: 9,
@@ -221,14 +247,15 @@ const styles = StyleSheet.create({
   },
   trackTitle: {
     color: 'white',
-    fontSize: 16.9,
+    fontSize: 18,
     justifyContent: 'flex-start',
-    fontFamily: 'GothamMedium',
+    fontFamily: 'GothamRoundedBook',
+    
   },
   trackInfo: {
     color: '#6C7A89',
     fontSize: 12,
-    fontFamily: 'GothamMedium',
+    fontFamily: 'GothamRoundedMedium',
   },
   trackArtwork: {
     flex: 1,
@@ -236,7 +263,7 @@ const styles = StyleSheet.create({
     height: '90%',
     aspectRatio: 1 / 1,
     alignSelf: 'center',
-    borderRadius: 6,
+    
     padding: 6,
   },
   trackOption: {
@@ -261,7 +288,7 @@ const styles = StyleSheet.create({
   trackOptionText: {
     fontSize: 17,
     color: 'white',
-    fontFamily: 'Roboto',
+    fontFamily: 'GothamRoundedMedium',
     marginLeft: 15,
   },
 });

@@ -29,13 +29,13 @@ const SavedPlaylists = () => {
   useEffect(() => {
     setLoading(true);
     setTimeout(() => {
-      retriveSaved();
+      retrieveSaved();
     }, 200);
 
     // retriveDownloaded();
   }, []);
 
-  const retriveSaved = async () => {
+  const retrieveSaved = async () => {
     try {
       const storedValue = await AsyncStorage.getItem(`@saved_playlists`);
 
@@ -86,7 +86,7 @@ const SavedPlaylists = () => {
                       style={{
                         color: 'red',
                         fontSize: 25,
-                        fontFamily: 'GothamMedium',
+                        fontFamily: 'GothamRoundedMedium',
                         marginVertical: 15,
                       }}>
                       Nothing Saved
@@ -95,7 +95,7 @@ const SavedPlaylists = () => {
                       style={{
                         color: 'white',
                         fontSize: 15,
-                        fontFamily: 'Montserrat-Regular ',
+                        fontFamily: 'GothamRoundedBook',
                         alignItems: 'center',
                       }}>
                       Try saving a Playlist/Album
@@ -105,7 +105,7 @@ const SavedPlaylists = () => {
                       onPress={() => {
                         navigation.navigate('NewStack', {screen: 'New'});
                       }}>
-                      <Text style={spotifyGreenButtonText}>Add New</Text>
+                      <Text style={spotifyGreenButtonText}>Search</Text>
                     </TouchableOpacity>
                   </View>
                 </>
@@ -115,7 +115,15 @@ const SavedPlaylists = () => {
                     <TouchableOpacity
                       key={index}
                       onPress={() => handleClick(item.id)}
-                      style={{flex: 1, marginVertical: 10}}>
+                      style={{
+                        flex: 1, 
+                        marginVertical: 10,
+                        paddingVertical : 5,
+                        paddingHorizontal: 5,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        backgroundColor: '#111111',
+                        borderRadius: 10,}}>
                       <View key={index} style={styles.itemWrapper}>
                         <Image
                           style={styles.playlistImg}
@@ -192,9 +200,9 @@ const styles = StyleSheet.create({
   },
   playlistId: {
     color: 'white',
-    fontSize: 17,
+    fontSize: 16,
     justifyContent: 'flex-start',
-    fontFamily: 'GothamMedium',
+    fontFamily: 'GothamRoundedMedium',
     fontWeight: 'bold',
   },
   listText: {
@@ -216,7 +224,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '500',
     fontSize: 17,
-    fontFamily: 'Gotham',
+    fontFamily: 'GothamRoundedBook',
     textTransform: 'uppercase',
   },
 });

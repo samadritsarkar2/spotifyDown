@@ -15,7 +15,7 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
       Linking.openURL(link);
     } catch (error) {
       Snackbar.show({
-        text: 'Something  Went Wrong',
+        text: 'Something went Wrong',
         duration: Snackbar.LENGTH_SHORT,
         backgroundColor: 'red',
       });
@@ -37,8 +37,8 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
               borderRadius: 10,
             }}>
             <Text
-              style={{alignSelf: 'center', fontFamily: 'Gotham', fontSize: 35}}>
-              FAQ
+              style={{alignSelf: 'center', fontFamily: 'GothamRoundedMedium', fontSize: 35}}>
+              Latest Updates
             </Text>
 
             <ScrollView
@@ -46,51 +46,50 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
               style={{margin: 10}}>
               {/* // Changelog  */}
               <View style={styles.faqOne}>
-                <Text style={styles.faqQuestion}>Changelog v1.95</Text>
+                <Text style={styles.faqQuestion}>Changelog v1.98</Text>
+                <Text style={styles.faqAnswer}>
+                  {'\u25CF'} Completely changed the{' '}
+                  <Text style={{fontWeight: 'bold'}}>Backend</Text>.
+                  Changed how the tracks were downloaded and sourced, significantly decreasing errors.
+                </Text>
                 <Text style={styles.faqAnswer}>
                   {'\u25CF'} Added{' '}
-                  <Text style={{fontWeight: 'bold'}}>Custom Downloader</Text> .
-                  Long press or tap the more icon while downloading the tracks,
-                  to manually select the YT Video. This update hopefully fixes a
-                  lot of issues with Downify.
+                  <Text style={{fontWeight: 'bold'}}>Player</Text>.
+                  Tap on the mini-player while a track is playing to reveal the sleek-clean Player screen, inspired from Spotify's design.
+                  With this, the <Text style={{fontWeight: 'bold'}}>seek feature</Text> is unlocked.
+                </Text>
+                <Text style={styles.faqAnswer}>
+                  {'\u25CF'}
+                  <Text style={{fontWeight: 'bold'}}>{' '}Faster Downloads</Text>
+                  {' '}Downloads are at least 69% faster than previous versions. Report to me if you face any issue.
+                </Text>
+                <Text style={styles.faqAnswer}>
+                  {'\u25CF'} 
+                  <Text style={{fontWeight: 'bold'}}>{' '} UI Changes :</Text>
+                  {' '}Many major and minor changes are done. Fonts, color, little tweaks and better animations.
+                </Text>
+                <Text style={styles.faqAnswer}>
+                  {'\u25CF'} 
+                  <Text style={{fontWeight: 'bold'}}>{' '} Downloaded Playlists Screen :</Text>
+                    {'\n'}Now displays the no. of tracks downloaded.
+                    {'\n'}Long tap on it, to open it up in search.
                 </Text>
               </View>
-              <View style={styles.faqOne}>
-                <Text style={styles.faqQuestion}>Changelog v1.90</Text>
-                <Text style={styles.faqAnswer}>
-                  {'\u25CF'} Added Download Queue
-                </Text>
-                <Text style={styles.faqAnswer}>
-                  {'\u25CF'} Improved the way Downloads are handled
-                </Text>
-                <Text style={styles.faqAnswer}>
-                  {'\u25CF'} Now, same track can be downloaded in multiple
-                  playlists
-                </Text>
-                <Text style={styles.faqAnswer}>
-                  {'\u25CF'} UI changes and few bug fixes
-                </Text>
-              </View>
+           
               {/* // ISSUES  */}
               <View style={styles.faqOne}>
                 <Text style={styles.faqQuestion}>Issues :(</Text>
-                <Text style={{textDecorationLine: 'line-through'}}>
-                  {'\u25CF'} Due to youtube policies, few songs are not
-                  downloadable.
-                </Text>
-                <Text style={{textDecorationLine: 'line-through'}}>
-                  {'\u25CF'} Sometimes, other versions of the song is downloaded
+                <Text style={styles.faqAnswer}>
+                {'\u25CF'} While some tracks are downloading, do not open another new playlist in search. Then, it will mark the track of previous
+                    playlist as the track of current playlist.
                 </Text>
                 <Text style={styles.faqAnswer}>
-                  {'\u25CF'} The above issues can be avoided by using the{' '}
-                  <Text style={{fontWeight: 'bold'}}>
-                    NEW Custom Downloader feature
-                  </Text>{' '}
-                  and choosing some other YT video of the same track.
+                {'\u25CF'} Since, YT music is the new source for downloads, few tracks are not found properly there. So, it may
+                give error as "Unable to Scrap from YT music". Try the custom downloader.
                 </Text>
                 <Text style={styles.faqAnswer}>
                   {'\u25CF'} If you encounter anything else, feel free to report
-                  an issue or DM me. I will definetly work on it.
+                  an issue or DM me in any social media. I will definitely work on it.
                 </Text>
               </View>
 
@@ -105,7 +104,7 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
                 </Text>
                 <Text style={styles.faqAnswer}>
                   {' '}
-                  2. Paste the link in Add New screen.
+                  2. Paste the link in Search screen.
                 </Text>
                 <Text style={styles.faqAnswer}>
                   {' '}
@@ -113,7 +112,7 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
                 </Text>
                 <Text style={styles.faqAnswer}>
                   {' '}
-                  4. Downloaded tracks will be in Download Folder. Single tap to
+                  4. Downloaded tracks will be in Downloads Folder. Single tap to
                   Play or Long tap to Add to Queue.
                 </Text>
               </View>
@@ -122,7 +121,7 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
                 <Text style={styles.faqQuestion}>How it Works?</Text>
                 <Text style={styles.faqAnswer}>
                   The app searches the songs in your playlist or albums in
-                  Youtube and downloads the first result. I will try to make a
+                  Youtube/Music and downloads the most accurate result. I will try to make a
                   detailed System Design doc soon. For more info :{' '}
                   <Text
                     onPress={() =>
@@ -185,14 +184,7 @@ const KnowMore = ({isModalVisible, toggleModal}) => {
 export default KnowMore;
 
 const styles = StyleSheet.create({
-  text: {
-    color: 'white',
-    textAlign: 'center',
-    fontWeight: '500',
-    fontSize: 17,
-    fontFamily: 'Gotham',
-    textTransform: 'uppercase',
-  },
+ 
   faqOne: {
     marginVertical: 5,
   },
@@ -203,5 +195,6 @@ const styles = StyleSheet.create({
   },
   faqAnswer: {
     fontSize: 14,
+    fontFamily : 'GothamRoundedBook'
   },
 });

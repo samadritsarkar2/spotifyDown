@@ -78,7 +78,7 @@ const Library = ({navigation}) => {
                   source={require('../assets/down.png')}
                   style={styles.optionIcon}
                 />
-                <Text style={styles.buttons}>Downloads </Text>
+                <Text style={styles.buttons}>Downloads</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity
@@ -97,7 +97,7 @@ const Library = ({navigation}) => {
                   source={require('../assets/info.png')}
                   style={styles.optionIcon}
                 />
-                <Text style={styles.buttons}>Know More</Text>
+                <Text style={styles.buttons}>Latest Updates</Text>
               </View>
             </TouchableOpacity>
             {/* <TouchableOpacity
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     color: '#1DB954',
-    fontFamily: 'GothamMedium',
+    fontFamily: 'GothamRoundedMedium',
     fontSize: 50,
     alignSelf: 'center',
   },
@@ -161,12 +161,12 @@ const styles = StyleSheet.create({
   buttons: {
     fontSize: 20,
     color: 'white',
-    fontFamily: 'GothamMedium',
+    fontFamily: 'GothamRoundedMedium',
   },
   smallText: {
     fontSize: 12,
     color: 'gray',
-    fontFamily: 'Gotham',
+    fontFamily: 'GothamRoundedBook',
   },
   optionWrapper: {
     flex: 1,
