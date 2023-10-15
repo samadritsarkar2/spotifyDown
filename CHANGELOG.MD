@@ -2,6 +2,10 @@
 
 All minor and major changes to the project will be documented here!
 
+- [**1.98**](https://github.com/samadritsarkar2/spotifyDown/tree/1.985)
+
+  - Updating soon...
+
 - [**1.80**](https://github.com/samadritsarkar2/spotifyDown/tree/version1.80)
 
   - Removed the Google AdMob Package
