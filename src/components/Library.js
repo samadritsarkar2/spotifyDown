@@ -1,35 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  ToastAndroid,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-
+import React, { useEffect, useState } from 'react';
+import { Image, ScrollView, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
 import KnowMore from './KnowMore.js';
 import analytics from '@react-native-firebase/analytics';
-import {
-  Ironsource,
-  IronSourceRewardedVideo,
-} from '@wowmaking/react-native-iron-source';
+import { IronSourceRewardedVideo } from '@wowmaking/react-native-iron-source';
+import { commonStyles, colors, fonts, fontSize, spacing, radii } from '../theme';
 
-const Library = ({navigation}) => {
+const BetterKnowMore = React.memo(KnowMore);
+
+const Library = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
-
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
+  const toggleModal = () => setModalVisible(!isModalVisible);
 
   useEffect(() => {
-    IronSourceRewardedVideo.addEventListener(
+    const availableListener = IronSourceRewardedVideo.addEventListener(
       'ironSourceRewardedVideoAvailable',
-      (res) => {},
+      () => {},
     );
-
-    IronSourceRewardedVideo.addEventListener(
+    const rewardedListener = IronSourceRewardedVideo.addEventListener(
       'ironSourceRewardedVideoAdRewarded',
       async () => {
         ToastAndroid.show(
@@ -39,103 +26,54 @@ const Library = ({navigation}) => {
         await analytics().logEvent('rewardedAd_shown');
       },
     );
-
     IronSourceRewardedVideo.initializeRewardedVideo();
+
+    return () => {
+      if (availableListener && availableListener.remove) availableListener.remove();
+      if (rewardedListener && rewardedListener.remove) rewardedListener.remove();
+    };
   }, []);
 
   const showAd = async () => {
     await analytics().logEvent('rewardedAd_clicked');
-
     IronSourceRewardedVideo.isRewardedVideoAvailable().then((available) => {
       if (available) {
         IronSourceRewardedVideo.showRewardedVideo();
       } else {
-        ToastAndroid.show(
-          'Ad is not available right now. Thanks tho ✨',
-          ToastAndroid.SHORT,
-        );
+        ToastAndroid.show('Ad is not available right now. Thanks tho', ToastAndroid.SHORT);
       }
     });
   };
 
-  const BetterKnowMore = React.memo(KnowMore);
+  const OPTIONS = [
+    { icon: require('../assets/down.png'), label: 'Downloads', onPress: () => navigation.navigate('DownloadStack') },
+    { icon: require('../assets/heart.png'), label: 'Saved Playlists', onPress: () => navigation.navigate('SavedPlaylists') },
+    { icon: require('../assets/info.png'), label: 'Latest Updates', onPress: toggleModal },
+    { icon: require('../assets/reward.png'), label: 'Watch a Rewarded Ad', subtitle: 'This will help in the development of this App', onPress: showAd },
+  ];
 
   return (
-    <>
-      <View
-        style={{flex: 1, backgroundColor: '#181818', paddingHorizontal: 10}}>
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.heading}>Your Library</Text>
-          </View>
-        </View>
-        <View style={styles.actions}>
-          <ScrollView alwaysBounceVertical={true}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('DownloadStack')}>
+    <View style={[commonStyles.screenContainer, { paddingHorizontal: spacing.sm }]}>
+      <View style={styles.header}>
+        <Text style={styles.heading}>Your Library</Text>
+      </View>
+      <View style={styles.actions}>
+        <ScrollView alwaysBounceVertical={true}>
+          {OPTIONS.map((opt) => (
+            <TouchableOpacity key={opt.label} onPress={opt.onPress}>
               <View style={styles.optionWrapper}>
-                <Image
-                  source={require('../assets/down.png')}
-                  style={styles.optionIcon}
-                />
-                <Text style={styles.buttons}>Downloads</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('SavedPlaylists')}>
-              <View style={styles.optionWrapper}>
-                <Image
-                  source={require('../assets/heart.png')}
-                  style={styles.optionIcon}
-                />
-                <Text style={styles.buttons}>Saved Playlists</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={toggleModal}>
-              <View style={styles.optionWrapper}>
-                <Image
-                  source={require('../assets/info.png')}
-                  style={styles.optionIcon}
-                />
-                <Text style={styles.buttons}>Latest Updates</Text>
-              </View>
-            </TouchableOpacity>
-            {/* <TouchableOpacity
-              onPress={() => {
-                // console.log(RNFS.ExternalDirectoryPath);
-                // console.log(DOWNLOAD_PATH);
-
-              }}>
-              <View style={styles.optionWrapper}>
-                <Image
-                  source={require('../assets/red-heart.png')}
-                  style={styles.optionIcon}
-                />
-                <Text style={styles.buttons}>Support the App</Text>
-              </View>
-            </TouchableOpacity> */}
-            <TouchableOpacity onPress={showAd}>
-              <View style={styles.optionWrapper}>
-                <Image
-                  source={require('../assets/reward.png')}
-                  style={styles.optionIcon}
-                />
+                <Image source={opt.icon} style={styles.optionIcon} />
                 <View>
-                  <Text style={styles.buttons}>Watch a Rewarded Ad</Text>
-                  <Text style={styles.smallText}>
-                    This will help in the development of this App ✨
-                  </Text>
+                  <Text style={styles.optionLabel}>{opt.label}</Text>
+                  {opt.subtitle && <Text style={styles.optionSubtitle}>{opt.subtitle}</Text>}
                 </View>
               </View>
             </TouchableOpacity>
-            <BetterKnowMore
-              isModalVisible={isModalVisible}
-              toggleModal={toggleModal}
-            />
-          </ScrollView>
-        </View>
+          ))}
+          <BetterKnowMore isModalVisible={isModalVisible} toggleModal={toggleModal} />
+        </ScrollView>
       </View>
-    </>
+    </View>
   );
 };
 
@@ -147,40 +85,39 @@ const styles = StyleSheet.create({
     marginTop: '5%',
   },
   heading: {
-    color: '#1DB954',
-    fontFamily: 'GothamRoundedMedium',
-    fontSize: 50,
+    color: colors.accent.primary,
+    fontFamily: fonts.heading,
+    fontSize: fontSize.display + 14,
     alignSelf: 'center',
   },
   actions: {
     flex: 1,
     flexDirection: 'row',
-    marginTop: 0,
     justifyContent: 'flex-start',
-  },
-  buttons: {
-    fontSize: 20,
-    color: 'white',
-    fontFamily: 'GothamRoundedMedium',
-  },
-  smallText: {
-    fontSize: 12,
-    color: 'gray',
-    fontFamily: 'GothamRoundedBook',
   },
   optionWrapper: {
     flex: 1,
-    margin: 10,
-    paddingVertical: 20,
-    paddingHorizontal: 10,
+    margin: spacing.sm,
+    paddingVertical: spacing.xl,
+    paddingHorizontal: spacing.sm,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#111111',
-    borderRadius: 10,
+    backgroundColor: colors.bg.card,
+    borderRadius: radii.md,
   },
   optionIcon: {
     height: 25,
     width: 25,
-    marginHorizontal: 15,
+    marginHorizontal: spacing.md,
+  },
+  optionLabel: {
+    fontSize: fontSize.xl,
+    color: colors.text.primary,
+    fontFamily: fonts.heading,
+  },
+  optionSubtitle: {
+    fontSize: 12,
+    color: colors.text.hint,
+    fontFamily: fonts.body,
   },
 });

@@ -6,11 +6,11 @@ const eventEmitter = new NativeEventEmitter(YouTubeExtractor);
 
 // Search YouTube Music for best-match videoId given Spotify track info
 export const findYTMusicMatch = (title, artists, durationMs) =>
-    YouTubeExtractor.searchYTMusic(title, artists, durationMs);
+    YouTubeExtractor.searchYTMusic(title, artists, durationMs != null ? durationMs : 0);
 
 // Search YouTube for manual video selection
 export const searchYouTube = (query, limit = 15) =>
-    YouTubeExtractor.searchYouTube(query, limit);
+    YouTubeExtractor.searchYouTube(query, limit != null ? limit : 15);
 
 // Download audio using yt-dlp (handles deobfuscation + unthrottled download)
 // onProgress callback receives {percent, eta}

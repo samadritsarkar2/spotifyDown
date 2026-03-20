@@ -1,40 +1,36 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { updateStorage, setStorage } from '../../utils/storage';
 import RNFS from 'react-native-fs';
 
 import {DOWNLOAD_PATH} from '../../common';
 
 export const handleUnorganized = (arr) => {
   return async (dispatch, getState) => {
-    const storedValue = await AsyncStorage.getItem(`@playlistView`);
+    await updateStorage(`@playlistView`, (prevList) => {
+      const playlists = getState().downloadsReducer.playlists;
 
-    const prevList = await JSON.parse(storedValue);
-    const playlists = getState().downloadsReducer.playlists;
-
-    if (playlists.includes('Unorganized')) {
-      // console.log('yes');
-      dispatch({type: 'SET_ACTIVE_PLAYLIST', payload: 'Unorganized'});
-    } else {
-      if (arr.length !== 0) {
-        const updatedData = {
-          ...prevList,
-          ['Unorganized']: {
-            info: {
-              id: 'Unorganized',
-              name: 'Unorganized',
-            },
-            tracks: arr,
-          },
-        };
-        // console.log(updatedData.Unorganized);
-
-        await AsyncStorage.setItem(
-          `@playlistView`,
-          JSON.stringify(updatedData),
-        );
-        await AsyncStorage.setItem('@unorganized', JSON.stringify(true));
+      if (playlists.includes('Unorganized')) {
         dispatch({type: 'SET_ACTIVE_PLAYLIST', payload: 'Unorganized'});
+        return prevList;
+      } else {
+        if (arr.length !== 0) {
+          const updatedData = {
+            ...prevList,
+            ['Unorganized']: {
+              info: {
+                id: 'Unorganized',
+                name: 'Unorganized',
+              },
+              tracks: arr,
+            },
+          };
+
+          setStorage('@unorganized', true);
+          dispatch({type: 'SET_ACTIVE_PLAYLIST', payload: 'Unorganized'});
+          return updatedData;
+        }
+        return prevList;
       }
-    }
+    });
   };
 };
 

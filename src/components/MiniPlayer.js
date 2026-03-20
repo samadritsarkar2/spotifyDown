@@ -20,8 +20,10 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 
 import {useDispatch, useSelector} from 'react-redux';
+import { selectPlayerState } from '../redux/selectors';
 
-import {GothamRoundedBook, GothamRoundedMedium, windowHeight} from '../common';
+import { windowHeight} from '../common';
+import { colors, fonts, fontSize as themeFontSize } from '../theme';
 import TextTicker from 'react-native-text-ticker';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import Player from './Player';
@@ -48,7 +50,7 @@ const MiniPlayer = () => {
   const playbackState = usePlaybackState();
   const {position, buffered, duration} = useProgress(10);
 
-  const store = useSelector((state) => state).player;
+  const store = useSelector(selectPlayerState);
   const {
     trackInfo: {title, artist, album, artwork},
     isPlayerActive,
@@ -203,9 +205,9 @@ const MiniPlayer = () => {
       Vibration.vibrate(100);
       Snackbar.show({
         text: 'Play a track and tap here to reveal the Player',
-        backgroundColor: '#1DB954',
+        backgroundColor: colors.accent.primary,
         duration: Snackbar.LENGTH_SHORT,
-        fontFamily : GothamRoundedMedium
+        fontFamily: fonts.heading,
       });
     }
   };
@@ -318,9 +320,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     bottom: windowHeight * 0.06,
     paddingVertical: windowHeight * 0.01,
-    backgroundColor: '#212326',
-    borderTopColor: 'white',
-    borderBottomColor: 'black',
+    backgroundColor: colors.bg.secondary,
+    borderTopColor: colors.text.primary,
+    borderBottomColor: colors.bg.primary,
     borderWidth: 1,
   },
   playerView: {
@@ -333,7 +335,7 @@ const styles = StyleSheet.create({
     marginStart: 10,
     alignSelf: 'center',
   },
-  trackInfoText: {color: 'gray', fontSize: 13},
+  trackInfoText: { color: colors.text.hint, fontSize: themeFontSize.sm },
   playerControls: {
     flex: 0.5,
     flexDirection: 'row',
@@ -345,12 +347,10 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 2,
     marginVertical: 3,
-    // backgroundColor : 'red'
   },
   playerIcons: {
-    //TODO: Flex
     width: '100%',
     height: '100%',
-    aspectRatio: 1 / 1,
+    aspectRatio: 1,
   },
 });

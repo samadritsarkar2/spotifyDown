@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Alert,
   Modal,
   StyleSheet,
   Text,
@@ -7,30 +8,27 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import { useSelector } from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateStorage } from '../utils/storage';
 import Snackbar from 'react-native-snackbar';
-import { DOWNLOAD_PATH, GothamRoundedBook, GothamRoundedMedium, windowHeight, windowWidth } from '../common/index';
-import { useDispatch } from 'react-redux';
+import { DOWNLOAD_PATH, windowHeight, windowWidth } from '../common/index';
+import { colors, fonts } from '../theme';
 import { checkExists, checkPermission, checkData, isExist } from '../utils';
 import RNFS, { downloadFile } from 'react-native-fs';
 import { findYTMusicMatch, downloadAudio } from '../common/YouTubeExtractor';
 import Spinner from 'react-native-spinkit';
 import { useNavigation } from '@react-navigation/native';
-
-// import {  } from 'react-native'
+import { selectDownloadQueue, selectCurrentDownloading, selectCurrentPlaylist, selectDownloadPercent } from '../redux/selectors';
 
 const DownloadingHelper = () => {
-  const state = useSelector((state) => state.playlist);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [isExecutingTask, setIsExecutingTask] = useState(false);
-  const {
-    downloadQueue,
-    currentDownloading,
-    currentPlaylist,
-    downloadPercent,
-  } = state;
+  
+  const downloadQueue = useSelector(selectDownloadQueue);
+  const currentDownloading = useSelector(selectCurrentDownloading);
+  const currentPlaylist = useSelector(selectCurrentPlaylist);
+  const downloadPercent = useSelector(selectDownloadPercent);
 
   function formatBytes(bytes, decimals = 2) {
     if (bytes === 0) return '0 Bytes';
@@ -107,52 +105,51 @@ const DownloadingHelper = () => {
                 duration: duration,
               };
 
-              const storedValue = await AsyncStorage.getItem(`@playlistView`);
-              const prevList = await JSON.parse(storedValue);
-              const playlistId = playlistDetails.id;
-              if (!prevList) {
-                let playlistView = {
-                  [playlistId]: {
-                    info: {
-                      id: playlistDetails.id,
-                      name: playlistDetails.name,
-                      image: playlistDetails.image,
-                    },
-                    tracks: [newDownload],
-                  },
-                };
-                await AsyncStorage.setItem(`@playlistView`, JSON.stringify(playlistView));
-                Snackbar.show({
-                  text: 'First Track added to Downloads',
-                  duration: Snackbar.LENGTH_SHORT,
-                  backgroundColor: '#1DB954',
-                  fontFamily: GothamRoundedMedium
-                });
-              } else {
-                let newList = { ...prevList };
-                if (playlistId in prevList) {
-                  newList[playlistId].tracks.push(newDownload);
-                } else {
-                  newList = {
-                    ...newList,
+              await updateStorage('@playlistView', (prevList) => {
+                const playlistId = playlistDetails.id;
+                if (!prevList) {
+                  Snackbar.show({
+                    text: 'First Track added to Downloads',
+                    duration: Snackbar.LENGTH_SHORT,
+                    backgroundColor: colors.accent.primary,
+                    fontFamily: fonts.heading
+                  });
+                  return {
                     [playlistId]: {
                       info: {
-                        id: playlistDetails.id,
+                        id: playlistId,
                         name: playlistDetails.name,
                         image: playlistDetails.image,
                       },
                       tracks: [newDownload],
                     },
                   };
+                } else {
+                  let newList = { ...prevList };
+                  if (playlistId in prevList) {
+                    newList[playlistId].tracks.push(newDownload);
+                  } else {
+                    newList = {
+                      ...newList,
+                      [playlistId]: {
+                        info: {
+                          id: playlistId,
+                          name: playlistDetails.name,
+                          image: playlistDetails.image,
+                        },
+                        tracks: [newDownload],
+                      },
+                    };
+                  }
+                  Snackbar.show({
+                    text: 'Track added to Downloads',
+                    duration: Snackbar.LENGTH_SHORT,
+                    backgroundColor: colors.accent.primary,
+                    fontFamily: fonts.heading
+                  });
+                  return newList;
                 }
-                await AsyncStorage.setItem(`@playlistView`, JSON.stringify(newList));
-                Snackbar.show({
-                  text: 'Track added to Downloads',
-                  duration: Snackbar.LENGTH_SHORT,
-                  backgroundColor: '#1DB954',
-                  fontFamily: GothamRoundedMedium
-                });
-              }
+              });
               dispatch({ type: 'UPDATE_DOWNLOADED', payload: { track: single, path, duration } });
               dispatch({ type: 'REMOVE_FROM_DOWNLOAD_QUEUE', payload: single });
               dispatch({ type: 'REMOVE_CURRENT_DOWNLOADING', payload: single });
@@ -166,8 +163,8 @@ const DownloadingHelper = () => {
             // Download audio using native OkHttp (proper headers, no throttling)
             try {
               const result = await downloadAudio(videoId, path, (progress) => {
-                dispatch({ type: 'SET_DOWNLOAD_PERCENT', payload: progress.percent });
-                if (progress.contentLength > 0) {
+                dispatch({ type: 'SET_DOWNLOAD_PERCENT', payload: progress.percent != null ? progress.percent : 0 });
+                if (progress.contentLength != null && progress.contentLength > 0) {
                   let size = formatBytes(progress.contentLength);
                   dispatch({ type: 'SET_DOWNLOAD_SIZE', payload: size });
                 }
@@ -184,52 +181,51 @@ const DownloadingHelper = () => {
                   duration: duration,
                 };
 
-                const storedValue = await AsyncStorage.getItem(`@playlistView`);
-                const prevList = await JSON.parse(storedValue);
-                const playlistId = playlistDetails.id;
-                if (!prevList) {
-                  let playlistView = {
-                    [playlistId]: {
-                      info: {
-                        id: playlistDetails.id,
-                        name: playlistDetails.name,
-                        image: playlistDetails.image,
-                      },
-                      tracks: [newDownload],
-                    },
-                  };
-                  await AsyncStorage.setItem(`@playlistView`, JSON.stringify(playlistView));
-                  Snackbar.show({
-                    text: 'First Track added to Downloads',
-                    duration: Snackbar.LENGTH_SHORT,
-                    backgroundColor: '#1DB954',
-                    fontFamily: GothamRoundedMedium
-                  });
-                } else {
-                  let newList = { ...prevList };
-                  if (playlistId in prevList) {
-                    newList[playlistId].tracks.push(newDownload);
-                  } else {
-                    newList = {
-                      ...newList,
+                await updateStorage('@playlistView', (prevList) => {
+                  const playlistId = playlistDetails.id;
+                  if (!prevList) {
+                    Snackbar.show({
+                      text: 'First Track added to Downloads',
+                      duration: Snackbar.LENGTH_SHORT,
+                      backgroundColor: colors.accent.primary,
+                      fontFamily: fonts.heading
+                    });
+                    return {
                       [playlistId]: {
                         info: {
-                          id: playlistDetails.id,
+                          id: playlistId,
                           name: playlistDetails.name,
                           image: playlistDetails.image,
                         },
                         tracks: [newDownload],
                       },
                     };
+                  } else {
+                    let newList = { ...prevList };
+                    if (playlistId in prevList) {
+                      newList[playlistId].tracks.push(newDownload);
+                    } else {
+                      newList = {
+                        ...newList,
+                        [playlistId]: {
+                          info: {
+                            id: playlistId,
+                            name: playlistDetails.name,
+                            image: playlistDetails.image,
+                          },
+                          tracks: [newDownload],
+                        },
+                      };
+                    }
+                    Snackbar.show({
+                      text: 'Track added to Downloads',
+                      duration: Snackbar.LENGTH_SHORT,
+                      backgroundColor: colors.accent.primary,
+                      fontFamily: fonts.heading
+                    });
+                    return newList;
                   }
-                  await AsyncStorage.setItem(`@playlistView`, JSON.stringify(newList));
-                  Snackbar.show({
-                    text: 'Track added to Downloads',
-                    duration: Snackbar.LENGTH_SHORT,
-                    backgroundColor: '#1DB954',
-                    fontFamily: GothamRoundedMedium
-                  });
-                }
+                });
                 dispatch({ type: 'UPDATE_DOWNLOADED', payload: { track: single, path, duration } });
                 dispatch({ type: 'REMOVE_FROM_DOWNLOAD_QUEUE', payload: single });
                 dispatch({ type: 'REMOVE_CURRENT_DOWNLOADING', payload: single });

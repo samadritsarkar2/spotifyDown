@@ -1,7 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import {useDispatch} from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import allActions from '../redux/actions/index';
-
 import {
   StyleSheet,
   View,
@@ -11,43 +10,21 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
-  PermissionsAndroid,
 } from 'react-native';
-
 var parse = require('url-parse');
 import analytics from '@react-native-firebase/analytics';
-import {
-  spotifyGreenButton,
-  spotifyGreenButtonText,
-  windowHeight,
-} from '../common';
-import {IronSourceBanner} from '@wowmaking/react-native-iron-source';
-import {useIsFocused} from '@react-navigation/core';
+import { commonStyles, colors, fonts, fontSize, spacing, radii } from '../theme';
 
-const New = ({navigation, route}) => {
-  const [id, setId] = useState('');
+const New = ({ navigation }) => {
   const [url, setUrl] = useState('');
-  const [fetched, setFetched] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const dispatch = useDispatch();
-  const isFocused = useIsFocused();
 
   const fetchApi = async () => {
     setLoading(true);
-
-    // Sanitation of the input URL
-
     let URL = parse(url);
     let pathArr = URL.pathname.split('/');
 
-    var supported = ['album', 'playlist'];
-    // let index;
-    // supported.map((val) => {
-    //   let i = pathArr.indexOf(val);
-
-    //   if (i !== -1) index = i;
-    // });
     let playlistIndex = pathArr.indexOf('playlist');
     let albumIndex = pathArr.indexOf('album');
     let finalIndex;
@@ -61,96 +38,58 @@ const New = ({navigation, route}) => {
     }
 
     let URlID = pathArr[finalIndex + 1];
-    // console.log(finalIndex, URlID);
     if (
-      URL.host != 'open.spotify.com' ||
+      URL.host !== 'open.spotify.com' ||
       (pathArr[finalIndex] !== 'playlist' && pathArr[finalIndex] !== 'album')
     ) {
       setLoading(false);
       Alert.alert(
         'Link not supported',
         "Provide link in the format 'open.spotify.com/playlist'",
-        [{text: 'OK', onPress: () => {}}],
-        {cancelable: true},
+        [{ text: 'OK' }],
+        { cancelable: true },
       );
     } else {
-      setId(URlID);
       dispatch(allActions.addNew(URlID));
-      // await AsyncStorage.setItem('@currentItem', JSON.stringify(res))
-
-      setFetched(true);
       setLoading(false);
-      await analytics().logEvent('new_playlist', {
-        id: URlID,
-      });
+      await analytics().logEvent('new_playlist', { id: URlID });
       navigation.navigate('Playlist');
     }
   };
 
-  // useEffect(() => {
-  // }, [isFocused]);
-
   return (
-    <>
-      <View style={{flex: 1, backgroundColor: '#181818'}}>
-        <StatusBar backgroundColor={'#282828'} />
-        <View style={styles.container}>
+    <View style={commonStyles.screenContainer}>
+      <StatusBar backgroundColor={colors.bg.primary} />
+      <View style={styles.container}>
+        <Image source={require('../assets/Headphone-amico.png')} style={styles.logo} />
+      </View>
+      <View style={styles.inputBox}>
+        <View style={styles.searchBar}>
           <Image
-            source={require('../assets/Headphone-amico.png')}
-            style={styles.logo}
-          />
-        </View>
-        <View style={styles.inputBox}>
-          <View 
-            style={{
-              backgroundColor : 'white',
-              marginHorizontal: 20,
-
-              width: '81%',
-           
-              alignSelf: 'center',
-              alignItems : 'center',
-              flexDirection : 'row',
-              borderRadius : 4,
-
-            }}
-          >
-            <Image 
-          source={require("../assets/magnifying-glass.png")} 
-          style={{
-            height : 30,
-            width : 30,
-            marginHorizontal : 5
-          }}
+            source={require('../assets/magnifying-glass.png')}
+            style={styles.searchIcon}
           />
           <TextInput
             style={styles.input}
             value={url}
-            onChangeText={(value) => {
-              setUrl(value);
-            }}
-            placeholder={'Enter Spotify Album/Playlist Link'}
-            placeholderTextColor={'black'}
+            onChangeText={setUrl}
+            placeholder="Enter Spotify Album/Playlist Link"
+            placeholderTextColor={colors.text.hint}
           />
-          {url ? <TouchableOpacity 
-              onPress={() => setUrl('')}
-          > 
-          <Image 
-          source={require("../assets/close.png")} 
-          style={{
-            height : 25,
-            width : 25,
-            marginHorizontal : 7
-          }}
-          />
-          </TouchableOpacity> : null}
-          </View>
-          <TouchableOpacity style={spotifyGreenButton} onPress={fetchApi}>
-            <Text style={spotifyGreenButtonText}>Submit</Text>
-          </TouchableOpacity>
+          {url ? (
+            <TouchableOpacity onPress={() => setUrl('')}>
+              <Image
+                source={require('../assets/close.png')}
+                style={styles.clearIcon}
+              />
+            </TouchableOpacity>
+          ) : null}
         </View>
+        <TouchableOpacity style={commonStyles.primaryButton} onPress={fetchApi}>
+          <Text style={commonStyles.primaryButtonText}>Submit</Text>
+        </TouchableOpacity>
       </View>
-    </>
+    </View>
   );
 };
 
@@ -159,55 +98,39 @@ export default New;
 const styles = StyleSheet.create({
   container: {
     flex: 0.4,
-    marginTop: 30,
+    marginTop: spacing.xl,
   },
   logo: {
     height: '85%',
-    aspectRatio: 1 / 1,
+    aspectRatio: 1,
     alignSelf: 'center',
-  },
-  header: {
-    marginTop: 20,
-    fontSize: 30,
-    textAlign: 'center',
-    color: 'white',
   },
   inputBox: {
     flex: 0.6,
-    marginTop : 2
+    marginTop: spacing.xs,
+  },
+  searchBar: {
+    backgroundColor: colors.text.primary,
+    marginHorizontal: spacing.xl,
+    width: '81%',
+    alignSelf: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderRadius: radii.sm,
+  },
+  searchIcon: {
+    height: 30,
+    width: 30,
+    marginHorizontal: spacing.xs + 1,
+  },
+  clearIcon: {
+    height: 25,
+    width: 25,
+    marginHorizontal: 7,
   },
   input: {
-    flex : 5 ,
+    flex: 5,
     color: 'black',
-   fontFamily : "GothamRoundedMedium"
+    fontFamily: fonts.heading,
   },
-  submit: {
-    justifyContent: 'center',
-    borderRadius: 30,
-    backgroundColor: '#1DB954',
-    marginVertical: 20,
-    padding: 10,
-    height: 50,
-    width: '70%',
-    alignSelf: 'center',
-  },
-  playlistHeader: {
-    flex: 0.6,
-    marginVertical: 15,
-    marginTop: 25,
-    justifyContent: 'space-evenly',
-    width: '90%',
-  },
-  scroller: {
-    flex: 0.54,
-    margin: 10,
-    width: '90%',
-
-    marginBottom: 20,
-  },
-  list: {
-    flex: 1,
-    flexDirection: 'row',
-    marginVertical: 10,
-  }
 });

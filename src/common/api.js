@@ -1,11 +1,10 @@
 // Centralized API configuration
-// Change these values to point to different backend servers
+// API_BASE_URL is read from .env file (see .env.example)
+// Falls back to emulator localhost if not set
 
-// For local development (Android emulator uses 10.0.2.2 to reach host localhost)
-const MAIN_API = "http://10.0.2.2:3002";   // downifyBackend — Spotify redirect only
+import { API_BASE_URL } from '@env';
 
-// For production
-// const MAIN_API = "https://your-firebase-functions-url.cloudfunctions.net";
+const MAIN_API = API_BASE_URL || "http://10.0.2.2:3002";
 
 export const API_BASE = MAIN_API;
 

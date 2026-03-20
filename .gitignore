@@ -67,5 +67,11 @@ yarn-error.log
 #misc
 .vscode/
 .env
-# /android/app/google-services.json
+!.env.example
+/android/app/google-services.json
 .prettierrc.js
+
+# Orphaned/generated files
+go.mod
+debug.log
+bugreport-*.zip

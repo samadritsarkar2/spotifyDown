@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import allActions from '../redux/actions/index';
+import React, { useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import {
   StyleSheet,
@@ -9,188 +7,34 @@ import {
   Image,
   TouchableOpacity,
   Alert,
-  ScrollView,
+  FlatList,
   Vibration,
   Linking,
 } from 'react-native';
 import Snackbar from 'react-native-snackbar';
 import Modal from 'react-native-modal';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { windowWidth, windowHeight, bottomGap } from '../common';
+import { colors, fonts, fontSize as themeFontSize, spacing, radii, commonStyles } from '../theme';
 import Spinner from 'react-native-spinkit';
 import TextTicker from 'react-native-text-ticker';
-
-import { ENDPOINTS } from '../common/api';
-import { windowWidth, windowHeight, bottomGap, GothamRoundedBook, GothamRoundedMedium } from '../common';
-
-import {
-  addNewPlaylist,
-  addToDownloadQueue,
-} from '../redux/actions/playlistActions';
-import CustomDownload from './CustomDownload';
+import { usePlaylist } from '../hooks/usePlaylist';
 
 const Playlist = ({ navigation, route }) => {
-
-  const [error, setError] = useState(false);
-  // const [tracks, setTracks] = useState([]);
-  // const [responseData, setResponseData] = useState({});
-
-  const [selected, setSelected] = useState(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [downloadPercent, setDownloadPercent] = useState(0);
-  // const [curentDownloading, setCurentDownloading] = useState(null);
-
   const isFocused = useIsFocused();
-  const URlID = useSelector((state) => state.playlist).id;
-
-  const dispatch = useDispatch();
-  const state = useSelector((state) => state.playlist);
-  const { responseInfo, tracks } = state.currentPlaylist;
-  const { loading, currentDownloading, downloadQueue } = state;
-
-  const fetchData = async () => {
-    try {
-      let api = ENDPOINTS.redirect(URlID);
-      const response = await fetch(api, {
-        method: 'GET',
-        headers: {},
-      });
-      // const text = await response.text();
-      // console.log('Error', response.status);
-      if (response.status === 200) {
-        response
-          .json()
-          .then((res) => {
-            dispatch(addNewPlaylist(res));
-          })
-          .catch((err) => {
-            // console.log(err);
-            // setLoading(false);
-            setError(true);
-
-            navigation.navigate('Error', { error: error });
-          });
-
-      } else {
-        setError(true);
-        navigation.navigate('Error', { error: error });
-      }
-    } catch (error) {
-      setTimeout(() => {
-        navigation.goBack();
-        Snackbar.show({
-          text: 'Internet connection is required to fetch playlist',
-          duration: Snackbar.LENGTH_LONG,
-          backgroundColor: 'red',
-        });
-      }, 1000);
-    }
-  };
-
-  useEffect(() => {
-
-    dispatch({ type: 'LOADING_TRUE' });
-
-    fetchData();
-
-
-
-  }, [isFocused]);
-
-  const handleDownload = (item) => {
-    dispatch(addToDownloadQueue(item));
-  };
-
-  const downloadAll = async () => {
-    tracks.map((item) => {
-      if (!item.downloaded) {
-        // console.log(item);
-        setTimeout(() => {
-          handleDownload(item);
-        }, 500);
-      }
-    });
-  };
-
-  const handleDownloadAll = async () => {
-    try {
-
-      let downloaded = await downloadAll();
-      savePlaylist();
-
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const savePlaylist = async () => {
-    if (responseInfo.saved == false) {
-      try {
-        const playlistToAdd = {
-          id: responseInfo.id,
-          name: responseInfo.name,
-          image: responseInfo.image,
-        };
-
-        const storedValue = await AsyncStorage.getItem(`@saved_playlists`);
-        const prevList = await JSON.parse(storedValue);
-        // console.log(storedValue)
-        if (!prevList) {
-          const newList = [playlistToAdd];
-          await AsyncStorage.setItem(
-            '@saved_playlists',
-            JSON.stringify(newList),
-          );
-          Snackbar.show({
-            text: 'First Playlist added to Library',
-            duration: Snackbar.LENGTH_LONG,
-            backgroundColor: '#1DB954',
-          });
-          setResponseData((item) =>
-            !item.saved ? { ...item, saved: true } : item,
-          );
-        } else {
-          const exists = prevList.some((item) => item.id === responseInfo.id);
-
-          if (!exists) {
-            prevList.push(playlistToAdd);
-            await AsyncStorage.setItem(
-              '@saved_playlists',
-              JSON.stringify(prevList),
-            );
-
-            Snackbar.show({
-              text: 'Playlist added to Library',
-              duration: Snackbar.LENGTH_LONG,
-              backgroundColor: '#1DB954',
-              fontFamily: GothamRoundedMedium
-
-            });
-            dispatch({ type: 'SAVE_PLAYLIST' });
-          } else {
-            Snackbar.show({
-              text: 'Playlist already exists in Library',
-              duration: Snackbar.LENGTH_LONG,
-              backgroundColor: 'red',
-              fontFamily: GothamRoundedBook
-            });
-            dispatch({ type: 'SAVE_PLAYLIST' });
-          }
-          // console.log(prevList)
-        }
-      } catch (err) {
-        // console.log(err);
-      }
-    }
-  };
-
-
-  const onRequestClose = () => null;
-
-  const handleCustomDownload = (item) => {
-    setIsVisible(false);
-    navigation.navigate('CustomDownload');
-    dispatch({ type: 'SET_CUSTOM_ITEM', payload: selected });
-  };
+  const {
+    selected,
+    setSelected,
+    isVisible,
+    setIsVisible,
+    responseInfo,
+    tracks,
+    loading,
+    currentDownloading,
+    handleDownload,
+    handleDownloadAll,
+    savePlaylist,
+    handleCustomDownload,
+  } = usePlaylist(navigation, isFocused);
 
   return (
     <>
@@ -292,106 +136,101 @@ const Playlist = ({ navigation, route }) => {
                 </View>
               </View>
             </View>
-            <ScrollView
+            <FlatList
+              data={tracks}
+              keyExtractor={(item, index) => item.id?.toString() || index.toString()}
               showsVerticalScrollIndicator={false}
-              style={styles.scroller}>
-              {/* <Text style={{color :'white'}}> {JSON.stringify(tracks)} </Text> */}
-              {tracks.map((item, index) => {
-                return (
-                  <View key={index} style={styles.list}>
-                    <TouchableOpacity style={{ flex: 1 }}>
-                      <View style={styles.itemWrapper}>
-                        <Image
-                          style={styles.trackArtwork}
-                          source={{ uri: `${item.artwork}` }}
-                        />
-                        <View style={styles.trackDetails}>
-                          <Text style={styles.trackTitle}>{item.title}</Text>
-                          <Text style={styles.trackInfo}>
-                            {item?.artist[0].name} - {item.album}
-                          </Text>
-                        </View>
-
+              style={styles.scroller}
+              initialNumToRender={10}
+              maxToRenderPerBatch={10}
+              windowSize={5}
+              ListFooterComponent={<View style={{ height: windowHeight * 0.062 }} />}
+              renderItem={({ item, index }) => (
+                <View style={styles.list}>
+                  <TouchableOpacity style={{ flex: 1 }}>
+                    <View style={styles.itemWrapper}>
+                      <Image
+                        style={styles.trackArtwork}
+                        source={{ uri: `${item.artwork}` }}
+                      />
+                      <View style={styles.trackDetails}>
+                        <Text style={styles.trackTitle}>{item.title}</Text>
+                        <Text style={styles.trackInfo}>
+                          {item?.artist[0].name} - {item.album}
+                        </Text>
                       </View>
-                    </TouchableOpacity>
+                    </View>
+                  </TouchableOpacity>
 
-                    {item.downloaded ? (
-                      <TouchableOpacity
-                        style={{
-                          marginHorizontal: 5,
-                          alignItems: 'flex-end',
-                          justifyContent: 'center',
-
-                        }}
-                        onPress={() => {
-                          // openFile(item);
-                        }}>
-                        <Image
-                          source={require('../assets/check.png')}
-                          style={{
-                            height: 30,
-                            width: 30,
-                            borderRadius: 30 / 2,
-                            backgroundColor: '#1DB954',
-                          }}
-                        />
-                      </TouchableOpacity>
-                    ) : (
-                      <TouchableOpacity
-                        style={{
-                          marginHorizontal: 5,
-                          alignItems: 'flex-end',
-                          justifyContent: 'center',
-                        }}
-                        onPress={() => handleDownload(item)}>
-                        {currentDownloading.includes(item) ? (
-                          <Spinner
-                            style={{ marginBottom: 7, justifyContent: 'center' }}
-                            size={30}
-                            type={'Circle'}
-                            color={'#FFF'}
-                          />
-                        ) : (
-                          <Image
-                            source={require('../assets/down.png')}
-                            style={{
-                              height: 30,
-                              width: 30,
-                              borderRadius: 30 / 2,
-                              justifyContent: 'center',
-                            }}
-                          />
-                        )}
-                      </TouchableOpacity>
-                    )}
+                  {item.downloaded ? (
                     <TouchableOpacity
                       style={{
                         marginHorizontal: 5,
                         alignItems: 'flex-end',
                         justifyContent: 'center',
                       }}
-                      onPress={() => {
-                        setSelected(item);
-
-                        // console.log('Handle cystom', item);
-                        Vibration.vibrate(50);
-                        setIsVisible(true);
-                      }}>
+                      onPress={() => {}}>
                       <Image
-                        source={require('../assets/more.png')}
+                        source={require('../assets/check.png')}
                         style={{
                           height: 30,
                           width: 30,
-
-                          justifyContent: 'center',
+                          borderRadius: 30 / 2,
+                          backgroundColor: colors.accent.primary,
                         }}
                       />
                     </TouchableOpacity>
-                  </View>
-                );
-              })}
-              <View style={{ height: windowHeight * 0.062 }} />
-            </ScrollView>
+                  ) : (
+                    <TouchableOpacity
+                      style={{
+                        marginHorizontal: 5,
+                        alignItems: 'flex-end',
+                        justifyContent: 'center',
+                      }}
+                      onPress={() => handleDownload(item)}>
+                      {currentDownloading.includes(item) ? (
+                        <Spinner
+                          style={{ marginBottom: 7, justifyContent: 'center' }}
+                          size={30}
+                          type={'Circle'}
+                          color={'#FFF'}
+                        />
+                      ) : (
+                        <Image
+                          source={require('../assets/down.png')}
+                          style={{
+                            height: 30,
+                            width: 30,
+                            borderRadius: 30 / 2,
+                            justifyContent: 'center',
+                          }}
+                        />
+                      )}
+                    </TouchableOpacity>
+                  )}
+                  <TouchableOpacity
+                    style={{
+                      marginHorizontal: 5,
+                      alignItems: 'flex-end',
+                      justifyContent: 'center',
+                    }}
+                    onPress={() => {
+                      setSelected(item);
+                      Vibration.vibrate(50);
+                      setIsVisible(true);
+                    }}>
+                    <Image
+                      source={require('../assets/more.png')}
+                      style={{
+                        height: 30,
+                        width: 30,
+                        justifyContent: 'center',
+                      }}
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
+            />
           </View>
         </>
       )}
@@ -444,32 +283,29 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#181818',
+    backgroundColor: colors.bg.primary,
   },
   container: {
     flex: 1,
     top: 30,
   },
   header: {
-    marginTop: 20,
-    fontSize: 30,
+    marginTop: spacing.xl,
+    fontSize: themeFontSize.xxl + 2,
     textAlign: 'center',
-    color: 'white',
+    color: colors.text.primary,
   },
-
   playlistId: {
-    color: 'white',
+    color: colors.text.primary,
     alignSelf: 'center',
     textAlign: 'center',
-    fontSize: 25,
-    fontFamily: 'GothamRoundedMedium',
-
+    fontSize: themeFontSize.xl + 5,
+    fontFamily: fonts.heading,
   },
   itemWrapper: {
     flex: 1,
     flexDirection: 'row',
     height: windowHeight * 0.055,
-
   },
   trackDetails: {
     flex: 9,
@@ -478,77 +314,65 @@ const styles = StyleSheet.create({
   },
   trackArtwork: {
     flex: 1,
-    marginRight: 10,
+    marginRight: spacing.sm,
     height: '90%',
-    aspectRatio: 1 / 1,
+    aspectRatio: 1,
     alignSelf: 'center',
-
-    padding: 6,
+    padding: spacing.sm,
   },
   trackTitle: {
-    color: 'white',
-    fontSize: 17,
-    justifyContent: 'flex-start',
-    fontFamily: 'GothamRoundedBook',
+    color: colors.text.primary,
+    fontSize: themeFontSize.lg,
+    fontFamily: fonts.body,
   },
   trackInfo: {
-    color: '#6C7A89',
+    color: colors.text.tertiary,
     fontSize: 12,
-    fontFamily: 'GothamRoundedMedium',
+    fontFamily: fonts.heading,
   },
   downloadAllButton: {
     justifyContent: 'center',
-    borderRadius: 30,
-    backgroundColor: '#1DB954',
-    marginVertical: 20,
+    borderRadius: radii.pill,
+    backgroundColor: colors.accent.primary,
+    marginVertical: spacing.xl,
     height: windowHeight * 0.05,
     width: windowWidth * 0.3,
     alignSelf: 'center',
   },
   downloadAllButtonText: {
-    color: 'white',
+    color: colors.text.primary,
     alignSelf: 'center',
-    fontFamily: 'GothamRoundedMedium',
-    fontSize: 16.9
+    fontFamily: fonts.heading,
+    fontSize: themeFontSize.lg,
   },
   playlistHeader: {
     flex: 0.5,
-    marginVertical: 15,
-    marginTop: 25,
+    marginVertical: spacing.md,
+    marginTop: spacing.lg,
     justifyContent: 'space-evenly',
     width: '90%',
   },
   scroller: {
     flex: 0.7,
-    margin: 10,
+    margin: spacing.sm,
     width: '96%',
-
     marginBottom: 0,
   },
   list: {
     flex: 1,
     flexDirection: 'row',
-    marginVertical: 10,
+    marginVertical: spacing.sm,
     alignItems: 'center',
-    justifyContent: 'center'
-    // backgroundColor : 'red'
+    justifyContent: 'center',
   },
   customModalOverlay: {
-    height: windowHeight * 0.15,
+    ...commonStyles.bottomSheetContainer,
     width: windowWidth,
-    backgroundColor: '#181818',
-    paddingHorizontal: 10,
   },
   trackOptionTouchable: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    height: '40%',
+    ...commonStyles.bottomSheetOption,
   },
   trackOptionText: {
-    fontSize: 17,
-    color: 'white',
-    fontFamily: 'GothamRoundedMedium',
-    marginLeft: 15,
+    ...commonStyles.bottomSheetOptionText,
   },
 });
