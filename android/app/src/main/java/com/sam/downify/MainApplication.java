@@ -16,6 +16,12 @@ import java.util.List;
 import androidx.multidex.MultiDexApplication;
 import com.microsoft.codepush.react.CodePush;
 import com.rnfs.RNFSPackage;
+import com.facebook.react.PackageList;
+import com.sam.downify.newpipe.YouTubeExtractorPackage;
+import com.sam.downify.newpipe.DownloaderImpl;
+import org.schabi.newpipe.extractor.NewPipe;
+import com.yausername.youtubedl_android.YoutubeDL;
+import com.yausername.ffmpeg.FFmpeg;
 
 
 public class MainApplication extends MultiDexApplication implements ReactApplication {
@@ -34,6 +40,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
             // packages.add(new RNFSPackage());
+          packages.add(new YouTubeExtractorPackage());
           return packages;
         }
         
@@ -62,7 +69,22 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
     return mReactNativeHost;
   }
 
-  
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    SoLoader.init(this, /* native exopackage */ false);
+    try {
+      NewPipe.init(DownloaderImpl.getInstance());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    // Initialize yt-dlp for unthrottled YouTube downloads
+    try {
+      YoutubeDL.getInstance().init(this);
+      FFmpeg.getInstance().init(this);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
-  
 }

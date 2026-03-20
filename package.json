@@ -28,7 +28,7 @@
     "react-native-dotenv": "^2.5.5",
     "react-native-fs": "^2.18.0",
     "react-native-gesture-handler": "^1.10.3",
-    "react-native-modal": "^11.10.0",
+    "react-native-modal": "^13.0.1",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.10.1",
     "react-native-slider": "^0.11.0",

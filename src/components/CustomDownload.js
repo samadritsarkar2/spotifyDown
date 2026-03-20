@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,14 +8,12 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {windowHeight} from '../common/index';
-import {NEW_API, NEWER_API} from '@env';
-import {addToDownloadQueue} from '../redux/actions/playlistActions';
+import { useDispatch, useSelector } from 'react-redux';
+import { windowHeight } from '../common/index';
+import { searchYouTube } from '../common/YouTubeExtractor';
+import { addToDownloadQueue } from '../redux/actions/playlistActions';
 
 const CustomDownload = () => {
-  const api = `${NEWER_API}/getCustomDownload?trackId=`;
-  // const directAPI = `${NEW_API}/getdirectlink?`;
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
 
@@ -24,30 +22,16 @@ const CustomDownload = () => {
   const single = useSelector((state) => state.playlist).customItem;
 
   const doFetch = async () => {
-    // let artistsString = single.artist.map((item) => item.name).join();
-
-    // const params = {
-    //   title: single.title,
-    //   album: single.album,
-    //   artistsString,
-    // };
-    // let query = Object.keys(params)
-    //   .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
-    //   .join('&');
-
-    const response = await fetch(api + single.id);
-    response
-      .json()
-      .then((data) => {
-        // console.log(data);
-        setData(data.results);
-        setLoading(false);
-      })
-      .catch((err) => {
-        //TODO: Show error to user
-        setLoading(false);
-        console.log(err)
-      });
+    try {
+      const artistNames = single.artist.map(a => a.name);
+      const query = `${single.title} ${artistNames.join(' ')} ${single.album}`;
+      const results = await searchYouTube(query, 15);
+      setData(results);
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+      console.log(e);
+    }
   };
 
   useEffect(() => {
@@ -60,12 +44,12 @@ const CustomDownload = () => {
     //
     // console.log("Clicked: ", item);
     setLoading(true);
-        // single.title = "cold\/mess";
-        single.customDownloadData = item;
+    // single.title = "cold\/mess";
+    single.customDownloadData = item;
 
-        dispatch(addToDownloadQueue(single));
-        setLoading(false);
-  
+    dispatch(addToDownloadQueue(single));
+    setLoading(false);
+
   };
 
   return (
@@ -84,11 +68,11 @@ const CustomDownload = () => {
         </Text>
       </View>
       {!loading ? (
-        <View style={{flex: 1, marginHorizontal : 7}}>
+        <View style={{ flex: 1, marginHorizontal: 7 }}>
           <FlatList
             data={data}
             showsVerticalScrollIndicator={false}
-            renderItem={({item}) => {
+            renderItem={({ item }) => {
               return (
                 <TouchableOpacity
                   onPress={() => {
@@ -115,9 +99,9 @@ const CustomDownload = () => {
                         alignSelf: 'center',
                         borderRadius: 6,
                       }}
-                      source={{uri: item.thumbnail}}
+                      source={{ uri: item.thumbnail }}
                     />
-                    <Text style={{...styles.titleText, alignSelf: 'center'}}>
+                    <Text style={{ ...styles.titleText, alignSelf: 'center' }}>
                       {item.title}
                     </Text>
                     <Text
@@ -134,7 +118,7 @@ const CustomDownload = () => {
               );
             }}
           />
-          <View style={{height: windowHeight * 0.07}} />
+          <View style={{ height: windowHeight * 0.07 }} />
         </View>
       ) : (
         <Text style={styles.otherText}>Loading...</Text>

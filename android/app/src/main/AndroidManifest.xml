@@ -10,6 +10,7 @@
       android:icon="@mipmap/ic_launcher"
       android:roundIcon="@mipmap/ic_launcher"
       android:allowBackup="false"
+      android:extractNativeLibs="true"
       android:requestLegacyExternalStorage="true"
       android:theme="@style/AppTheme">
       
@@ -23,7 +24,7 @@
         android:windowSoftInputMode="adjustPan"
         android:screenOrientation="portrait" 
         android:launchMode="singleTask"
-        android:exported="false"
+        android:exported="true"
         
         >
         <intent-filter>

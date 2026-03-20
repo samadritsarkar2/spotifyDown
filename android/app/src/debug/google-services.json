@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:714569810554:android:2590bf076e41e011f331c3",
         "android_client_info": {
-          "package_name": "com.sam.downify.debug"
+          "package_name": "com.sam.downify"
         }
       },
       "oauth_client": [
