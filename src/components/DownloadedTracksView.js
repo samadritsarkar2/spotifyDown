@@ -79,21 +79,15 @@ const TracksView = () => {
 
   // --- Animated styles ---
 
-  // Cover: overscroll zoom + parallax drift
+  // Cover: parallax drift (moves up at 40% of scroll speed)
   const coverAnimatedStyle = useAnimatedStyle(() => {
-    const scale = interpolate(
-      scrollY.value,
-      [-HEADER_HEIGHT, 0],
-      [4, 1],
-      Extrapolation.CLAMP,
-    );
     const translateY = interpolate(
       scrollY.value,
       [0, HEADER_HEIGHT],
       [0, -HEADER_HEIGHT * 0.4],
       Extrapolation.CLAMP,
     );
-    return { transform: [{ scale }, { translateY }] };
+    return { transform: [{ translateY }] };
   });
 
   // Cover: darkening overlay
