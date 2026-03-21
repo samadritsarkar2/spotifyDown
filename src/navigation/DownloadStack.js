@@ -24,7 +24,7 @@ const DownloadStack = () => {
       <Stack.Screen component={Downloads} name="Downloads" options={{
         headerTitle : "Downloaded Playlists"
       }}/>
-      <Stack.Screen component={TracksView} name="TracksView" />
+      <Stack.Screen component={TracksView} name="TracksView" options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 };
