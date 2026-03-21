@@ -1,12 +1,13 @@
 import React from 'react';
-import { View, Vibration, FlatList, RefreshControl } from 'react-native';
+import { View, Vibration, FlatList, RefreshControl, StyleSheet } from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 import allActions from '../redux/actions/index';
 import { windowHeight } from '../common';
 import { commonStyles, colors, spacing } from '../theme';
 import { useDownloads } from '../hooks/useDownloads';
 import EmptyState from './shared/EmptyState';
-import LoadingScreen from './shared/LoadingScreen';
 import PlaylistCard from './shared/PlaylistCard';
+import { SkeletonPlaylistList } from './shared/SkeletonPlaylistCard';
 
 const Downloads = ({ navigation }) => {
   const { loading, playlists, data, onRefresh, dispatch } = useDownloads();
@@ -14,7 +15,7 @@ const Downloads = ({ navigation }) => {
   if (loading) {
     return (
       <View style={commonStyles.screenContainer}>
-        <LoadingScreen type="9CubeGrid" />
+        <SkeletonPlaylistList count={5} />
       </View>
     );
   }
@@ -40,21 +41,23 @@ const Downloads = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={loading} onRefresh={onRefresh} />}
         ListFooterComponent={<View style={commonStyles.listFooterGap} />}
-        renderItem={({ item }) => (
-          <PlaylistCard
-            image={data[item].info.image}
-            name={data[item].info.name}
-            trackCount={data[item].tracks.length}
-            onPress={() => {
-              dispatch({ type: 'SET_ACTIVE_PLAYLIST', payload: item });
-              navigation.navigate('TracksView');
-            }}
-            onLongPress={() => {
-              dispatch(allActions.addNew(item));
-              Vibration.vibrate(300);
-              navigation.navigate('NewStack', { screen: 'Playlist' });
-            }}
-          />
+        renderItem={({ item, index }) => (
+          <Animated.View entering={FadeInDown.delay(Math.min(index, 10) * 50).duration(300)}>
+            <PlaylistCard
+              image={data[item].info.image}
+              name={data[item].info.name}
+              trackCount={data[item].tracks.length}
+              onPress={() => {
+                dispatch({ type: 'SET_ACTIVE_PLAYLIST', payload: item });
+                navigation.navigate('TracksView');
+              }}
+              onLongPress={() => {
+                dispatch(allActions.addNew(item));
+                Vibration.vibrate(300);
+                navigation.navigate('NewStack', { screen: 'Playlist' });
+              }}
+            />
+          </Animated.View>
         )}
       />
     </View>

@@ -1,28 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Alert,
-  Modal,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import { Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateStorage } from '../utils/storage';
 import Snackbar from 'react-native-snackbar';
-import { DOWNLOAD_PATH, windowHeight, windowWidth } from '../common/index';
+import { DOWNLOAD_PATH } from '../common/index';
 import { colors, fonts } from '../theme';
 import { checkExists, checkPermission, checkData, isExist } from '../utils';
-import RNFS, { downloadFile } from 'react-native-fs';
+import RNFS from 'react-native-fs';
 import { findYTMusicMatch, downloadAudio } from '../common/YouTubeExtractor';
-import Spinner from 'react-native-spinkit';
-import { useNavigation } from '@react-navigation/native';
 import { selectDownloadQueue, selectCurrentDownloading, selectCurrentPlaylist, selectDownloadPercent } from '../redux/selectors';
 
 const DownloadingHelper = () => {
   const dispatch = useDispatch();
-  const navigation = useNavigation();
   const [isExecutingTask, setIsExecutingTask] = useState(false);
   
   const downloadQueue = useSelector(selectDownloadQueue);
@@ -239,7 +228,7 @@ const DownloadingHelper = () => {
                   text: `Pardon! Could not download ${single.title}. Try the Custom Downloader.`,
                   duration: Snackbar.LENGTH_SHORT,
                   backgroundColor: 'red',
-                  fontFamily: GothamRoundedBook,
+                  fontFamily: fonts.body,
                 });
                 reject('Download error');
               }
@@ -306,41 +295,8 @@ const DownloadingHelper = () => {
     workerFn();
   }, [downloadQueue, isExecutingTask]);
 
-  return (
-    <View>
-      {downloadQueue.length >= 1 ? (
-        <TouchableOpacity
-          style={{
-            backgroundColor: 'white',
-            height: windowWidth * 0.15,
-
-            width: windowWidth * 0.15,
-            borderRadius: 15,
-            position: 'absolute',
-            bottom: windowHeight * 0.12,
-            left: 20,
-
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          onPress={
-            () =>
-              navigation.navigate('LibraryStack', {
-                screen: 'DownloadQueue',
-                initial: false,
-              })
-            // navigation.navigate('DownloadQueue')
-          }>
-          <Spinner
-            style={{ marginBottom: 7, justifyContent: 'center' }}
-            size={20}
-            type={'Circle'}
-            color={'red'}
-          />
-        </TouchableOpacity>
-      ) : null}
-    </View>
-  );
+  // Download progress is now shown in MiniPlayer — no visible UI here
+  return null;
 };
 
 export default DownloadingHelper;

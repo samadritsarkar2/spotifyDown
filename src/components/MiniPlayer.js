@@ -20,10 +20,10 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 
 import {useDispatch, useSelector} from 'react-redux';
-import { selectPlayerState } from '../redux/selectors';
+import { selectPlayerState, selectDownloadQueue, selectDownloadPercent } from '../redux/selectors';
 
 import { windowHeight} from '../common';
-import { colors, fonts, fontSize as themeFontSize } from '../theme';
+import { colors, fonts, fontSize as themeFontSize, spacing, radii } from '../theme';
 import TextTicker from 'react-native-text-ticker';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import Player from './Player';
@@ -55,6 +55,10 @@ const MiniPlayer = () => {
     trackInfo: {title, artist, album, artwork},
     isPlayerActive,
   } = store;
+
+  const downloadQueue = useSelector(selectDownloadQueue);
+  const downloadPercent = useSelector(selectDownloadPercent);
+  const isDownloading = downloadQueue.length > 0;
 
   const trackPlayerInit = async () => {
     try {
@@ -215,96 +219,61 @@ const MiniPlayer = () => {
   return (
     <>
       {!store.isPlayerActive ? (
-        <TouchableWithoutFeedback onPress={() => activatePlayer()}>
-          <View style={[styles.box]}>
-            <View style={styles.playerView}>
-              <View style={styles.trackInfo}>
-                {/* <Text style={{color: 'white'}}>
-              {trackTitle} {'\u25CF'} {trackArtist}
-            </Text> */}
-
-                {/* <TextTicker
-              style={{
-                color: 'white',
-                fontFamily: 'GothamMedium',
-                fontWeight: 'bold'
-              }}
-          
-              // duration={8000}
-              // scroll={false}
-              // // scrollSpeed={300}
-              // repeatSpacer={150}
-              // bounce={false}
-      
-              >
-Play something 🎶{' '} {'\u25CF'} 
-        <Text>Go to Library{'->'} {'\u25CF'} Downloads{'->'}{' '}
-                    Select a Playlist 🔖{'->'} Play a track 🎵</Text>
-                </TextTicker> */}
-
-                <TextTicker
-                  style={{
-                    color: 'white',
-                    fontFamily: 'GothamMedium',
-                    fontWeight: 'bold',
-                  }}
-                  duration={8000}
-                  scroll={false}
-                  repeatSpacer={150}
-                  marqueeDelay={100}>
-                  {title === '' ? (
-                    <Text style={{...styles.trackInfoText, color: 'white'}}>
-                      Tap here to open NEW Player 🎶{' '}
+        <View style={styles.box}>
+          {isDownloading && (
+            <View style={styles.downloadProgressBar}>
+              <View style={[styles.downloadProgressFill, { width: `${Math.max(0, Math.min(downloadPercent, 100))}%` }]} />
+            </View>
+          )}
+          <View style={styles.playerView}>
+            {isDownloading && (
+              <TouchableOpacity
+                style={styles.downloadBadge}
+                onPress={() => navigation.navigate('LibraryStack', { screen: 'DownloadQueue', initial: false })}>
+                <Image source={require('../assets/down.png')} style={styles.downloadBadgeIcon} />
+                <Text style={styles.downloadBadgeText}>{downloadQueue.length}</Text>
+              </TouchableOpacity>
+            )}
+            <TouchableWithoutFeedback onPress={() => activatePlayer()}>
+              <View style={styles.playerInner}>
+                {artwork ? (
+                  <Image source={{ uri: artwork }} style={styles.miniArtwork} />
+                ) : null}
+                <View style={styles.trackInfo}>
+                  {title ? (
+                    <TextTicker
+                      style={styles.miniTitle}
+                      duration={8000}
+                      scroll={false}
+                      repeatSpacer={150}
+                      marqueeDelay={100}>
+                      {title}
                       <Text style={styles.trackInfoText}>
-                        {'\u25CF'} Go to Library{'->'} {'\u25CF'} Downloads
-                        {'->'} Select a Playlist 🔖{'->'} Play a track 🎵
+                        {' \u25CF '}{artist}{' \u25CF '}{album}
                       </Text>
-                    </Text>
+                    </TextTicker>
                   ) : (
-                    <Text style={{...styles.trackInfoText, color: 'white'}}>
-                      {title}{' '}
-                      <Text style={styles.trackInfoText}>
-                        {'\u25CF'} {artist} {'\u25CF'} {album}
-                      </Text>
-                    </Text>
+                    <Text style={styles.miniTitleDimmed}>Not playing</Text>
                   )}
-                </TextTicker>
+                </View>
               </View>
-
-              <View style={styles.playerControls}>
-                <TouchableOpacity
-                  onPress={skipToPrevious}
-                  style={styles.playerIconsTouchable}>
-                  <Image
-                    source={require('../assets/previous.png')}
-                    style={styles.playerIcons}
-                  />
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={togglePlayback}
-                  style={styles.playerIconsTouchable}>
-                  <Image
-                    source={
-                      playbackState === State.Playing
-                        ? require('../assets/pause.png')
-                        : require('../assets/play.png')
-                    }
-                    style={[styles.playerIcons]}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={skipToNext}
-                  style={styles.playerIconsTouchable}>
-                  <Image
-                    source={require('../assets/next.png')}
-                    style={styles.playerIcons}
-                  />
-                </TouchableOpacity>
-              </View>
+            </TouchableWithoutFeedback>
+            <View style={styles.playerControls}>
+              <TouchableOpacity onPress={skipToPrevious} style={styles.playerIconsTouchable}>
+                <Image source={require('../assets/previous.png')} style={styles.playerIcons} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={togglePlayback} style={styles.playerIconsTouchable}>
+                <Image
+                  source={playbackState === State.Playing ? require('../assets/pause.png') : require('../assets/play.png')}
+                  style={styles.playerIcons}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={skipToNext} style={styles.playerIconsTouchable}>
+                <Image source={require('../assets/next.png')} style={styles.playerIcons} />
+              </TouchableOpacity>
             </View>
           </View>
-        </TouchableWithoutFeedback>
+        </View>
       ) : null}
     </>
   );
@@ -316,41 +285,86 @@ const styles = StyleSheet.create({
   box: {
     position: 'absolute',
     width: '100%',
-    height: windowHeight * 0.055,
-    justifyContent: 'center',
     bottom: windowHeight * 0.06,
-    paddingVertical: windowHeight * 0.01,
     backgroundColor: colors.bg.secondary,
-    borderTopColor: colors.text.primary,
-    borderBottomColor: colors.bg.primary,
-    borderWidth: 1,
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  downloadProgressBar: {
+    height: 3,
+    width: '100%',
+    backgroundColor: colors.bg.primary,
+  },
+  downloadProgressFill: {
+    height: 3,
+    backgroundColor: colors.accent.primary,
   },
   playerView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: windowHeight * 0.065,
+    paddingHorizontal: 8,
+  },
+  playerInner: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  downloadBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.accent.primary,
+    borderRadius: radii.sm,
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    marginRight: 8,
+  },
+  downloadBadgeIcon: {
+    width: 14,
+    height: 14,
+    tintColor: colors.text.primary,
+  },
+  downloadBadgeText: {
+    color: colors.text.primary,
+    fontSize: themeFontSize.xs,
+    fontFamily: fonts.heading,
+    marginLeft: 3,
+  },
+  miniArtwork: {
+    width: 42,
+    height: 42,
+    borderRadius: 6,
+    marginRight: 10,
   },
   trackInfo: {
     flex: 1,
-    marginStart: 10,
-    alignSelf: 'center',
+    justifyContent: 'center',
   },
-  trackInfoText: { color: colors.text.hint, fontSize: themeFontSize.sm },
+  miniTitle: {
+    color: colors.text.primary,
+    fontFamily: 'GothamMedium',
+    fontSize: themeFontSize.sm + 1,
+  },
+  miniTitleDimmed: {
+    color: colors.text.hint,
+    fontFamily: 'GothamMedium',
+    fontSize: themeFontSize.sm + 1,
+  },
+  trackInfoText: { color: colors.text.tertiary, fontSize: themeFontSize.sm },
   playerControls: {
-    flex: 0.5,
     flexDirection: 'row',
-    marginEnd: 5,
-    alignItems: 'flex-end',
-    alignSelf: 'center',
+    alignItems: 'center',
+    marginLeft: 8,
   },
   playerIconsTouchable: {
-    flex: 1,
+    padding: 4,
     marginHorizontal: 2,
-    marginVertical: 3,
   },
   playerIcons: {
-    width: '100%',
-    height: '100%',
-    aspectRatio: 1,
+    width: 24,
+    height: 24,
   },
 });

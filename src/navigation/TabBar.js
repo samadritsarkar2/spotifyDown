@@ -58,6 +58,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
             <View style={styles.iconAndLabel}>
               <Image style={styles.icon} source={isFocused ? config.iconFocused : config.icon} />
               <Text style={isFocused ? styles.labelFocused : styles.label}>{config.label}</Text>
+              {isFocused && <View style={styles.activeIndicator} />}
             </View>
           </TouchableOpacity>
         );
@@ -98,5 +99,12 @@ const styles = StyleSheet.create({
   labelFocused: {
     color: colors.text.primary,
     fontSize: fontSize.sm,
+  },
+  activeIndicator: {
+    width: 20,
+    height: 3,
+    borderRadius: 1.5,
+    backgroundColor: colors.accent.primary,
+    marginTop: 2,
   },
 });

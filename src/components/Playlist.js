@@ -17,7 +17,10 @@ import { windowWidth, windowHeight, bottomGap } from '../common';
 import { colors, fonts, fontSize as themeFontSize, spacing, radii, commonStyles } from '../theme';
 import Spinner from 'react-native-spinkit';
 import TextTicker from 'react-native-text-ticker';
+import LinearGradient from 'react-native-linear-gradient';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 import { usePlaylist } from '../hooks/usePlaylist';
+import { SkeletonTrackList } from './shared/SkeletonTrackRow';
 
 const Playlist = ({ navigation, route }) => {
   const isFocused = useIsFocused();
@@ -39,14 +42,8 @@ const Playlist = ({ navigation, route }) => {
   return (
     <>
       {loading ? (
-        <View style={styles.wholeScreen}>
-          <Spinner
-            style={{ marginBottom: 7 }}
-            size={72}
-            type={'ThreeBounce'}
-            color={'#FFF'}
-          />
-          <Text style={{ color: 'white', fontSize: 20 }}>Fetching...</Text>
+        <View style={[styles.wholeScreen, { alignItems: 'stretch' }]}>
+          <SkeletonTrackList count={10} />
         </View>
       ) : (
         <>
@@ -57,27 +54,16 @@ const Playlist = ({ navigation, route }) => {
                   flex: 0.9,
                   flexDirection: 'column',
                 }}>
-                {responseInfo.image ? (
+                <View style={{ alignSelf: 'center', height: '100%', aspectRatio: 1 }}>
                   <Image
-                    source={{ uri: responseInfo.image }}
-                    style={{
-                      height: '100%',
-                      aspectRatio: 1 / 1,
-                      borderRadius: 10,
-                      alignSelf: 'center',
-                    }}
+                    source={responseInfo.image ? { uri: responseInfo.image } : require('../assets/defaultPlaylist.png')}
+                    style={{ height: '100%', width: '100%', borderRadius: radii.md }}
                   />
-                ) : (
-                  <Image
-                    source={require('../assets/defaultPlaylist.png')}
-                    style={{
-                      height: '100%',
-                      width: '60%',
-                      borderRadius: 10,
-                      alignSelf: 'center',
-                    }}
+                  <LinearGradient
+                    colors={['transparent', colors.bg.primary]}
+                    style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 80, borderBottomLeftRadius: radii.md, borderBottomRightRadius: radii.md }}
                   />
-                )}
+                </View>
                 <View
                   style={{
                     alignContent: 'center',
@@ -144,9 +130,10 @@ const Playlist = ({ navigation, route }) => {
               initialNumToRender={10}
               maxToRenderPerBatch={10}
               windowSize={5}
+              ItemSeparatorComponent={() => <View style={commonStyles.listSeparator} />}
               ListFooterComponent={<View style={{ height: windowHeight * 0.062 }} />}
               renderItem={({ item, index }) => (
-                <View style={styles.list}>
+                <Animated.View entering={FadeInDown.delay(Math.min(index, 10) * 50).duration(300)} style={styles.list}>
                   <TouchableOpacity style={{ flex: 1 }}>
                     <View style={styles.itemWrapper}>
                       <Image
@@ -228,7 +215,7 @@ const Playlist = ({ navigation, route }) => {
                       }}
                     />
                   </TouchableOpacity>
-                </View>
+                </Animated.View>
               )}
             />
           </View>

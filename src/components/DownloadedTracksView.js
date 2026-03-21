@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/core';
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, Text, FlatList } from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 import allActions from '../redux/actions';
-import { windowHeight } from '../common';
 import { commonStyles, colors, fonts, fontSize, spacing, radii } from '../theme';
 import { useDownloadedTracks } from '../hooks/useDownloadedTracks';
 import TrackRow from './shared/TrackRow';
@@ -23,8 +23,10 @@ const TracksView = () => {
     dispatch,
   } = useDownloadedTracks(navigation);
 
+  const trackCount = data[activePlaylist]?.tracks?.length || 0;
+
   return (
-    <View style={[commonStyles.screenContainer, { paddingHorizontal: spacing.sm + 4, marginTop: spacing.sm }]}>
+    <View style={[commonStyles.screenContainer, { paddingHorizontal: spacing.md }]}>
       <FlatList
         data={data[activePlaylist].tracks}
         keyExtractor={(item, index) => item.id?.toString() || index.toString()}
@@ -33,38 +35,43 @@ const TracksView = () => {
         maxToRenderPerBatch={10}
         windowSize={5}
         ListHeaderComponent={
-          <View style={styles.headerRow}>
-            <TouchableOpacity
-              style={styles.playButton}
-              onPress={() => dispatch(allActions.addPlaylistToQueue(activePlaylist))}
-              delayLongPress={100}>
-              <Image source={require('../assets/play.png')} style={styles.playButtonImg} />
-              <Text style={styles.playButtonText}> Play</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.playButton}
-              onPress={() => dispatch(allActions.shufflePlay(activePlaylist))}
-              delayLongPress={100}>
-              <Image source={require('../assets/shuffle.png')} style={styles.playButtonImg} />
-              <Text style={styles.playButtonText}> Shuffle Play</Text>
-            </TouchableOpacity>
+          <View style={styles.header}>
+            <Text style={styles.trackCount}>{trackCount} songs</Text>
+            <View style={styles.controls}>
+              <TouchableOpacity
+                style={styles.iconBtn}
+                onPress={() => dispatch(allActions.shufflePlay(activePlaylist))}>
+                <Image source={require('../assets/shuffle.png')} style={styles.iconBtnImg} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.playFab}
+                onPress={() => dispatch(allActions.addPlaylistToQueue(activePlaylist))}>
+                <Image source={require('../assets/play.png')} style={styles.playFabImg} />
+              </TouchableOpacity>
+            </View>
           </View>
         }
+        ItemSeparatorComponent={() => <View style={{ height: spacing.xs }} />}
         ListFooterComponent={<View style={commonStyles.listFooterGap} />}
-        renderItem={({ item }) => (
-          <TrackRow
-            artwork={item.artwork}
-            title={item.title}
-            subtitle={`${item.artist} - ${item.album}`}
-            scrollTitle
-            onPress={() => dispatch(allActions.playOne(item))}
-            onLongPress={() => handleLongPress(item)}
-            rightElement={
-              <TouchableOpacity style={styles.moreButton} onPress={() => handleLongPress(item)}>
-                <Image source={require('../assets/more.png')} style={commonStyles.iconButton} />
-              </TouchableOpacity>
-            }
-          />
+        renderItem={({ item, index }) => (
+          <Animated.View entering={FadeInDown.delay(Math.min(index, 10) * 50).duration(300)}>
+            <TrackRow
+              artwork={item.artwork}
+              title={item.title}
+              subtitle={`${item.artist} - ${item.album}`}
+              scrollTitle
+              onPress={() => dispatch(allActions.playOne(item))}
+              onLongPress={() => handleLongPress(item)}
+              rightElement={
+                <TouchableOpacity
+                  style={styles.moreButton}
+                  onPress={() => handleLongPress(item)}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+                  <Image source={require('../assets/more.png')} style={{ width: 20, height: 20, tintColor: colors.text.secondary }} />
+                </TouchableOpacity>
+              }
+            />
+          </Animated.View>
         )}
       />
       <BottomSheetModal visible={isVisible} onClose={() => setIsVisible(false)}>
@@ -93,29 +100,55 @@ const TracksView = () => {
 export default TracksView;
 
 const styles = StyleSheet.create({
-  headerRow: {
-    flex: 1,
-    marginBottom: spacing.sm,
+  header: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-  },
-  playButton: {
-    ...commonStyles.primaryButton,
-    flexDirection: 'row',
-    width: '44%',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 0,
+    marginTop: spacing.sm,
+    marginBottom: spacing.md,
   },
-  playButtonImg: { height: 25, width: 25 },
-  playButtonText: {
-    ...commonStyles.primaryButtonText,
-    fontSize: fontSize.lg,
-    textTransform: 'capitalize',
+  trackCount: {
+    color: colors.text.tertiary,
+    fontSize: fontSize.sm,
+    fontFamily: fonts.body,
+  },
+  controls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
+  },
+  iconBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconBtnImg: {
+    width: 24,
+    height: 24,
+    tintColor: colors.accent.primary,
+  },
+  playFab: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: colors.accent.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 4,
+    shadowColor: colors.accent.primary,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+  },
+  playFabImg: {
+    width: 22,
+    height: 22,
+    tintColor: colors.bg.primary,
+    marginLeft: 2,
   },
   moreButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: spacing.xs,
+    padding: spacing.sm,
   },
 });

@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View, Text, Image, StatusBar, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Image, StatusBar } from 'react-native';
 import { IronSource } from '@wowmaking/react-native-iron-source';
 import { LogBox } from 'react-native';
 import { commonStyles, colors, fonts, fontSize, spacing } from '../theme';
+import PressableScale from './shared/PressableScale';
 
 LogBox.ignoreLogs([
   'Require cycle:',
@@ -29,16 +30,16 @@ const Home = ({ navigation }) => {
         </Text>
       </View>
       <View style={styles.inputBox}>
-        <TouchableOpacity
-          style={commonStyles.primaryButton}
-          onPress={() => navigation.navigate('NewStack', { screen: 'New' })}>
-          <Text style={commonStyles.primaryButtonText}>Download</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={commonStyles.primaryButton}
-          onPress={() => navigation.navigate('LibraryStack', { screen: 'Library' })}>
-          <Text style={commonStyles.primaryButtonText}>Your Library</Text>
-        </TouchableOpacity>
+        <PressableScale onPress={() => navigation.navigate('NewStack', { screen: 'New' })}>
+          <View style={commonStyles.primaryButton}>
+            <Text style={commonStyles.primaryButtonText}>Download</Text>
+          </View>
+        </PressableScale>
+        <PressableScale onPress={() => navigation.navigate('LibraryStack', { screen: 'Library' })}>
+          <View style={commonStyles.primaryButton}>
+            <Text style={commonStyles.primaryButtonText}>Your Library</Text>
+          </View>
+        </PressableScale>
       </View>
     </View>
   );

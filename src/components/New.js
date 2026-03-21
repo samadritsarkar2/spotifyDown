@@ -14,6 +14,7 @@ import {
 var parse = require('url-parse');
 import analytics from '@react-native-firebase/analytics';
 import { commonStyles, colors, fonts, fontSize, spacing, radii } from '../theme';
+import PressableScale from './shared/PressableScale';
 
 const New = ({ navigation }) => {
   const [url, setUrl] = useState('');
@@ -85,9 +86,11 @@ const New = ({ navigation }) => {
             </TouchableOpacity>
           ) : null}
         </View>
-        <TouchableOpacity style={commonStyles.primaryButton} onPress={fetchApi}>
-          <Text style={commonStyles.primaryButtonText}>Submit</Text>
-        </TouchableOpacity>
+        <PressableScale onPress={fetchApi}>
+          <View style={commonStyles.primaryButton}>
+            <Text style={commonStyles.primaryButtonText}>Submit</Text>
+          </View>
+        </PressableScale>
       </View>
     </View>
   );
@@ -110,27 +113,34 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   searchBar: {
-    backgroundColor: colors.text.primary,
+    backgroundColor: colors.bg.elevated,
     marginHorizontal: spacing.xl,
-    width: '81%',
+    width: '85%',
+    height: 52,
     alignSelf: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    borderRadius: radii.sm,
+    borderRadius: radii.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: spacing.sm + 4,
   },
   searchIcon: {
-    height: 30,
-    width: 30,
-    marginHorizontal: spacing.xs + 1,
+    height: 22,
+    width: 22,
+    marginRight: spacing.sm,
+    tintColor: colors.text.hint,
   },
   clearIcon: {
-    height: 25,
-    width: 25,
-    marginHorizontal: 7,
+    height: 20,
+    width: 20,
+    marginLeft: spacing.sm,
+    tintColor: colors.text.hint,
   },
   input: {
-    flex: 5,
-    color: 'black',
-    fontFamily: fonts.heading,
+    flex: 1,
+    color: colors.text.primary,
+    fontFamily: fonts.body,
+    fontSize: fontSize.md,
   },
 });

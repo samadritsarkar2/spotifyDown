@@ -24,6 +24,7 @@ const BottomSheetModal = ({ visible, onClose, children }) => (
     deviceWidth={windowWidth}
     style={commonStyles.bottomSheetOverlay}>
     <View style={commonStyles.bottomSheetContainer}>
+      <View style={commonStyles.bottomSheetDragHandle} />
       {children}
     </View>
   </Modal>

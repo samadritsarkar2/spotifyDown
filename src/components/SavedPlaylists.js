@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList } from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import allActions from '../redux/actions/index';
 import { getStorage } from '../utils/storage';
 import { commonStyles, spacing } from '../theme';
 import EmptyState from './shared/EmptyState';
-import LoadingScreen from './shared/LoadingScreen';
 import PlaylistCard from './shared/PlaylistCard';
+import { SkeletonPlaylistList } from './shared/SkeletonPlaylistCard';
 
 const SavedPlaylists = () => {
   const [loading, setLoading] = useState(true);
@@ -17,9 +18,7 @@ const SavedPlaylists = () => {
 
   useEffect(() => {
     setLoading(true);
-    const timer = setTimeout(() => {
-      retrieveSaved();
-    }, 200);
+    const timer = setTimeout(() => retrieveSaved(), 200);
     return () => clearTimeout(timer);
   }, []);
 
@@ -42,7 +41,7 @@ const SavedPlaylists = () => {
   if (loading) {
     return (
       <View style={commonStyles.screenContainer}>
-        <LoadingScreen type="Circle" />
+        <SkeletonPlaylistList count={4} />
       </View>
     );
   }
@@ -61,12 +60,14 @@ const SavedPlaylists = () => {
             onAction={() => navigation.navigate('NewStack', { screen: 'New' })}
           />
         }
-        renderItem={({ item }) => (
-          <PlaylistCard
-            image={item.image}
-            name={item.name}
-            onPress={() => handleClick(item.id)}
-          />
+        renderItem={({ item, index }) => (
+          <Animated.View entering={FadeInDown.delay(Math.min(index, 10) * 50).duration(300)}>
+            <PlaylistCard
+              image={item.image}
+              name={item.name}
+              onPress={() => handleClick(item.id)}
+            />
+          </Animated.View>
         )}
       />
     </View>

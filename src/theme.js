@@ -77,34 +77,51 @@ export const commonStyles = StyleSheet.create({
     borderRadius: radii.md,
     padding: spacing.md,
   },
+  cardElevated: {
+    backgroundColor: colors.bg.card,
+    borderRadius: radii.md,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.border,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+
+  // List separator
+  listSeparator: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: colors.border,
+    marginLeft: 58,
+  },
 
   // Track list items
   trackRow: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    height: windowHeight * 0.07,
+    paddingVertical: 8,
   },
   trackArtwork: {
-    height: '90%',
-    aspectRatio: 1,
-    alignSelf: 'center',
+    width: 56,
+    height: 56,
     borderRadius: radii.sm,
   },
   trackTitle: {
     color: colors.text.primary,
-    fontSize: fontSize.lg,
+    fontSize: fontSize.md + 1,
     fontFamily: fonts.body,
   },
   trackSubtitle: {
     color: colors.text.tertiary,
-    fontSize: 12,
-    fontFamily: fonts.heading,
+    fontSize: fontSize.sm,
+    fontFamily: fonts.body,
+    marginTop: 2,
   },
   trackDetails: {
     flex: 1,
     justifyContent: 'center',
-    marginLeft: spacing.sm,
+    marginLeft: spacing.md - 4,
   },
 
   // Icon buttons (play, pause, more, download, etc.)
@@ -149,6 +166,13 @@ export const commonStyles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.bg.card,
     borderRadius: radii.md,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.border,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   playlistCardImage: {
     flex: 1.3,
@@ -211,11 +235,25 @@ export const commonStyles = StyleSheet.create({
     margin: 0,
   },
   bottomSheetContainer: {
-    height: windowHeight * 0.15,
-    backgroundColor: colors.bg.primary,
+    height: windowHeight * 0.18,
+    backgroundColor: colors.bg.secondary,
     paddingHorizontal: spacing.sm,
     borderTopLeftRadius: radii.lg,
     borderTopRightRadius: radii.lg,
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+  },
+  bottomSheetDragHandle: {
+    width: 36,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: colors.text.hint,
+    alignSelf: 'center',
+    marginTop: spacing.sm,
+    marginBottom: spacing.xs,
   },
   bottomSheetOption: {
     flex: 1,

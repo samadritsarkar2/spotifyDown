@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, ToastAndroid, View } from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 import KnowMore from './KnowMore.js';
 import analytics from '@react-native-firebase/analytics';
 import { IronSourceRewardedVideo } from '@wowmaking/react-native-iron-source';
 import { commonStyles, colors, fonts, fontSize, spacing, radii } from '../theme';
+import PressableScale from './shared/PressableScale';
 
 const BetterKnowMore = React.memo(KnowMore);
 
@@ -59,16 +61,18 @@ const Library = ({ navigation }) => {
       </View>
       <View style={styles.actions}>
         <ScrollView alwaysBounceVertical={true}>
-          {OPTIONS.map((opt) => (
-            <TouchableOpacity key={opt.label} onPress={opt.onPress}>
-              <View style={styles.optionWrapper}>
-                <Image source={opt.icon} style={styles.optionIcon} />
-                <View>
-                  <Text style={styles.optionLabel}>{opt.label}</Text>
-                  {opt.subtitle && <Text style={styles.optionSubtitle}>{opt.subtitle}</Text>}
+          {OPTIONS.map((opt, index) => (
+            <Animated.View key={opt.label} entering={FadeInDown.delay(index * 80).duration(350)}>
+              <PressableScale onPress={opt.onPress}>
+                <View style={styles.optionWrapper}>
+                  <Image source={opt.icon} style={styles.optionIcon} />
+                  <View>
+                    <Text style={styles.optionLabel}>{opt.label}</Text>
+                    {opt.subtitle && <Text style={styles.optionSubtitle}>{opt.subtitle}</Text>}
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
+              </PressableScale>
+            </Animated.View>
           ))}
           <BetterKnowMore isModalVisible={isModalVisible} toggleModal={toggleModal} />
         </ScrollView>
@@ -102,8 +106,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.bg.card,
-    borderRadius: radii.md,
+    ...commonStyles.cardElevated,
   },
   optionIcon: {
     height: 25,
