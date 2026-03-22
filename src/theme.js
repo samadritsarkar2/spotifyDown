@@ -271,4 +271,24 @@ export const commonStyles = StyleSheet.create({
     fontFamily: fonts.heading,
     marginLeft: spacing.md,
   },
+
+  // Shared track list styles
+  trackItemBg: {
+    backgroundColor: colors.bg.primary,
+    paddingHorizontal: spacing.md,
+  },
+  controlsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: spacing.md,
+  },
+  moreButton: {
+    padding: spacing.sm,
+  },
+  moreIcon: {
+    width: 20,
+    height: 20,
+    tintColor: colors.text.secondary,
+  },
 });
