@@ -9,7 +9,7 @@ const initialState = {
   loading: true,
 };
 
-export const playlist = (state = initialState, action) => {
+export const playlistReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'NEW_PLAYLIST':
       return {

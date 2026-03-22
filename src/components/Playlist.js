@@ -1,554 +1,179 @@
-import React, {useState, useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import allActions from '../redux/actions/index';
-import {useIsFocused} from '@react-navigation/native';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  Alert,
-  ScrollView,
-  Vibration,
-  Linking,
-} from 'react-native';
-import Snackbar from 'react-native-snackbar';
-import Modal from 'react-native-modal';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useCallback } from 'react';
+import { View, StyleSheet, TouchableOpacity, Image, Vibration } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import Spinner from 'react-native-spinkit';
-import TextTicker from 'react-native-text-ticker';
+import { commonStyles, colors, spacing } from '../theme';
+import { usePlaylist } from '../hooks/usePlaylist';
+import TrackRow from './shared/TrackRow';
+import BottomSheetModal, { ModalOption } from './shared/BottomSheetModal';
+import CollapsibleTrackList from './shared/CollapsibleTrackList';
 
-import {NEWER_API} from '@env';
-import {windowWidth, windowHeight, bottomGap, GothamRoundedBook, GothamRoundedMedium} from '../common';
+const IMG_DOWN = require('../assets/down.png');
+const IMG_CHECK = require('../assets/check.png');
+const IMG_MORE = require('../assets/more.png');
+const IMG_HEART = require('../assets/heart.png');
+const IMG_HEART_RED = require('../assets/red-heart.png');
+const IMG_CANCEL = require('../assets/cancel.png');
 
-import {
-  addNewPlaylist,
-  addToDownloadQueue,
-} from '../redux/actions/playlistActions';
-import CustomDownload from './CustomDownload';
-
-const Playlist = ({navigation, route}) => {
-
-  const [error, setError] = useState(false);
-  // const [tracks, setTracks] = useState([]);
-  // const [responseData, setResponseData] = useState({});
-
-  const [selected, setSelected] = useState(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [downloadPercent, setDownloadPercent] = useState(0);
-  // const [curentDownloading, setCurentDownloading] = useState(null);
-
-  const isFocused = useIsFocused();
-  const URlID = useSelector((state) => state.playlist).id;
-
-  const dispatch = useDispatch();
-  const state = useSelector((state) => state.playlist);
-  const {responseInfo, tracks} = state.currentPlaylist;
-  const {loading, currentDownloading, downloadQueue} = state;
-
-  const fetchData = async () => {
-    try {
-      let api = `${NEWER_API}/redirect?id=${URlID}`;
-      const response = await fetch(api, {
-        method: 'GET',
-        headers: {},
-      });
-      // const text = await response.text();
-      // console.log('Error', response.status);
-      if (response.status === 200) {
-        response
-          .json()
-          .then((res) => {
-            dispatch(addNewPlaylist(res));
-          })
-          .catch((err) => {
-            // console.log(err);
-            // setLoading(false);
-            setError(true);
-   
-            navigation.navigate('Error', {error: error});
-           });
-           
-      } else {
-        setError(true);
-        navigation.navigate('Error', {error: error});
-      }
-    } catch (error) {
-      setTimeout(() => {
-        navigation.goBack();
-        Snackbar.show({
-          text: 'Internet connection is required to fetch playlist',
-          duration: Snackbar.LENGTH_LONG,
-          backgroundColor: 'red',
-        });
-      }, 1000);
-    }
-  };
-
-  useEffect(() => {
-   
-    dispatch({type: 'LOADING_TRUE'});
-
-    fetchData();
-
-    
-
-  }, [isFocused]);
-
-  const handleDownload = (item) => {
-    dispatch(addToDownloadQueue(item));
-  };
-
-  const downloadAll = async () => {
-    tracks.map((item) => {
-      if (!item.downloaded) {
-        // console.log(item);
-        setTimeout(() => {
-          handleDownload(item);
-        }, 500);
-      }
-    });
-  };
-
-  const handleDownloadAll = async () => {
-    try {
-      
-        let downloaded = await downloadAll();
-        savePlaylist();
-      
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const savePlaylist = async () => {
-    if (responseInfo.saved == false) {
-      try {
-        const playlistToAdd = {
-          id: responseInfo.id,
-          name: responseInfo.name,
-          image: responseInfo.image,
-        };
-
-        const storedValue = await AsyncStorage.getItem(`@saved_playlists`);
-        const prevList = await JSON.parse(storedValue);
-        // console.log(storedValue)
-        if (!prevList) {
-          const newList = [playlistToAdd];
-          await AsyncStorage.setItem(
-            '@saved_playlists',
-            JSON.stringify(newList),
-          );
-          Snackbar.show({
-            text: 'First Playlist added to Library',
-            duration: Snackbar.LENGTH_LONG,
-            backgroundColor: '#1DB954',
-          });
-          setResponseData((item) =>
-            !item.saved ? {...item, saved: true} : item,
-          );
-        } else {
-          const exists = prevList.some((item) => item.id === responseInfo.id);
-
-          if (!exists) {
-            prevList.push(playlistToAdd);
-            await AsyncStorage.setItem(
-              '@saved_playlists',
-              JSON.stringify(prevList),
-            );
-
-            Snackbar.show({
-              text: 'Playlist added to Library',
-              duration: Snackbar.LENGTH_LONG,
-              backgroundColor: '#1DB954',
-        fontFamily : GothamRoundedMedium
-
-            });
-            dispatch({type: 'SAVE_PLAYLIST'});
-          } else {
-            Snackbar.show({
-              text: 'Playlist already exists in Library',
-              duration: Snackbar.LENGTH_LONG,
-              backgroundColor: 'red',
-              fontFamily : GothamRoundedBook
-            });
-            dispatch({type: 'SAVE_PLAYLIST'});
-          }
-          // console.log(prevList)
-        }
-      } catch (err) {
-        // console.log(err);
-      }
-    }
-  };
-
-  
-  const onRequestClose = () => null;
-
-  const handleCustomDownload = (item) => {
-    setIsVisible(false);
-    navigation.navigate('CustomDownload');
-    dispatch({type: 'SET_CUSTOM_ITEM', payload: selected});
-  };
+// --- Memo'd track item ---
+const PlaylistTrackItem = React.memo(({
+  item,
+  index,
+  currentDownloading,
+  onDownload,
+  onMore,
+}) => {
+  const isDownloading = currentDownloading.some((d) => d.id === item.id);
+  const artistName = item.artist?.[0]?.name || '';
 
   return (
-    <>
-      {loading ? (
-        <View style={styles.wholeScreen}>
-          <Spinner
-            style={{marginBottom: 7}}
-            size={72}
-            type={'ThreeBounce'}
-            color={'#FFF'}
-          />
-          <Text style={{color: 'white', fontSize: 20}}>Fetching...</Text>
-        </View>
-      ) : (
-        <>
-          <View style={styles.wholeScreen}>
-            <View style={styles.playlistHeader}>
-              <View
-                style={{
-                  flex: 0.9,
-                  flexDirection: 'column',
-                }}>
-                {responseInfo.image ? (
-                  <Image
-                    source={{uri: responseInfo.image}}
-                    style={{
-                      height: '100%',
-                      aspectRatio: 1 / 1,
-                      borderRadius: 10,
-                      alignSelf: 'center',
-                    }}
-                  />
+    <View style={commonStyles.trackItemBg}>
+      <TrackRow
+        artwork={item.artwork}
+        title={item.title}
+        subtitle={`${artistName} - ${item.album}`}
+        rightElement={
+          <View style={styles.rightActions}>
+            {item.downloaded ? (
+              <Image source={IMG_CHECK} style={styles.checkIcon} />
+            ) : (
+              <TouchableOpacity onPress={() => onDownload(item)}>
+                {isDownloading ? (
+                  <Spinner size={26} type="Circle" color={colors.text.primary} />
                 ) : (
-                  <Image
-                    source={require('../assets/defaultPlaylist.png')}
-                    style={{
-                      height: '100%',
-                      width: '60%',
-                      borderRadius: 10,
-                      alignSelf: 'center',
-                    }}
-                  />
+                  <Image source={IMG_DOWN} style={styles.downloadIcon} />
                 )}
-                <View
-                  style={{
-                    alignContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <TextTicker
-                    style={[styles.playlistId, {}]}
-                    duration={10000}
-                    scroll={false}
-                    repeatSpacer={150}
-                    marqueeDelay={2000}>
-                    {responseInfo.name}
-                  </TextTicker>
-                </View>
-              </View>
-              <View
-                style={{
-                  flex: 0.3,
-                  marginTop: 50,
-                  flexDirection: 'row',
-                  justifyContent: 'space-evenly',
-                  alignItems: 'center',
-               
-                }}>
-                <TouchableOpacity
-                  style={styles.downloadAllButton}
-                  onPress={() => {
-                    handleDownloadAll();
-                  }}>
-                  <Text style={styles.downloadAllButtonText}>Download All</Text>
-                </TouchableOpacity>
-                <View style={{}}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      savePlaylist();
-                    }}
-                    onLongPress={() => {
-                      Snackbar.show({
-                        text: 'Save this playlist in Library',
-                        duration: Snackbar.LENGTH_LONG,
-                        backgroundColor: 'red',
-                      });
-                    }}>
-                    {responseInfo.saved ? (
-                      <Image
-                        source={require('../assets/red-heart.png')}
-                        style={{height: 30, width: 30}}
-                      />
-                    ) : (
-                      <Image
-                        source={require('../assets/heart.png')}
-                        style={{height: 30, width: 30}}
-                      />
-                    )}
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              style={styles.scroller}>
-              {/* <Text style={{color :'white'}}> {JSON.stringify(tracks)} </Text> */}
-              {tracks.map((item, index) => {
-                return (
-                  <View key={index} style={styles.list}>
-                    <TouchableOpacity style={{flex: 1}}>     
-                    <View style={styles.itemWrapper}>
-                  <Image
-                    style={styles.trackArtwork}
-                    source={{uri: `${item.artwork}`}}
-                  />
-                  <View style={styles.trackDetails}>
-                    <Text style={styles.trackTitle}>{item.title}</Text>
-                    <Text style={styles.trackInfo}>
-                      {item?.artist[0].name} - {item.album}
-                    </Text>
-                  </View>
-                   
-                     </View>
-                    </TouchableOpacity>
-
-                    {item.downloaded ? (
-                      <TouchableOpacity
-                        style={{
-                          marginHorizontal : 5,
-                          alignItems: 'flex-end',
-                          justifyContent: 'center',
-                    
-                        }}
-                        onPress={() => {
-                          // openFile(item);
-                        }}>
-                        <Image
-                          source={require('../assets/check.png')}
-                          style={{
-                            height: 30,
-                            width: 30,
-                            borderRadius: 30 / 2,
-                            backgroundColor: '#1DB954',
-                          }}
-                        />
-                      </TouchableOpacity>
-                    ) : (
-                      <TouchableOpacity
-                        style={{
-                          marginHorizontal : 5,
-                          alignItems: 'flex-end',
-                          justifyContent: 'center',
-                        }}
-                        onPress={() => handleDownload(item)}>
-                        {currentDownloading.includes(item) ? (
-                          <Spinner
-                            style={{marginBottom: 7, justifyContent: 'center'}}
-                            size={30}
-                            type={'Circle'}
-                            color={'#FFF'}
-                          />
-                        ) : (
-                          <Image
-                            source={require('../assets/down.png')}
-                            style={{
-                              height: 30,
-                              width: 30,
-                              borderRadius: 30 / 2,
-                              justifyContent: 'center',
-                            }}
-                          />
-                        )}
-                      </TouchableOpacity>
-                    )}
-                    <TouchableOpacity
-                      style={{
-                        marginHorizontal : 5,
-                        alignItems: 'flex-end',
-                        justifyContent: 'center',
-                      }}
-                      onPress={() => {
-                        setSelected(item);
-
-                        // console.log('Handle cystom', item);
-                        Vibration.vibrate(50);
-                        setIsVisible(true);
-                      }}>
-                      <Image
-                        source={require('../assets/more.png')}
-                        style={{
-                          height: 30,
-                          width: 30,
-
-                          justifyContent: 'center',
-                        }}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                );
-              })}
-              <View style={{height: windowHeight * 0.062}} />
-            </ScrollView>
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity
+              style={commonStyles.moreButton}
+              onPress={() => onMore(item)}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+              <Image source={IMG_MORE} style={commonStyles.moreIcon} />
+            </TouchableOpacity>
           </View>
-        </>
-      )}
-      <Modal
-        isVisible={isVisible}
-        animationIn={'slideInUp'}
-        animationOut={'slideOutDown'}
-        onBackdropPress={() => setIsVisible(false)}
-        onBackButtonPress={() => setIsVisible(false)}
-        swipeDirection={['down']}
-        propagateSwipe={true}
-        useNativeDriver={true}
-        deviceWidth={windowWidth}
-        style={{justifyContent: 'flex-end', margin: 0}}>
-        <View style={styles.customModalOverlay}>
-          <TouchableOpacity
-            style={styles.trackOptionTouchable}
-            onPress={() => {
-              handleCustomDownload();
-            }}>
-            <Image
-              source={require('../assets/down.png')}
-              style={{width: 20, height: 20}}
-            />
-            <Text style={styles.trackOptionText}>
-              Manually choose Youtube video
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.trackOptionTouchable}
-            onPress={() => {
-              setIsVisible(false);
-            }}>
-            <Image
-              source={require('../assets/cancel.png')}
-              style={{width: 22, height: 22}}
-            />
-            <Text style={styles.trackOptionText}>Cancel</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-    </>
+        }
+      />
+    </View>
+  );
+});
+
+const Playlist = ({ navigation }) => {
+  const isFocused = useIsFocused();
+  const {
+    selected,
+    setSelected,
+    isVisible,
+    setIsVisible,
+    responseInfo,
+    tracks,
+    loading,
+    currentDownloading,
+    handleDownload,
+    handleDownloadAll,
+    savePlaylist,
+    handleCustomDownload,
+  } = usePlaylist(navigation, isFocused);
+
+  const onMore = useCallback((item) => {
+    setSelected(item);
+    Vibration.vibrate(50);
+    setIsVisible(true);
+  }, []);
+
+  const onGoBack = useCallback(() => navigation.goBack(), [navigation]);
+
+  const renderItem = useCallback(({ item, index }) => (
+    <PlaylistTrackItem
+      item={item}
+      index={index}
+      currentDownloading={currentDownloading}
+      onDownload={handleDownload}
+      onMore={onMore}
+    />
+  ), [currentDownloading, handleDownload, onMore]);
+
+  const headerControls = (
+    <View style={commonStyles.controlsRow}>
+      <TouchableOpacity style={styles.downloadAllBtn} onPress={handleDownloadAll}>
+        <Image source={IMG_DOWN} style={styles.downloadAllIcon} />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={savePlaylist}>
+        <Image
+          source={responseInfo?.saved ? IMG_HEART_RED : IMG_HEART}
+          style={styles.heartIcon}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+
+  const bottomSheet = (
+    <BottomSheetModal visible={isVisible} onClose={() => setIsVisible(false)}>
+      <ModalOption
+        icon={IMG_DOWN}
+        label="Manually choose Youtube video"
+        onPress={handleCustomDownload}
+      />
+      <ModalOption
+        icon={IMG_CANCEL}
+        label="Cancel"
+        onPress={() => setIsVisible(false)}
+      />
+    </BottomSheetModal>
+  );
+
+  return (
+    <CollapsibleTrackList
+      playlistName={responseInfo?.name || ''}
+      playlistImage={responseInfo?.image}
+      trackCount={tracks?.length || 0}
+      tracks={tracks || []}
+      loading={loading}
+      headerControls={headerControls}
+      renderItem={renderItem}
+      bottomSheet={bottomSheet}
+      onGoBack={onGoBack}
+    />
   );
 };
 
 export default Playlist;
 
 const styles = StyleSheet.create({
-  wholeScreen: {
-    flex: 1,
+  downloadAllBtn: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: colors.accent.primary,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#181818',
+    elevation: 4,
+    shadowColor: colors.accent.primary,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
   },
-  container: {
-    flex: 1,
-    top: 30,
+  downloadAllIcon: {
+    width: 22,
+    height: 22,
+    tintColor: colors.bg.primary,
   },
-  header: {
-    marginTop: 20,
-    fontSize: 30,
-    textAlign: 'center',
-    color: 'white',
+  heartIcon: {
+    width: 30,
+    height: 30,
   },
-
-  playlistId: {
-    color: 'white',
-    alignSelf: 'center',
-    textAlign: 'center',
-    fontSize: 25,
-    fontFamily: 'GothamRoundedMedium',
- 
-  },
-  itemWrapper: {
-    flex: 1,
+  rightActions: {
     flexDirection: 'row',
-    height: windowHeight * 0.055,
-    
-  },
-  trackDetails: {
-    flex: 9,
-    flexDirection: 'column',
-    justifyContent: 'center',
-  },
-  trackArtwork: {
-    flex: 1,
-    marginRight: 10,
-    height: '90%',
-    aspectRatio: 1 / 1,
-    alignSelf: 'center',
-
-    padding: 6,
-  },
-  trackTitle: {
-    color: 'white',
-    fontSize: 17,
-    justifyContent: 'flex-start',
-    fontFamily: 'GothamRoundedBook',
-  },
-  trackInfo: {
-    color: '#6C7A89',
-    fontSize: 12,
-    fontFamily: 'GothamRoundedMedium',
-  },
-  downloadAllButton: {
-    justifyContent: 'center',
-    borderRadius: 30,
-    backgroundColor: '#1DB954',
-    marginVertical: 20,
-    height: windowHeight * 0.05,
-    width: windowWidth * 0.3,
-    alignSelf: 'center',
-  },
-  downloadAllButtonText: {
-    color: 'white',
-    alignSelf: 'center',
-    fontFamily: 'GothamRoundedMedium',
-    fontSize : 16.9
-  },
-  playlistHeader: {
-    flex: 0.5,
-    marginVertical: 15,
-    marginTop: 25,
-    justifyContent: 'space-evenly',
-    width: '90%',
-  },
-  scroller: {
-    flex: 0.7,
-    margin: 10,
-    width: '96%',
-
-    marginBottom: 0,
-  },
-  list: {
-    flex: 1,
-    flexDirection: 'row',
-    marginVertical: 10,
-    alignItems : 'center',
-    justifyContent :'center'
-    // backgroundColor : 'red'
-  },
-  customModalOverlay: {
-    height: windowHeight * 0.15,
-    width: windowWidth,
-    backgroundColor: '#181818',
-    paddingHorizontal: 10,
-  },
-  trackOptionTouchable: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
     alignItems: 'center',
-    height: '40%',
   },
-  trackOptionText: {
-    fontSize: 17,
-    color: 'white',
-    fontFamily: 'GothamRoundedMedium',
-    marginLeft: 15,
+  checkIcon: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: colors.accent.primary,
+  },
+  downloadIcon: {
+    width: 26,
+    height: 26,
   },
 });

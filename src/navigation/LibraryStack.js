@@ -8,6 +8,7 @@ import Library from '../components/Library';
 import SavedPlaylists from '../components/SavedPlaylists';
 import {IronSourceBanner} from '@wowmaking/react-native-iron-source';
 import {useIsFocused} from '@react-navigation/core';
+import { colors, fonts } from '../theme';
 import DownloadStack from './DownloadStack';
 import {Text, View} from 'react-native';
 import DownloadQueue from '../components/DownloadQueue';
@@ -90,7 +91,7 @@ const LibraryStack = () => {
           name="SavedPlaylists"
           options={{
             headerTitle: 'Saved Playlists',
-            headerStyle: {backgroundColor: '#181818', elevation: 0},
+            headerStyle: {backgroundColor: colors.bg.primary, elevation: 0},
             headerTintColor: 'white',
             headerTitleStyle: {color: 'white', fontFamily: 'OpenSans-SemiBold'},
             headerTitleAlign: 'center',
@@ -107,7 +108,7 @@ const LibraryStack = () => {
           name="DownloadQueue"
           options={{
             headerTitle: 'Downloading Queue',
-            headerStyle: {backgroundColor: '#181818', elevation: 0},
+            headerStyle: {backgroundColor: colors.bg.primary, elevation: 0},
             headerTintColor: 'white',
             headerTitleStyle: {color: 'white', fontFamily: 'OpenSans-SemiBold'},
             headerTitleAlign: 'center',

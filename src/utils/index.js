@@ -1,7 +1,7 @@
 import {DOWNLOAD_PATH} from '../common';
-
+import {PermissionsAndroid} from 'react-native';
 import RNFS from 'react-native-fs';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getStorage } from './storage';
 
 export const isExist = async (single) => {
   const filepath = `${DOWNLOAD_PATH}/${single.title}.mp3`;
@@ -78,9 +78,7 @@ const findIdOfTrack = (track) => {
 export const checkData = async (data, playlistId) => {
   let allDownloadedTracks = [];
   try {
-    const storedValue = await AsyncStorage.getItem(`@playlistView`);
-
-    const prevList = await JSON.parse(storedValue);
+    const prevList = await getStorage(`@playlistView`);
 
     if (prevList !== null) {
       let playlists = Object.keys(prevList);

@@ -12,5 +12,12 @@ module.exports = {
         allowUndefined: true,
       },
     ],
+    // Reanimated plugin MUST be last
+    'react-native-reanimated/plugin',
   ],
+  env: {
+    production: {
+      plugins: ['transform-remove-console'],
+    },
+  },
 };

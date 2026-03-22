@@ -1,176 +1,69 @@
 import React from 'react';
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-  Vibration,
-  ToastAndroid,
-  Dimensions,
-} from 'react-native';
-import {windowHeight} from '../common';
-import MiniPlayer from '../components/MiniPlayer';
+import { Text, View, TouchableOpacity, Image, StyleSheet, Vibration, ToastAndroid } from 'react-native';
+import { colors, fonts, fontSize, spacing } from '../theme';
+import { windowHeight } from '../common';
 
-const TabBar = ({state, descriptors, navigation}) => {
+const TAB_CONFIG = {
+  Home: {
+    label: 'Home',
+    icon: require('../assets/home.png'),
+    iconFocused: require('../assets/homeFill.png'),
+  },
+  NewStack: {
+    label: 'Download',
+    icon: require('../assets/search.png'),
+    iconFocused: require('../assets/searchFill.png'),
+  },
+  LibraryStack: {
+    label: 'Library',
+    icon: require('../assets/library.png'),
+    iconFocused: require('../assets/libraryFill.png'),
+  },
+};
+
+const VISIBLE_TABS = ['Home', 'NewStack', 'LibraryStack'];
+
+const TabBar = ({ state, descriptors, navigation }) => {
   const focusedOptions = descriptors[state.routes[state.index].key].options;
+  if (focusedOptions.tabBarVisible === false) return null;
 
-  if (focusedOptions.tabBarVisible === false) {
-    return null;
-  }
-
-  const renderSwitch = (name, label, isFocused) => {
-    switch (name) {
-      case 'Home':
-        return (
-          <View>
-            {isFocused ? (
-              <View
-                style={styles.iconAndLable}>
-                <Image
-                  style={styles.icons}
-                  source={require('../assets/homeFill.png')}
-                />
-                <Text
-                  style={styles.labelTextFocused}>
-                  Home
-                </Text>
-              </View>
-            ) : (
-              <View
-              style={styles.iconAndLable}>
-                <Image
-                  style={styles.icons}
-                  source={require('../assets/home.png')}
-                />
-                <Text
-                  style={styles.labelText}>
-                  Home
-                </Text>
-              </View>
-            )}
-          </View>
-        );
-      case 'NewStack':
-        return (
-          <View>
-            {isFocused ? (
-              <View
-              style={styles.iconAndLable}>
-                <Image
-                  style={styles.icons}
-                  source={require('../assets/searchFill.png')}
-                />
-                <Text style={styles.labelTextFocused} >Search</Text>
-              </View>
-            ) : (
-              <View
-              style={styles.iconAndLable}>
-                <Image
-                  style={styles.icons}
-                  source={require('../assets/search.png')}
-                />
-                <Text style={styles.labelText} >Search</Text>
-
-              </View>
-            )}
-          </View>
-        );
-      case 'LibraryStack':
-        return (
-          <View>
-            {isFocused ? (
-              <View
-              style={styles.iconAndLable}>
-                <Image
-                  style={styles.icons}
-                  source={require('../assets/libraryFill.png')}
-                />
-                <Text style={styles.labelTextFocused}>Library</Text>
-                
-              </View>
-            ) : (
-              <View
-              style={styles.iconAndLable}>
-                <Image
-                  style={styles.icons}
-                  source={require('../assets/library.png')}
-                />
-                <Text style={styles.labelText}>Library</Text>
-
-              </View>
-            )}
-          </View>
-        );
-      default:
-        return (
-          <Text style={{color: isFocused ? '#673ab7' : 'white'}}>{label}</Text>
-        );
-    }
-  };
   return (
-    <>
-      {/* <MiniPlayer /> */}
-      
-      <View style={styles.mainView}>
-        {/* <MiniPlayer /> */}
-        {state.routes.map((route, index) => {
-          if (
-            route.name !== 'Home' &&
-            route.name !== 'NewStack' &&
-            route.name !== 'LibraryStack'
-          ) {
-            return;
-          }
+    <View style={styles.mainView}>
+      {state.routes.map((route, index) => {
+        if (!VISIBLE_TABS.includes(route.name)) return null;
 
-          const {options} = descriptors[route.key];
-          const label =
-            options.tabBarLabel !== undefined
-              ? options.tabBarLabel
-              : options.title !== undefined
-              ? options.title
-              : route.name;
+        const config = TAB_CONFIG[route.name];
+        if (!config) return null;
 
-          const isFocused = state.index === index;
+        const { options } = descriptors[route.key];
+        const isFocused = state.index === index;
 
-          const onPress = () => {
-            const event = navigation.emit({
-              type: 'tabPress',
-              target: route.key,
-              canPreventDefault: true,
-            });
-
-            if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name);
-            }
-          };
-
-          const onLongPress = () => {
-            //console.log(screen)
-            Vibration.vibrate(200);
-            ToastAndroid.show(`${route.name}`, ToastAndroid.SHORT);
-            navigation.emit({
-              type: 'tabLongPress',
-              target: route.key,
-            });
-          };
-
-          return (
-            <TouchableOpacity
-              accessibilityRole="button"
-              accessibilityState={isFocused ? {selected: true} : {}}
-              accessibilityLabel={options.tabBarAccessibilityLabel}
-              testID={options.tabBarTestID}
-              onPress={onPress}
-              onLongPress={onLongPress}
-              style={styles.touchOpacity}
-              key={index}>
-              {renderSwitch(route.name, label, isFocused)}
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    </>
+        return (
+          <TouchableOpacity
+            key={route.key}
+            accessibilityRole="button"
+            accessibilityState={isFocused ? { selected: true } : {}}
+            accessibilityLabel={options.tabBarAccessibilityLabel}
+            testID={options.tabBarTestID}
+            onPress={() => {
+              const event = navigation.emit({ type: 'tabPress', target: route.key, canPreventDefault: true });
+              if (!isFocused && !event.defaultPrevented) navigation.navigate(route.name);
+            }}
+            onLongPress={() => {
+              Vibration.vibrate(200);
+              ToastAndroid.show(config.label, ToastAndroid.SHORT);
+              navigation.emit({ type: 'tabLongPress', target: route.key });
+            }}
+            style={styles.touchOpacity}>
+            <View style={styles.iconAndLabel}>
+              <Image style={styles.icon} source={isFocused ? config.iconFocused : config.icon} />
+              <Text style={isFocused ? styles.labelFocused : styles.label}>{config.label}</Text>
+              {isFocused && <View style={styles.activeIndicator} />}
+            </View>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
   );
 };
 
@@ -178,7 +71,7 @@ export default TabBar;
 
 const styles = StyleSheet.create({
   mainView: {
-    backgroundColor: '#212326',
+    backgroundColor: colors.bg.secondary,
     flexDirection: 'row',
     height: windowHeight * 0.06,
     paddingVertical: windowHeight * 0.005,
@@ -189,34 +82,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  iconAndLable : {
-    flex : 0.95,
+  iconAndLabel: {
+    flex: 0.95,
     flexDirection: 'column',
     alignItems: 'center',
-    alignContent : 'center',
-   
-    
+    alignContent: 'center',
   },
-  icons: {
-   flex : 1,
-   aspectRatio : 4/4
+  icon: {
+    flex: 1,
+    aspectRatio: 1,
   },
-  iconsFocused: {
-    // Not used
-    color : 'black',
-    height: 25,
-    width: 25,
-    
+  label: {
+    color: colors.text.hint,
+    fontSize: fontSize.sm,
   },
-  labelText : {
-    color: 'gray',
-    fontSize: 13,
-    display : 'flex'
-    
-  }, 
-  labelTextFocused : {
-    color: 'white',
-    fontSize: 13,
-    display : 'flex'
-  }
+  labelFocused: {
+    color: colors.text.primary,
+    fontSize: fontSize.sm,
+  },
+  activeIndicator: {
+    width: 20,
+    height: 3,
+    borderRadius: 1.5,
+    backgroundColor: colors.accent.primary,
+    marginTop: 2,
+  },
 });

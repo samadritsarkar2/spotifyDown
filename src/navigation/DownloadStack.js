@@ -5,6 +5,7 @@ import {
 } from '@react-navigation/stack';
 import Downloads from '../components/Downloads';
 import TracksView from '../components/DownloadedTracksView';
+import { colors } from '../theme';
 
 const Stack = createStackNavigator();
 
@@ -15,7 +16,7 @@ const DownloadStack = () => {
       screenOptions={{
         cardOverlayEnabled: true,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        headerStyle: {backgroundColor: '#181818', elevation: 0},
+        headerStyle: {backgroundColor: colors.bg.primary, elevation: 0},
         headerTitleAlign: 'center',
         headerTitleStyle: {color: 'white', fontFamily: 'OpenSans-SemiBold'},
         headerTintColor: 'white',
@@ -23,7 +24,7 @@ const DownloadStack = () => {
       <Stack.Screen component={Downloads} name="Downloads" options={{
         headerTitle : "Downloaded Playlists"
       }}/>
-      <Stack.Screen component={TracksView} name="TracksView" />
+      <Stack.Screen component={TracksView} name="TracksView" options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 };

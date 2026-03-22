@@ -1,0 +1,14 @@
+# Gradle Properties Example
+# Copy this file to ~/.gradle/gradle.properties (user-level) or this directory (project-level)
+# NEVER commit real values to version control
+
+# --- Keystore Signing ---
+MYAPP_RELEASE_STORE_FILE=my-key.keystore
+MYAPP_RELEASE_STORE_PASSWORD=your_keystore_password_here
+MYAPP_RELEASE_KEY_ALIAS=your_key_alias_here
+MYAPP_RELEASE_KEY_PASSWORD=your_key_password_here
+
+# --- CodePush Deployment Keys ---
+CODEPUSH_DEBUG_KEY=your_debug_deployment_key_here
+CODEPUSH_RELEASE_KEY=your_release_deployment_key_here
+CODEPUSH_STAGING_KEY=your_staging_deployment_key_here

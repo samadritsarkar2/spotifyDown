@@ -1,38 +1,18 @@
-import {Dimensions} from 'react-native';
+import { Dimensions } from 'react-native';
 import RNFS from 'react-native-fs';
+import { commonStyles } from '../theme';
 
+// Path & dimensions (non-style exports)
 export const DOWNLOAD_PATH = `${RNFS.ExternalDirectoryPath}`;
 export const windowHeight = Dimensions.get('window').height;
 export const windowWidth = Dimensions.get('window').width;
 export const bottomGap = 0.115;
-export const spotifyGreenButton = {
-  justifyContent: 'center',
-  height: 50,
-  width: '60%',
-  borderRadius: 30,
-  alignSelf: 'center',
-  marginTop: 25,
-  backgroundColor: '#1DB954',
-  paddingHorizontal: 20,
-};
 
-export const spotifyGreenButtonText = {
-  color: 'white',
-  textAlign: 'center',
-  fontWeight: '500',
-  fontSize: 18,
-  fontFamily: 'GothamRoundedMedium',
-  
-  textTransform: 'uppercase',
-};
+// Font names (kept for files still referencing these)
+export const GothamRoundedBook = 'GothamRoundedBook';
+export const GothamRoundedMedium = 'GothamRoundedMedium';
 
-const config = {
-  maxAdContentRating: 'T',
-  tagForChildDirectedTreatment: false,
-  tagForUnderAgeConsent: false,
-};
-
-
-        export const GothamRoundedBook = "GothamRoundedBook";
-        export const GothamRoundedMedium = "GothamRoundedMedium";
-        
+// Legacy button styles — maps to theme for backward compat
+// New code should import from '../theme' directly
+export const spotifyGreenButton = commonStyles.primaryButton;
+export const spotifyGreenButtonText = commonStyles.primaryButtonText;

@@ -26,15 +26,16 @@ export const addNewPlaylist = (playlistData) => {
 export const addToDownloadQueue = (track) => {
   return async (dispatch, getState) => {
     try {
-      // const alreadyThere = getState().playlist.downloadQueue.findIndex(
-      //   (item) => item.id === track.id,
-      // );
+      const { downloadQueue, currentDownloading } = getState().playlist;
+      const alreadyQueued = downloadQueue.some((item) => item.id === track.id);
+      const alreadyDownloading = currentDownloading.some((item) => item.id === track.id);
+
+      if (alreadyQueued || alreadyDownloading || track.downloaded) {
+        return;
+      }
 
       dispatch({type: 'ADD_TO_DOWNLOAD_QUEUE', payload: track});
-      dispatch({
-        type: 'SET_CURRENT_DOWNLOADING',
-        payload: track,
-      });
+      dispatch({type: 'SET_CURRENT_DOWNLOADING', payload: track});
     } catch (error) {
       console.log(error);
     }

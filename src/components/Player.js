@@ -10,9 +10,11 @@ import Slider from "@react-native-community/slider";
 import { windowHeight, windowWidth } from '../common';
 import TextTicker from 'react-native-text-ticker';
 import { useDispatch, useSelector } from 'react-redux';
+import { selectPlayerState } from '../redux/selectors';
 import { useMemo } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { setPlayerClosed } from '../redux/actions/playerActions';
+import { colors, fonts, fontSize as themeFontSize } from '../theme';
 
 const Player = ({route, navigation}) => {
 
@@ -25,7 +27,7 @@ const Player = ({route, navigation}) => {
   const playbackState = usePlaybackState();
   const { position, buffered, duration } = useProgress(10);
   
-  const store = useSelector(state => state).player;
+  const store = useSelector(selectPlayerState);
   const { trackInfo : {title, artist, album, artwork}, isPlayerActive} = store;
   
   const isPlaying = playbackState === State.Playing;
@@ -152,7 +154,7 @@ useEffect(() => {
   return (
     <View style={{
       height : windowHeight * 1,
-        backgroundColor : '#212326'
+        backgroundColor : colors.bg.secondary
       }}>
         <ImageBackground
           source={ artwork ? {uri : artwork} : null}
@@ -333,72 +335,37 @@ export default Player;
 // });
 
 const styles = StyleSheet.create({
-  container: {
+  tintContainer: {
     flex: 1,
-    backgroundColor: '#040404',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
- tintContainer : {
-  flex: 1,
-        backgroundColor: 'rgba(0,0,0, 0.50)'
- },
-  songDetailsContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 10,
+    backgroundColor: colors.overlay,
   },
   songTitleText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-   fontFamily : 'GothamRoundedMedium',
+    color: colors.text.primary,
+    fontSize: themeFontSize.lg + 1,
+    fontFamily: fonts.heading,
     textAlign: 'center',
-
     marginBottom: 5,
   },
   songAlbumText: {
-    color: '#d3d3d3',
-    fontSize: 16,
-    fontFamily : 'GothamMedium',
-    
-   
+    color: colors.text.secondary,
+    fontSize: themeFontSize.md + 1,
+    fontFamily: fonts.secondary,
   },
-  durationText : {
-    color: '#d3d3d3',
-    fontSize : 14,
-    fontFamily : 'GothamRoundedMedium',
-    alignSelf : 'baseline'
+  durationText: {
+    color: colors.text.secondary,
+    fontSize: themeFontSize.sm + 1,
+    fontFamily: fonts.heading,
+    alignSelf: 'baseline',
   },
   seekBar: {
-    
     width: '100%',
     height: 30,
-    // marginTop: 10,
-    // alignSelf : 'baseline',
-    // backgroundColor : 'red'
   },
-  controlsContainer: {
-    flex: 2,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    paddingHorizontal: 20,
-  },
-  controlButton: {
- 
- 
-  },
-  playButton: {
-   
-  },
+  controlButton: {},
+  playButton: {},
   controlIcon: {
-    width : 30,
-    height : 30,
-   
-    resizeMode : 'cover',
-  
+    width: 30,
+    height: 30,
+    resizeMode: 'cover',
   },
 });

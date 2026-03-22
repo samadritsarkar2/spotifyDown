@@ -95,17 +95,17 @@ packagingOptions {
             keyPassword 'android'
         }
     release {
-      storeFile file('my-key.keystore')
-      storePassword 'samspotifydown'
-      keyAlias 'final-version-1'
-      keyPassword 'samspotifydown'
+      storeFile file(findProperty('MYAPP_RELEASE_STORE_FILE') ?: 'my-key.keystore')
+      storePassword findProperty('MYAPP_RELEASE_STORE_PASSWORD') ?: ''
+      keyAlias findProperty('MYAPP_RELEASE_KEY_ALIAS') ?: ''
+      keyPassword findProperty('MYAPP_RELEASE_KEY_PASSWORD') ?: ''
     }
     }
     buildTypes {
           debug {
-            signingConfig signingConfigs.release
-            applicationIdSuffix ".debug"
-            resValue "string", "reactNativeCodePush_androidDeploymentKey", 'TCMtmuQ4X68FcUqFUVqUlMTytsjroPIVcF4vwB'
+            signingConfig signingConfigs.debug
+            resValue "string", "reactNativeCodePush_androidDeploymentKey", findProperty('CODEPUSH_DEBUG_KEY') ?: ''
+            resValue "string", "CodePushDeploymentKey", findProperty('CODEPUSH_DEBUG_KEY') ?: ''
 
         }
          release {
@@ -113,14 +113,16 @@ packagingOptions {
             // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
-            resValue "string", "reactNativeCodePush_androidDeploymentKey", '3PZGCl14jxeBTJU3yT6U-8HNZJQ6CjxlOWQ5T'
+            resValue "string", "reactNativeCodePush_androidDeploymentKey", findProperty('CODEPUSH_RELEASE_KEY') ?: ''
+            resValue "string", "CodePushDeploymentKey", findProperty('CODEPUSH_RELEASE_KEY') ?: ''
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             
         }
         releaseStaging {
             initWith release    
             applicationIdSuffix ".releasestaging"
-            resValue "string", "reactNativeCodePush_androidDeploymentKey", 'TCMtmuQ4X68FcUqFUVqUlMTytsjroPIVcF4vwB'
+            resValue "string", "reactNativeCodePush_androidDeploymentKey", findProperty('CODEPUSH_STAGING_KEY') ?: ''
+            resValue "string", "CodePushDeploymentKey", findProperty('CODEPUSH_STAGING_KEY') ?: ''
             // Note: It's a good idea to provide matchingFallbacks for the new buildType you create to prevent build issues
             // Add the following line if not already there
             matchingFallbacks = ['release']
@@ -180,6 +182,13 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
     implementation("com.squareup.okhttp3:okhttp-urlconnection:4.9.1")
+    implementation('com.github.TeamNewPipe:NewPipeExtractor:v0.26.0') {
+        exclude group: 'com.github.spotbugs', module: 'spotbugs-annotations'
+        exclude group: 'org.mozilla', module: 'rhino'
+    }
+    // yt-dlp for unthrottled downloading (handles n-param deobfuscation)
+    implementation("io.github.junkfood02.youtubedl-android:library:0.18.1")
+    implementation("io.github.junkfood02.youtubedl-android:ffmpeg:0.18.1")
 
 
      debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")

@@ -1,144 +1,73 @@
-import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  FlatList,
-} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {windowHeight} from '../common/index';
-import {NEW_API, NEWER_API} from '@env';
-import {addToDownloadQueue} from '../redux/actions/playlistActions';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { searchYouTube } from '../common/YouTubeExtractor';
+import { selectCustomItemData } from '../redux/selectors';
+import { addToDownloadQueue } from '../redux/actions/playlistActions';
+import { windowHeight } from '../common';
+import { colors, fonts, fontSize, spacing, radii, commonStyles } from '../theme';
+import LoadingScreen from './shared/LoadingScreen';
 
 const CustomDownload = () => {
-  const api = `${NEWER_API}/getCustomDownload?trackId=`;
-  // const directAPI = `${NEW_API}/getdirectlink?`;
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState();
-
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-
-  const single = useSelector((state) => state.playlist).customItem;
+  const single = useSelector(selectCustomItemData);
 
   const doFetch = async () => {
-    // let artistsString = single.artist.map((item) => item.name).join();
-
-    // const params = {
-    //   title: single.title,
-    //   album: single.album,
-    //   artistsString,
-    // };
-    // let query = Object.keys(params)
-    //   .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
-    //   .join('&');
-
-    const response = await fetch(api + single.id);
-    response
-      .json()
-      .then((data) => {
-        // console.log(data);
-        setData(data.results);
-        setLoading(false);
-      })
-      .catch((err) => {
-        //TODO: Show error to user
-        setLoading(false);
-        console.log(err)
-      });
+    try {
+      const artistNames = single.artist.map(a => a.name);
+      const query = `${single.title} ${artistNames.join(' ')} ${single.album}`;
+      const results = await searchYouTube(query, 15);
+      setData(results);
+    } catch (e) {
+      // silently handle
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     setLoading(true);
-    // console.log(single);
     doFetch();
   }, []);
 
-  const handleClick = async (item) => {
-    //
-    // console.log("Clicked: ", item);
-    setLoading(true);
-        // single.title = "cold\/mess";
-        single.customDownloadData = item;
-
-        dispatch(addToDownloadQueue(single));
-        setLoading(false);
-  
+  const handleClick = (item) => {
+    single.customDownloadData = item;
+    dispatch(addToDownloadQueue(single));
   };
+
+  if (loading) {
+    return (
+      <View style={[commonStyles.screenContainer, { paddingTop: spacing.sm }]}>
+        <LoadingScreen type="Circle" size={40} />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headingText}>Select any video to download</Text>
-        <Text
-          style={{
-            color: 'gray',
-            fontSize: 13,
-            fontFamily: 'GothamMedium',
-            justifyContent: 'center',
-            alignSelf: 'center',
-          }}>
-          The videos are sorted in descending order of views
-        </Text>
+        <Text style={styles.subtitleText}>The videos are sorted in descending order of views</Text>
       </View>
-      {!loading ? (
-        <View style={{flex: 1, marginHorizontal : 7}}>
-          <FlatList
-            data={data}
-            showsVerticalScrollIndicator={false}
-            renderItem={({item}) => {
-              return (
-                <TouchableOpacity
-                  onPress={() => {
-                    handleClick(item);
-                  }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      minHeight: windowHeight * 0.085,
-
-                      paddingVertical: 2,
-                      marginVertical: 7,
-                      alignItems: 'flex-start',
-                      // justifyContent: 'space-evenly',
-                      backgroundColor: '#111111',
-                      borderRadius: 10,
-                    }}>
-                    <Image
-                      style={{
-                        flex: 1,
-                        marginRight: 10,
-                        height: '95%',
-                        aspectRatio: 1 / 1,
-                        alignSelf: 'center',
-                        borderRadius: 6,
-                      }}
-                      source={{uri: item.thumbnail}}
-                    />
-                    <Text style={{...styles.titleText, alignSelf: 'center'}}>
-                      {item.title}
-                    </Text>
-                    <Text
-                      style={{
-                        ...styles.otherText,
-                        alignSelf: 'center',
-                        marginLeft: 5,
-                      }}>
-                      {' '}
-                      {item.duration_string}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              );
-            }}
-          />
-          <View style={{height: windowHeight * 0.07}} />
-        </View>
-      ) : (
-        <Text style={styles.otherText}>Loading...</Text>
-      )}
+      <View style={{ flex: 1, marginHorizontal: spacing.sm - 1 }}>
+        <FlatList
+          data={data}
+          keyExtractor={(item, index) => item.videoId?.toString() || index.toString()}
+          showsVerticalScrollIndicator={false}
+          ListFooterComponent={<View style={commonStyles.listFooterGap} />}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => handleClick(item)}>
+              <View style={styles.videoRow}>
+                <Image style={styles.thumbnail} source={{ uri: item.thumbnail }} />
+                <Text style={styles.titleText}>{item.title}</Text>
+                <Text style={styles.durationText}>{item.duration_string}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+        />
+      </View>
     </View>
   );
 };
@@ -148,33 +77,56 @@ export default CustomDownload;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#181820',
-    paddingTop: 10,
-
+    backgroundColor: colors.bg.primary,
+    paddingTop: spacing.sm,
     justifyContent: 'center',
-    // alignItems: 'center',
   },
   header: {
-    padding: 15,
+    padding: spacing.md,
   },
   headingText: {
     alignSelf: 'center',
-    color: 'white',
-    fontSize: 17,
-    fontFamily: 'GothamRoundedMedium',
+    color: colors.text.primary,
+    fontSize: fontSize.lg,
+    fontFamily: fonts.heading,
+  },
+  subtitleText: {
+    color: colors.text.hint,
+    fontSize: fontSize.sm,
+    fontFamily: fonts.secondary,
+    alignSelf: 'center',
+  },
+  videoRow: {
+    flexDirection: 'row',
+    minHeight: windowHeight * 0.085,
+    paddingVertical: spacing.xs / 2,
+    marginVertical: spacing.sm - 1,
+    alignItems: 'flex-start',
+    backgroundColor: colors.bg.card,
+    borderRadius: radii.md,
+  },
+  thumbnail: {
+    flex: 1,
+    marginRight: spacing.sm,
+    height: '95%',
+    aspectRatio: 1,
+    alignSelf: 'center',
+    borderRadius: radii.sm,
   },
   titleText: {
     flex: 4,
-    color: 'white',
-    fontSize: 15,
-    fontFamily: 'GothamRoundedBook',
-    marginHorizontal: 2,
-  },
-  otherText: {
-    flex: 1,
-    color: 'white',
-    fontSize: 15,
-    fontFamily: 'GothamRoundedMedium',
+    color: colors.text.primary,
+    fontSize: fontSize.md,
+    fontFamily: fonts.body,
+    marginHorizontal: spacing.xs / 2,
     alignSelf: 'center',
+  },
+  durationText: {
+    flex: 1,
+    color: colors.text.primary,
+    fontSize: fontSize.md,
+    fontFamily: fonts.heading,
+    alignSelf: 'center',
+    marginLeft: spacing.xs,
   },
 });
